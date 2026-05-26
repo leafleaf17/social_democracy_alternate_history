@@ -79,7 +79,7 @@ if (Q.economic_growth) {
     }
 })();
 !}
-}
+
 = Status
 
 [+ month : month +] [+ year +]
