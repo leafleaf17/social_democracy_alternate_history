@@ -291,23 +291,21 @@ Q.socialism_disp = Math.round(Q.socialism);
 })();
 !}
 
-{!<div style="position:relative; width:100%; height:100%;">
-<div id="polling-header" style="position:absolute; top:0; right:0; background:#f5f5f5; border:1px solid #ddd; border-radius:4px; padding:0.75rem; margin:0.5rem; font-size:0.9rem; min-width:140px; box-shadow:0 1px 3px rgba(0,0,0,0.1); z-index:10;">
-    <div style="font-weight:bold; margin-bottom:0.4rem;">[+ month : month +] [+ year +]</div>
-    <div style="font-size:0.85rem; color:#555; margin-bottom:0.5rem; border-bottom:1px solid #ddd; padding-bottom:0.4rem;">Projected results:</div>
-    <div style="display:flex; align-items:center; gap:0.3rem; margin-bottom:0.3rem;"><span style="display:inline-block;width:10px;height:10px;background:#1f4d91;border:1px solid #888;"></span><span>Democrat</span></div>
-    <div style="display:flex; align-items:center; gap:0.3rem; margin-bottom:0.3rem;"><span style="display:inline-block;width:10px;height:10px;background:#b22234;border:1px solid #888;"></span><span>Republican</span></div>
-    <div style="display:flex; align-items:center; gap:0.3rem;"><span style="display:inline-block;width:10px;height:10px;background:#b0b0b0;border:1px solid #888;"></span><span>Other</span></div>
-</div>
-</div>!}
-
 = Projected election results
 
-{!<div id="us-election-map-wrapper" style="width:100%; max-width:none; overflow-x:hidden; margin: 0.25rem 0 0.5rem 0; padding:0; box-sizing:border-box;">
-    <div id="us-election-map-info" style="font-size:0.95rem; margin-bottom:0.4rem; margin-left:0.25rem;">
-        <span id="us-election-map-hover">Hover over a state to see projected support.</span>
+{!<div id="us-election-map-wrapper" style="width:100%; max-width:none; overflow-x:hidden; margin: 0 0 0 0; padding:0; box-sizing:border-box; display:flex; flex-direction:column; height:calc(100vh - 200px);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem;">
+        <div id="us-election-map-info" style="font-size:0.95rem;">
+            <span id="us-election-map-hover">Hover over a state to see projected support.</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem;">
+            <div style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block;width:12px;height:12px;background:#1f4d91;border:1px solid #666;"></span><span>Dem</span></div>
+            <div style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block;width:12px;height:12px;background:#b22234;border:1px solid #666;"></span><span>Rep</span></div>
+            <div style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block;width:12px;height:12px;background:#b0b0b0;border:1px solid #666;"></span><span>Other</span></div>
+            <div style="margin-left:0.5rem; font-weight:bold;">[+ month : month +] [+ year +]</div>
+        </div>
     </div>
-<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; height:auto; min-width:0; display:block; margin-bottom:0.5rem;">
+<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; height:100%; min-width:0; display:block; flex-grow:1;">
   <title>Blank map of the United States, territories not included</title>
 <defs>
 <style type="text/css">
