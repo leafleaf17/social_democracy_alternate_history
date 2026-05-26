@@ -104,7 +104,7 @@ if (Q.economic_growth) {
         setTimeout(waitForMap, 50);
     }
 !}
-
+}
 = Status
 
 [+ month : month +] [+ year +]
