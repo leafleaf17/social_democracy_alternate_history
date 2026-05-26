@@ -150,6 +150,11 @@ Prussian police loyalty: [+ prussian_police_loyalty : loyalty +]
 @polls
 on-arrival: {!
 Q.pro_republic_disp = Math.round(Q.pro_republic);
+Q.pro_democrat = 100 - Q.pro_republic;
+if (Q.pro_democrat < 0) { Q.pro_democrat = 0; }
+if (Q.pro_democrat > 100) { Q.pro_democrat = 100; }
+Q.pro_democrat_disp = Math.round(Q.pro_democrat);
+Q.pro_other_disp = 0;
 Q.nationalism_disp = Math.round(Q.nationalism);
 Q.socialism_disp = Math.round(Q.socialism);
 !}
@@ -159,6 +164,17 @@ Q.socialism_disp = Math.round(Q.socialism);
 
 on-arrival: {!
     var partyColors = { dem:'#1f4d91', rep:'#b22234', other:'#b0b0b0' };
+    function getMarginColor(dem, rep) {
+        var diff = dem - rep;
+        if (diff >= 15) { return '#172A89'; }
+        if (diff >= 5) { return '#244CB5'; }
+        if (diff >= 1) { return '#5A7BC7'; }
+        if (diff >= 0) { return '#A1B2DD'; }
+        if (-diff >= 15) { return '#9E1010'; }
+        if (-diff >= 5) { return '#D62F2F'; }
+        if (-diff >= 1) { return '#E36666'; }
+        return '#F1A1A1';
+    }
     var stateSupport = {
         al:{dem:42,rep:54,other:4}, ak:{dem:39,rep:52,other:9}, az:{dem:46,rep:49,other:5}, ar:{dem:43,rep:53,other:4}, ca:{dem:62,rep:32,other:6},
         co:{dem:50,rep:43,other:7}, ct:{dem:58,rep:35,other:7}, de:{dem:54,rep:38,other:8}, fl:{dem:46,rep:51,other:3}, ga:{dem:47,rep:50,other:3},
@@ -178,9 +194,13 @@ on-arrival: {!
         Array.prototype.forEach.call(map.querySelectorAll('path[title], circle[title]'), function(path) {
             var state = path.getAttribute('class');
             if (!state) { return; }
-            var support = stateSupport[state] || {dem:48,rep:44,other:8};
+            var support = stateSupport[state] || {
+                dem: Q.pro_democrat_disp || 50,
+                rep: Q.pro_republic_disp || 50,
+                other: Q.pro_other_disp || 0
+            };
             var winner = support.dem >= support.rep && support.dem >= support.other ? 'dem' : support.rep >= support.dem && support.rep >= support.other ? 'rep' : 'other';
-            path.style.fill = partyColors[winner] || partyColors.other;
+            path.style.fill = winner === 'other' ? partyColors.other : getMarginColor(support.dem, support.rep);
             path.style.stroke = '#ffffff';
             path.style.strokeWidth = '0.4';
             path.style.cursor = 'default';
@@ -199,11 +219,11 @@ on-arrival: {!
     }
 !}
 
-{!<div id="us-election-map-wrapper" style="max-width:1100px; margin: 0.75rem 0 1rem 0;">
+{!<div id="us-election-map-wrapper" style="max-width:1300px; margin: 0.75rem 0 1rem 0;">
     <div id="us-election-map-info" style="font-size:0.95rem; margin-bottom:0.4rem;">
         <span id="us-election-map-hover">Hover over a state to see projected support.</span>
     </div>
-<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; max-width:1100px; height:auto; display:block; margin-bottom:0.5rem;">
+<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; max-width:1300px; height:auto; display:block; margin-bottom:0.5rem;">
   <title>Blank map of the United States, territories not included</title>
 <defs>
 <style type="text/css">
