@@ -12,7 +12,7 @@ Q.economic_growth_2 = '0';
 if (Q.economic_growth) {
     Q.economic_growth_2 = Q.economic_growth.toFixed(1);
 }
-// Setup US election map helpers and initialize
+(function() {
     function getMarginColor(dem, rep) {
         var diff = dem - rep;
         if (diff >= 15) { return '#172A89'; }
@@ -77,6 +77,7 @@ if (Q.economic_growth) {
     } else {
         setTimeout(waitForMap, 50);
     }
+})();
 !}
 }
 = Status
