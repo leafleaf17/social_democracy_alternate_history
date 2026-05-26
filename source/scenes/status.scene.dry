@@ -42,62 +42,36 @@ if (Q.economic_growth) {
             vt:{dem:61,rep:30,other:9}, wa:{dem:56,rep:35,other:9}, wi:{dem:47,rep:49,other:4}, wv:{dem:31,rep:60,other:9}, wy:{dem:20,rep:70,other:10},
             dc:{dem:87,rep:8,other:5}
         };
-        function colorStatePath(path) {
+        Array.prototype.forEach.call(map.querySelectorAll('path, circle'), function(path) {
             var classAttr = path.getAttribute('class') || '';
             var state = (classAttr.split(/\s+/).find(function(c) { return c === 'dc' || c.length === 2; }) || '').toLowerCase();
             if (!state) { return; }
             var support = stateSupport[state] || { dem: 50, rep: 50, other: 0 };
             var winner = support.dem >= support.rep && support.dem >= support.other ? 'dem' : support.rep >= support.dem && support.rep >= support.other ? 'rep' : 'other';
-            var fillColor = winner === 'other' ? partyColors.other : getMarginColor(support.dem, support.rep);
-            path.setAttribute('fill', fillColor);
-            path.setAttribute('stroke', '#ffffff');
-            path.setAttribute('stroke-width', '0.4');
-            path.setAttribute('cursor', 'default');
-            if (!path.__usMapHoverSetup) {
-                path.addEventListener('mouseenter', function() {
-                    var title = path.querySelector('title');
-                    var stateName = title ? title.textContent : state.toUpperCase();
-                    hoverInfo.textContent = stateName + ' — Dem ' + support.dem + '%, Rep ' + support.rep + '%, Other ' + support.other + '%';
-                });
-                path.addEventListener('mouseleave', function() {
-                    hoverInfo.textContent = 'Hover over a state to see projected support.';
-                });
-                path.__usMapHoverSetup = true;
+            path.style.fill = winner === 'other' ? partyColors.other : getMarginColor(support.dem, support.rep);
+            path.style.stroke = '#ffffff';
+            path.style.strokeWidth = '0.4';
+            path.style.cursor = 'default';
+            path.addEventListener('mouseenter', function() {
+                var title = path.querySelector('title');
+                var stateName = title ? title.textContent : state.toUpperCase();
+                hoverInfo.textContent = stateName + ' — Dem ' + support.dem + '%, Rep ' + support.rep + '%, Other ' + support.other + '%';
+            });
+            path.addEventListener('mouseleave', function() {
+                hoverInfo.textContent = 'Hover over a state to see projected support.';
+            });
+        });
+        return true;
+    }
+    function waitForMap() {
+        if (initUSElectionMap()) { return; }
+        var attempts = 0;
+        var intervalId = setInterval(function() {
+            if (initUSElectionMap() || ++attempts > 50) {
+                clearInterval(intervalId);
             }
-        }
-        function initUSElectionMap() {
-            var map = document.getElementById('us-election-map');
-            var hoverInfo = document.getElementById('us-election-map-hover');
-            if (!map || !hoverInfo) { return false; }
-            Array.prototype.forEach.call(map.querySelectorAll('path, circle'), colorStatePath);
-            return true;
-        }
-        function recolorMap() {
-            var map = document.getElementById('us-election-map');
-            if (!map) { return; }
-            Array.prototype.forEach.call(map.querySelectorAll('path, circle'), colorStatePath);
-        }
-        function waitForMap() {
-            if (initUSElectionMap()) {
-                recolorMap();
-                return;
-            }
-            var attempts = 0;
-            var intervalId = setInterval(function() {
-                if (initUSElectionMap() || ++attempts > 50) {
-                    clearInterval(intervalId);
-                }
-            }, 50);
-            setTimeout(function() {
-                var recolorAttempts = 0;
-                var recolorId = setInterval(function() {
-                    recolorMap();
-                    if (++recolorAttempts >= 10) {
-                        clearInterval(recolorId);
-                    }
-                }, 200);
-            }, 100);
-        }
+        }, 50);
+    }
     if (typeof window !== 'undefined' && window.requestAnimationFrame) {
         window.requestAnimationFrame(waitForMap);
     } else {
@@ -252,11 +226,11 @@ Q.socialism_disp = Math.round(Q.socialism);
 
 = Projected election results
 
-{!<div id="us-election-map-wrapper" style="width:100%; max-width:none; min-width:0; overflow-x:hidden; margin: 0.75rem 0 1rem 0; padding:0; box-sizing:border-box;">
+{!<div id="us-election-map-wrapper" style="width:100%; max-width:none; overflow-x:hidden; margin: 0.75rem 0 1rem 0; padding:0; box-sizing:border-box;">
     <div id="us-election-map-info" style="font-size:0.95rem; margin-bottom:0.4rem;">
         <span id="us-election-map-hover">Hover over a state to see projected support.</span>
     </div>
-<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet" style="width:100%; max-width:100%; height:auto; min-width:0; display:block; margin-bottom:0.5rem;">
+<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; height:auto; min-width:0; display:block; margin-bottom:0.5rem;">
   <title>Blank map of the United States, territories not included</title>
 <defs>
 <style type="text/css">
