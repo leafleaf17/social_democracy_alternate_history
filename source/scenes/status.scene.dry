@@ -283,17 +283,6 @@ Q.socialism_disp = Math.round(Q.socialism);
             }
         }, 50);
     }
-    var mapToggleBtn = document.getElementById('map-toggle-btn');
-    if (mapToggleBtn) {
-        mapToggleBtn.addEventListener('click', function() {
-            var modal = document.getElementById('map-modal');
-            var isShowing = modal.style.display !== 'none';
-            modal.style.display = isShowing ? 'none' : 'block';
-            if (!isShowing) {
-                setTimeout(waitForMap, 50);
-            }
-        });
-    }
     if (typeof window !== 'undefined' && window.requestAnimationFrame) {
         window.requestAnimationFrame(waitForMap);
     } else {
@@ -304,24 +293,19 @@ Q.socialism_disp = Math.round(Q.socialism);
 
 = Projected election results
 
-{!<button id="map-toggle-btn" style="padding:0.5rem 1rem; background:#4a90e2; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; margin-bottom:0.5rem;">Show/Hide Election Map</button>
-
-<div id="map-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; box-sizing:border-box; padding:20px;">
-    <div style="position:absolute; top:10px; right:10px; width:20px; height:20px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; border-radius:50%; font-weight:bold; z-index:1001;" onclick="document.getElementById('map-modal').style.display='none';">✕</div>
-    <div id="us-election-map-wrapper" style="width:100%; height:100%; padding:0; box-sizing:border-box; display:flex; flex-direction:column; background:white; border-radius:4px; overflow:hidden;">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border-bottom:1px solid #ddd; flex-wrap:wrap; gap:0.5rem;">
-            <div id="us-election-map-info" style="font-size:1rem;">
-                <span id="us-election-map-hover">Hover over a state to see projected support.</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
-                <div style="display:flex; align-items:center; gap:0.3rem;"><span style="display:inline-block;width:12px;height:12px;background:#1f4d91;border:1px solid #666;"></span><span>Democrat</span></div>
-                <div style="display:flex; align-items:center; gap:0.3rem;"><span style="display:inline-block;width:12px;height:12px;background:#b22234;border:1px solid #666;"></span><span>Republican</span></div>
-                <div style="display:flex; align-items:center; gap:0.3rem;"><span style="display:inline-block;width:12px;height:12px;background:#b0b0b0;border:1px solid #666;"></span><span>Other</span></div>
-                <div style="margin-left:1rem; font-weight:bold;">[+ month : month +] [+ year +]</div>
-            </div>
+{!<div id="us-election-map-wrapper" style="width:100%; max-width:none; overflow-x:hidden; margin: 0 0 0 0; padding:0; box-sizing:border-box; display:flex; flex-direction:column; height:calc(100vh - 200px);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem;">
+        <div id="us-election-map-info" style="font-size:0.95rem;">
+            <span id="us-election-map-hover">Hover over a state to see projected support.</span>
         </div>
-        <div style="flex:1; overflow:auto; padding:1rem;">
-<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; height:auto; max-width:none; min-width:0; display:block;">
+        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem;">
+            <div style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block;width:12px;height:12px;background:#1f4d91;border:1px solid #666;"></span><span>Dem</span></div>
+            <div style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block;width:12px;height:12px;background:#b22234;border:1px solid #666;"></span><span>Rep</span></div>
+            <div style="display:flex; align-items:center; gap:0.2rem;"><span style="display:inline-block;width:12px;height:12px;background:#b0b0b0;border:1px solid #666;"></span><span>Other</span></div>
+            <div style="margin-left:0.5rem; font-weight:bold;">[+ month : month +] [+ year +]</div>
+        </div>
+    </div>
+<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; height:100%; min-width:0; display:block; flex-grow:1;">
   <title>Blank map of the United States, territories not included</title>
 <defs>
 <style type="text/css">
@@ -616,7 +600,5 @@ Place this code in the empty space below. */
 <path class="separator1" fill="none" d="m 215,493 v 55 l 36,45 m -251,-168 h 147 l 68,68 h 85 l 54,54 v 46"/>
 
 </svg>
-        </div>
-    </div>
 </div>!}
 
