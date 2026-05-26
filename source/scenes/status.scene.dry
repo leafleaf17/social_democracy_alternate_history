@@ -227,11 +227,11 @@ Q.socialism_disp = Math.round(Q.socialism);
 
 = Projected election results
 
-{!<div id="us-election-map-wrapper" style="width:100%; max-width:calc(100vw - 40px); overflow-x:auto; margin: 0.75rem 0 1rem 0;">
+{!<div id="us-election-map-wrapper" style="width:100%; max-width:none; overflow-x:hidden; margin: 0.75rem 0 1rem 0; padding:0; box-sizing:border-box;">
     <div id="us-election-map-info" style="font-size:0.95rem; margin-bottom:0.4rem;">
         <span id="us-election-map-hover">Hover over a state to see projected support.</span>
     </div>
-<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; min-width:950px; height:auto; display:block; margin-bottom:0.5rem;">
+<svg id="us-election-map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" style="width:100%; height:auto; min-width:0; display:block; margin-bottom:0.5rem;">
   <title>Blank map of the United States, territories not included</title>
 <defs>
 <style type="text/css">
