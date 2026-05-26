@@ -12,6 +12,72 @@ Q.economic_growth_2 = '0';
 if (Q.economic_growth) {
     Q.economic_growth_2 = Q.economic_growth.toFixed(1);
 }
+(function() {
+    function getMarginColor(dem, rep) {
+        var diff = dem - rep;
+        if (diff >= 15) { return '#172A89'; }
+        if (diff >= 5) { return '#244CB5'; }
+        if (diff >= 1) { return '#5A7BC7'; }
+        if (diff >= 0) { return '#A1B2DD'; }
+        if (-diff >= 15) { return '#9E1010'; }
+        if (-diff >= 5) { return '#D62F2F'; }
+        if (-diff >= 1) { return '#E36666'; }
+        return '#F1A1A1';
+    }
+    function initUSElectionMap() {
+        var map = document.getElementById('us-election-map');
+        var hoverInfo = document.getElementById('us-election-map-hover');
+        if (!map || !hoverInfo) { return false; }
+        var partyColors = { dem:'#1f4d91', rep:'#b22234', other:'#b0b0b0' };
+        var stateSupport = {
+            al:{dem:42,rep:54,other:4}, ak:{dem:39,rep:52,other:9}, az:{dem:46,rep:49,other:5}, ar:{dem:43,rep:53,other:4}, ca:{dem:62,rep:32,other:6},
+            co:{dem:50,rep:43,other:7}, ct:{dem:58,rep:35,other:7}, de:{dem:54,rep:38,other:8}, fl:{dem:46,rep:51,other:3}, ga:{dem:47,rep:50,other:3},
+            hi:{dem:64,rep:28,other:8}, id:{dem:34,rep:58,other:8}, il:{dem:56,rep:37,other:7}, in:{dem:40,rep:56,other:4}, ia:{dem:48,rep:45,other:7},
+            ks:{dem:39,rep:55,other:6}, ky:{dem:38,rep:55,other:7}, la:{dem:41,rep:54,other:5}, me:{dem:53,rep:39,other:8}, md:{dem:56,rep:35,other:9},
+            ma:{dem:63,rep:29,other:8}, mi:{dem:46,rep:49,other:5}, mn:{dem:52,rep:40,other:8}, mo:{dem:42,rep:53,other:5}, ms:{dem:37,rep:57,other:6},
+            mt:{dem:44,rep:49,other:7}, nc:{dem:48,rep:49,other:3}, nd:{dem:33,rep:58,other:9}, ne:{dem:38,rep:56,other:6}, nh:{dem:53,rep:41,other:6},
+            nj:{dem:55,rep:36,other:9}, nm:{dem:50,rep:42,other:8}, nv:{dem:49,rep:44,other:7}, ny:{dem:60,rep:31,other:9}, oh:{dem:44,rep:51,other:5},
+            ok:{dem:28,rep:65,other:7}, or:{dem:53,rep:38,other:9}, pa:{dem:48,rep:49,other:3}, ri:{dem:58,rep:34,other:8}, sc:{dem:39,rep:56,other:5},
+            sd:{dem:35,rep:57,other:8}, tn:{dem:34,rep:58,other:8}, tx:{dem:42,rep:53,other:5}, ut:{dem:22,rep:67,other:11}, va:{dem:44,rep:51,other:5},
+            vt:{dem:61,rep:30,other:9}, wa:{dem:56,rep:35,other:9}, wi:{dem:47,rep:49,other:4}, wv:{dem:31,rep:60,other:9}, wy:{dem:20,rep:70,other:10},
+            dc:{dem:87,rep:8,other:5}
+        };
+        Array.prototype.forEach.call(map.querySelectorAll('path, circle'), function(path) {
+            var classAttr = path.getAttribute('class') || '';
+            var state = (classAttr.split(/\s+/).find(function(c) { return c === 'dc' || c.length === 2; }) || '').toLowerCase();
+            if (!state) { return; }
+            var support = stateSupport[state] || { dem: 50, rep: 50, other: 0 };
+            var winner = support.dem >= support.rep && support.dem >= support.other ? 'dem' : support.rep >= support.dem && support.rep >= support.other ? 'rep' : 'other';
+            path.style.fill = winner === 'other' ? partyColors.other : getMarginColor(support.dem, support.rep);
+            path.style.stroke = '#ffffff';
+            path.style.strokeWidth = '0.4';
+            path.style.cursor = 'default';
+            path.addEventListener('mouseenter', function() {
+                var title = path.querySelector('title');
+                var stateName = title ? title.textContent : state.toUpperCase();
+                hoverInfo.textContent = stateName + ' — Dem ' + support.dem + '%, Rep ' + support.rep + '%, Other ' + support.other + '%';
+            });
+            path.addEventListener('mouseleave', function() {
+                hoverInfo.textContent = 'Hover over a state to see projected support.';
+            });
+        });
+        return true;
+    }
+    function waitForMap() {
+        if (initUSElectionMap()) { return; }
+        var attempts = 0;
+        var intervalId = setInterval(function() {
+            if (initUSElectionMap() || ++attempts > 50) {
+                clearInterval(intervalId);
+            }
+        }, 50);
+    }
+    if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+        window.requestAnimationFrame(waitForMap);
+    } else {
+        setTimeout(waitForMap, 50);
+    }
+})();
 !}
 
 = Status
@@ -464,56 +530,5 @@ Place this code in the empty space below. */
         <div style="display:flex; align-items:center; gap:0.4rem;"><span style="display:inline-block;width:14px;height:14px;background:#b22234;border:1px solid #888;"></span>Republican</div>
         <div style="display:flex; align-items:center; gap:0.4rem;"><span style="display:inline-block;width:14px;height:14px;background:#b0b0b0;border:1px solid #888;"></span>Other</div>
     </div>
-    <script>
-    (function() {
-        var partyColors = { dem:'#1f4d91', rep:'#b22234', other:'#b0b0b0' };
-        function getMarginColor(dem, rep) {
-            var diff = dem - rep;
-            if (diff >= 15) { return '#172A89'; }
-            if (diff >= 5) { return '#244CB5'; }
-            if (diff >= 1) { return '#5A7BC7'; }
-            if (diff >= 0) { return '#A1B2DD'; }
-            if (-diff >= 15) { return '#9E1010'; }
-            if (-diff >= 5) { return '#D62F2F'; }
-            if (-diff >= 1) { return '#E36666'; }
-            return '#F1A1A1';
-        }
-        var stateSupport = {
-            al:{dem:42,rep:54,other:4}, ak:{dem:39,rep:52,other:9}, az:{dem:46,rep:49,other:5}, ar:{dem:43,rep:53,other:4}, ca:{dem:62,rep:32,other:6},
-            co:{dem:50,rep:43,other:7}, ct:{dem:58,rep:35,other:7}, de:{dem:54,rep:38,other:8}, fl:{dem:46,rep:51,other:3}, ga:{dem:47,rep:50,other:3},
-            hi:{dem:64,rep:28,other:8}, id:{dem:34,rep:58,other:8}, il:{dem:56,rep:37,other:7}, in:{dem:40,rep:56,other:4}, ia:{dem:48,rep:45,other:7},
-            ks:{dem:39,rep:55,other:6}, ky:{dem:38,rep:55,other:7}, la:{dem:41,rep:54,other:5}, me:{dem:53,rep:39,other:8}, md:{dem:56,rep:35,other:9},
-            ma:{dem:63,rep:29,other:8}, mi:{dem:46,rep:49,other:5}, mn:{dem:52,rep:40,other:8}, mo:{dem:42,rep:53,other:5}, ms:{dem:37,rep:57,other:6},
-            mt:{dem:44,rep:49,other:7}, nc:{dem:48,rep:49,other:3}, nd:{dem:33,rep:58,other:9}, ne:{dem:38,rep:56,other:6}, nh:{dem:53,rep:41,other:6},
-            nj:{dem:55,rep:36,other:9}, nm:{dem:50,rep:42,other:8}, nv:{dem:49,rep:44,other:7}, ny:{dem:60,rep:31,other:9}, oh:{dem:44,rep:51,other:5},
-            ok:{dem:28,rep:65,other:7}, or:{dem:53,rep:38,other:9}, pa:{dem:48,rep:49,other:3}, ri:{dem:58,rep:34,other:8}, sc:{dem:39,rep:56,other:5},
-            sd:{dem:35,rep:57,other:8}, tn:{dem:34,rep:58,other:8}, tx:{dem:42,rep:53,other:5}, ut:{dem:22,rep:67,other:11}, va:{dem:44,rep:51,other:5},
-            vt:{dem:61,rep:30,other:9}, wa:{dem:56,rep:35,other:9}, wi:{dem:47,rep:49,other:4}, wv:{dem:31,rep:60,other:9}, wy:{dem:20,rep:70,other:10},
-            dc:{dem:87,rep:8,other:5}
-        };
-        var map = document.getElementById('us-election-map');
-        var hoverInfo = document.getElementById('us-election-map-hover');
-        if (!map || !hoverInfo) { return; }
-        Array.prototype.forEach.call(map.querySelectorAll('path[title], circle[title]'), function(path) {
-            var classAttr = path.getAttribute('class') || '';
-            var state = (classAttr.split(/\s+/).find(function(c) { return c === 'dc' || c.length === 2; }) || '').toLowerCase();
-            if (!state) { return; }
-            var support = stateSupport[state] || { dem: 50, rep: 50, other: 0 };
-            var winner = support.dem >= support.rep && support.dem >= support.other ? 'dem' : support.rep >= support.dem && support.rep >= support.other ? 'rep' : 'other';
-            path.style.fill = winner === 'other' ? partyColors.other : getMarginColor(support.dem, support.rep);
-            path.style.stroke = '#ffffff';
-            path.style.strokeWidth = '0.4';
-            path.style.cursor = 'default';
-            path.addEventListener('mouseenter', function() {
-                var title = path.querySelector('title');
-                var stateName = title ? title.textContent : state.toUpperCase();
-                hoverInfo.textContent = stateName + ' — Dem ' + support.dem + '%, Rep ' + support.rep + '%, Other ' + support.other + '%';
-            });
-            path.addEventListener('mouseleave', function() {
-                hoverInfo.textContent = 'Hover over a state to see projected support.';
-            });
-        });
-    })();
-    </script>
 </div>!}
 
