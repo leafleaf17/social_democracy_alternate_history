@@ -223,57 +223,64 @@ Support for the Republic: [+ pro_republic_disp +]%
 </div>
 <script>
 (function(){
-    var svg = document.getElementById('us-svg');
-    if (!svg || !Q) return;
-    var tilts = Q.VER_political_tilt || {};
-    var has = Q.VER_state_has_election || {};
-    var states = Object.keys(tilts);
-    var cols = 10;
-    var i = 0;
-    for (var si=0; si<states.length; si++){
-        var s = states[si];
-        var row = Math.floor(i/cols);
-        var col = i % cols;
-        var cx = 60 + col * 88;
-        var cy = 60 + row * 90;
-
-        var g = document.createElementNS('http://www.w3.org/2000/svg','g');
-        var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-        circle.setAttribute('cx',cx);
-        circle.setAttribute('cy',cy);
-        circle.setAttribute('r',28);
-        circle.setAttribute('stroke','#333');
-        circle.setAttribute('stroke-width',1);
-        var tilt = (tilts[s] || 0) + (Q.VER_global_political_tilt || 0);
-        var fill = (has[s]) ? colorForTilt(tilt) : '#999999';
-        circle.setAttribute('fill',fill);
-        var text = document.createElementNS('http://www.w3.org/2000/svg','text');
-        text.setAttribute('x',cx);
-        text.setAttribute('y',cy+5);
-        text.setAttribute('text-anchor','middle');
-        text.setAttribute('font-size','12');
-        text.setAttribute('font-family','sans-serif');
-        text.setAttribute('fill','#ffffff');
-        text.textContent = s;
-        g.appendChild(circle);
-        g.appendChild(text);
-        svg.appendChild(g);
-        i++;
-    }
-    function colorForTilt(tilt){
-        if (!tilt) return '#999999';
-        var absTilt = Math.abs(tilt);
-        if (tilt < 0){
-            if (absTilt >= 75) return '#3a6db1'; // Solid Dem
-            if (absTilt >= 50) return '#5c92d5'; // Likely Dem
-            if (absTilt >= 25) return '#8fb2e0'; // Lean Dem
-            return '#bcd1f0'; // Tilt Dem
-        } else {
-            if (absTilt >= 75) return '#d05353'; // Solid Rep
-            if (absTilt >= 50) return '#ea8b8b'; // Likely Rep
-            if (absTilt >= 25) return '#f6bcbc'; // Lean Rep
-            return '#fce4e4'; // Tilt Rep
+    function build() {
+        var dendry = window.dendryUI;
+        var qualities = (dendry && dendry.dendryEngine && dendry.dendryEngine.state && dendry.dendryEngine.state.qualities) || {};
+        var tilts = qualities.VER_political_tilt || {};
+        var has = qualities.VER_state_has_election || {};
+        var globalTilt = qualities.VER_global_political_tilt || 0;
+        var svg = document.getElementById('us-svg');
+        if (!svg) return;
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+        rect.setAttribute('x',0); rect.setAttribute('y',0); rect.setAttribute('width',1000); rect.setAttribute('height',600); rect.setAttribute('fill','#dcdcdc');
+        svg.appendChild(rect);
+        var states = Object.keys(tilts);
+        var cols = 10;
+        var i = 0;
+        for (var si=0; si<states.length; si++){
+            var s = states[si];
+            var row = Math.floor(i/cols);
+            var col = i % cols;
+            var cx = 60 + col * 88;
+            var cy = 60 + row * 90;
+            var g = document.createElementNS('http://www.w3.org/2000/svg','g');
+            var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+            circle.setAttribute('cx',cx); circle.setAttribute('cy',cy); circle.setAttribute('r',28); circle.setAttribute('stroke','#333'); circle.setAttribute('stroke-width',1);
+            var tilt = (typeof tilts[s] === 'number' ? tilts[s] : 0) + globalTilt;
+            var fill = (has[s]) ? colorForTilt(tilt) : '#999999';
+            circle.setAttribute('fill',fill);
+            var text = document.createElementNS('http://www.w3.org/2000/svg','text');
+            text.setAttribute('x',cx); text.setAttribute('y',cy+5); text.setAttribute('text-anchor','middle'); text.setAttribute('font-size','12'); text.setAttribute('font-family','sans-serif'); text.setAttribute('fill','#ffffff'); text.textContent = s;
+            g.appendChild(circle); g.appendChild(text); svg.appendChild(g);
+            i++;
+        }
+        function colorForTilt(tilt){
+            if (!tilt) return '#999999';
+            var absTilt = Math.abs(tilt);
+            if (tilt < 0){
+                if (absTilt >= 75) return '#3a6db1';
+                if (absTilt >= 50) return '#5c92d5';
+                if (absTilt >= 25) return '#8fb2e0';
+                return '#bcd1f0';
+            } else {
+                if (absTilt >= 75) return '#d05353';
+                if (absTilt >= 50) return '#ea8b8b';
+                if (absTilt >= 25) return '#f6bcbc';
+                return '#fce4e4';
+            }
         }
     }
+    var tries = 0;
+    function waitForUI(){
+        if (window.dendryUI && window.document.getElementById('us-svg')){
+            build();
+        } else if (tries < 50){
+            tries++; setTimeout(waitForUI,100);
+        }
+    }
+    waitForUI();
+    document.addEventListener('DOMContentLoaded', build);
+    window.addEventListener('dendry.scene.change', build);
 })();
 </script>
