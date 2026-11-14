@@ -21,7 +21,7 @@ if (Q.economic_growth) {
 Resources available: [+ resources +]
 
 
-House of Representatives: [+ democrat_house_seats +]
+House of Representatives: [+ democrat_house_seats +] [? if democrat_house_majority: (Democrat majority) ?]
 
 Internal dissent: [+ dissent_percent : dissent +]
 
