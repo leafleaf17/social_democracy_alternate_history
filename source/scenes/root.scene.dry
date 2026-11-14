@@ -21,7 +21,7 @@ on-arrival: {!
 Q.started = 1;
 // time elapsed (in months)
 Q.time = 1;
-Q.year = 1928;
+Q.year = 2021;
 Q.month = 1;
 // how many actions have been taken this month?
 Q.month_actions = 0;
@@ -385,7 +385,12 @@ Q.kpd_coalition_dissent = 0;
 
 // does the SPD tolerate the government even if it is not a participant?
 Q.spd_toleration = 0;
-
+Q.democratic_senate_seats = 50;
+Q.democratic_house_seats = 222;
+Q.democratic_controlled_senate = 1;
+Q.democratic_controlled_house = 1;
+Q.republican_controlled_senate = 0;
+Q.republican_controlled_house = 0;
 // is the current government a presidential minority government?
 Q.minority_government = 0;
 
