@@ -20,8 +20,8 @@ if (Q.economic_growth) {
 
 Resources available: [+ resources +]
 
-Senate: [+ democratic_senate_seats + ]/100 *</span> position: [? if democratic_controlled_senate : <span style="color: #3E88B3;">**(Democrat controlled)* ?] [? if republican_control_senate : <span style="color: #E81B23;">**(Republican controlled)* ?]
-House: [+ democratic_house_seats + ]/435 *</span> position: [? if democratic_controlled_house : <span style="color: #3E88B3;">**(Democrat controlled)* ?] [? if republican_control_house : <span style="color: #E81B23;">**(Republican controlled)* ?]
+Senate: [+ democratic_senate_seats + ]/100 [? if democratic_controlled_senate : <span style="color: #3E88B3;">**(Democrat controlled)* ?] [? if republican_control_senate : <span style="color: #E81B23;">**(Republican controlled)* ?]
+House: [+ democratic_house_seats + ]/435 [? if democratic_controlled_house : <span style="color: #3E88B3;">**(Democrat controlled)* ?] [? if republican_control_house : <span style="color: #E81B23;">**(Republican controlled)* ?]
 
 [? if spd_in_government and not in_spd_majority and not in_left_front : Coalition dissent: [+ coalition_dissent : coalition_dissent +] ?]
 
