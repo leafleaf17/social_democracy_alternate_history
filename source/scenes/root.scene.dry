@@ -222,6 +222,11 @@ rep: repPct,
 margin: +(demPct - repPct).toFixed(2),
 leader: leader
 };
+let lower = code.toLowerCase();
+        Q[lower + '_dem'] = demPct;
+        Q[lower + '_rep'] = repPct;
+        Q[lower + '_margin'] = +(demPct - repPct).toFixed(2);
+        Q[lower + '_leader'] = leader;
 }
 Q.projected_dem_ev = totalDemEV;
 Q.projected_rep_ev = totalRepEV;
