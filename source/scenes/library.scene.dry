@@ -294,31 +294,31 @@ Many leftists are former members of the USPD (the left-wing, anti-war Independen
 
 Strength: [+ socialist_strength : strength +]
 
-Dissent: [+ left_dissent : dissent +]
+Dissent: [+ socialist_dissent : dissent +]
 
 **Centrists**
 
 Centrists in the SPD are followers of the doctrine of orthodox Marxism as expounded by Karl Kautsky and later Rudolf Hilferding. They seek a middle course between reform and revolution, while defending the democratic state.
 
-Strength: [+ center_strength : strength +]
+Strength: [+ progressive_strength : strength +]
 
-Dissent: [+ center_dissent : dissent +]
+Dissent: [+ progressive_dissent : dissent +]
 
 **Labor**
 
 Many SPD members are also part of the ADGB, the federation of free trade unions. Their goal is economic reform and benefits for organized workers.
 
-Strength: [+ labor_strength : strength +]
+Strength: [+ new_liberal_strength : strength +]
 
-Dissent: [+ labor_dissent : dissent +]
+Dissent: [+ new_liberal_dissent : dissent +]
 
 **Reformists**
 
 Reformists are pragmatic participants in government, and seek to expand the welfare state and defend democracy against the far right and left. [? if spd_prussia : They are dominant in the state government of Prussia. ?]
 
-Strength: [+ reformist_strength : strength +]
+Strength: [+ blue_dog_strength : strength +]
 
-Dissent: [+ reformist_dissent : dissent +]
+Dissent: [+ blue_dog_dissent : dissent +]
 
 @neorevisionists
 go-to: menu

@@ -14,20 +14,20 @@ Q.budget = Q.starting_budget;
 
 Q.starting_dissent = Number.parseInt(document.getElementById("starting_dissent").value); 
 if (Q.starting_dissent == 0) {
-    Q.left_dissent = 10;
-    Q.center_dissent = 0;
-    Q.labor_dissent = 5;
-    Q.reformist_dissent = 5;
+    Q.socialist_dissent = 10;
+    Q.progressive_dissent = 0;
+    Q.new_liberal_dissent = 5;
+    Q.blue_dog_dissent = 5;
 } else if (Q.starting_dissent == 1) {
-    Q.left_dissent = 20;
-    Q.center_dissent = 0;
-    Q.labor_dissent = 5;
-    Q.reformist_dissent = 5;
+    Q.socialist_dissent = 20;
+    Q.progressive_dissent = 0;
+    Q.new_liberal_dissent = 5;
+    Q.blue_dog_dissent = 5;
 } else {
-    Q.left_dissent = 30;
-    Q.center_dissent = 20;
-    Q.labor_dissent = 25;
-    Q.reformist_dissent = 25;
+    Q.socialist_dissent = 30;
+    Q.progressive_dissent = 20;
+    Q.new_liberal_dissent = 25;
+    Q.blue_dog_dissent = 25;
 }
 
 Q.starting_relations = Number.parseInt(document.getElementById("starting_relations").value); 

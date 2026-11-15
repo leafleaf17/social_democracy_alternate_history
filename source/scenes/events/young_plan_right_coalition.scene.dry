@@ -32,7 +32,7 @@ The right-wing coalition has fallen. New elections have been set for [+ next_ele
 title: Support the rump Center-led government, voting in favor of the government.
 subtitle: We would essentially provide "toleration" to a bourgeois government.
 view-if: neo_weimar_coalition >= 50
-on-arrival: spd_toleration = 1; in_right_coalition = 0; left_dissent += 8; 
+on-arrival: spd_toleration = 1; in_right_coalition = 0; socialist_dissent += 8; 
 
 By supporting the government, we have essentially entered into a "toleration" arrangement with the [+ chancellor +] government. We do not have a voice in the government, but we are responsible for its continued stability. The left of our party opposes this plan, and would rather that we hold new elections.
 

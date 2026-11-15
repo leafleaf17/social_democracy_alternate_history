@@ -5,8 +5,8 @@ Q.rb_strength = Math.round(Q.rb_strength);
 Q.sh_strength = Math.round(Q.sh_strength);
 Q.sa_strength = Math.round(Q.sa_strength);
 // re-calculate dissent, in case we transitioned from, say, the KPD support that raised reformist dissent.
-var total_strength = Q.socialist_strength + Q.center_strength + Q.labor_strength + Q.reformist_strength + Q.neorevisionist_strength;
-var total_dissent = Q.socialist_strength*Q.left_dissent + Q.center_strength*Q.center_dissent + Q.labor_strength*Q.labor_dissent + Q.reformist_strength*Q.reformist_dissent + Q.neorevisionist_strength*Q.neorevisionist_dissent;
+var total_strength = Q.socialist_strength + Q.progressive_strength + Q.new_liberal_strength + Q.blue_dog_strength + Q.neorevisionist_strength;
+var total_dissent = Q.socialist_strength*Q.socialist_dissent + Q.progressive_strength*Q.progressive_dissent + Q.new_liberal_strength*Q.new_liberal_dissent + Q.blue_dog_strength*Q.blue_dog_dissent + Q.neorevisionist_strength*Q.neorevisionist_dissent;
 
 Q.dissent = 0.01*total_dissent/total_strength;
 console.log('new dissent: ' + Q.dissent);
@@ -48,7 +48,7 @@ if (Q.kpd_relation >= 60) {
 }
 // general strike strength
 // maximum (given 25 labor strength) is 400
-// use normalized workers_spd instead of labor_strength?
+// use normalized workers_spd instead of new_liberal_strength?
 Q.normalized_workers_spd = 100*Q.workers_spd/(Q.workers_spd + Q.workers_kpd + Q.workers_nsdap + Q.workers_other + Q.workers_dnvp + Q.workers_z);
 Q.normalized_workers_kpd = 100*Q.workers_kpd/(Q.workers_spd + Q.workers_kpd + Q.workers_nsdap + Q.workers_other + Q.workers_dnvp + Q.workers_z);
 Q.normalized_workers_total = Q.normalized_workers_spd;
@@ -57,7 +57,7 @@ if (Q.kpd_relation >= 60) {
 } else if (Q.kpd_relation >= 45) {
     Q.normalized_workers_total += Q.normalized_workers_kpd*0.5;
 }
-Q.total_power += (2 - Q.labor_dissent/100)*Q.normalized_workers_total*(2 - Q.unemployed/100)*2.5;
+Q.total_power += (2 - Q.new_liberal_dissent/100)*Q.normalized_workers_total*(2 - Q.unemployed/100)*2.5;
 console.log("Supporter strength:", Q.total_power);
 
 // our enemies

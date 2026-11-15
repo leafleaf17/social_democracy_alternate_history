@@ -23,7 +23,7 @@ The Prussian Landtag has formed a committee to investigate the affair. What shou
 
 @corruption_unacceptable
 title: Corruption is unacceptable. Cooperate with the investigation, even if it implicates the SPD.
-on-arrival: center_dissent += 5; reformist_dissent += 5; labor_dissent += 5
+on-arrival: progressive_dissent += 5; blue_dog_dissent += 5; new_liberal_dissent += 5
 
 We cooperate with the investigation fully, expelling any party member who has been credibly accused of corruption. This causes internal dissention as many loyal party members are purged. However, our actions have limited the damage to the SPD's support.
 
