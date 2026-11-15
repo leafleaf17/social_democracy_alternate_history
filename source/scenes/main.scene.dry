@@ -32,8 +32,6 @@ if (Q.advisor_action_timer <= 0) {
 } else {
     Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' months.';
 }
-!}
-max-cards: 4
 const boxes = document.querySelectorAll('.scrollable-box');
 if (boxes.length >= 2) {
     boxes[1].remove();
@@ -41,6 +39,8 @@ if (boxes.length >= 2) {
 Q.last_time_updated = Q.time;
 if (Q.week) Q.last_week_updated = Q.week;
 !}
+max-cards: 4
+
 on-display: {!
 if (!document.getElementById('news_tab')) {
     var button = document.createElement('button');
