@@ -1,10 +1,8 @@
 (function() {
   'use strict';
 
-  var MAP_PATHS = [
-    'Blank_US_Map_(states_only).svg',
-    '../../Blank_US_Map_(states_only).svg'
-  ];
+  // The SVG is stored at repository root; raw.githubusercontent.com serves its actual XML.
+  var MAP_URL = 'https://raw.githubusercontent.com/leafleaf17/social_democracy_alternate_history/main/Blank_US_Map_%28states_only%29.svg';
   var stateNames = {
     AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
     CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia',
@@ -29,7 +27,7 @@
     return ui && ui.dendryEngine && ui.dendryEngine.state && ui.dendryEngine.state.qualities;
   }
 
-  // YAPms-style bands: under 1, 1–5, 5–15, and 15+ percentage points.
+  // Four requested margin bands: under 1, 1–5, 5–15, and 15+ points.
   function marginBand(margin) {
     var absolute = Math.abs(margin);
     if (absolute >= 15) return 3;
@@ -39,33 +37,33 @@
   }
 
   function colorForMargin(margin) {
-    var palette = margin >= 0 ? colors.dem : colors.rep;
-    return palette[marginBand(margin)];
+    return (margin >= 0 ? colors.dem : colors.rep)[marginBand(margin)];
   }
 
-  function pct(value) {
+  function formatPercent(value) {
     return Number(value).toFixed(2) + '%';
   }
 
-  function results() {
-    var q = currentQualities();
-    if (!q) return null;
+  function pollingResults() {
+    var qualities = currentQualities();
+    if (!qualities) return null;
     if (typeof window.simulate_polling === 'function') window.simulate_polling();
-    return q.polling || null;
+    return qualities.polling || null;
   }
 
   function stateShapes(svg, code) {
-    // The uploaded SVG gives each state path a lowercase postal abbreviation class.
+    // The local SVG marks each state with its lowercase postal abbreviation class.
     return svg.querySelectorAll('path.' + code.toLowerCase() + ', circle.' + code.toLowerCase());
   }
 
   function tooltipText(code, result) {
     var margin = Number(result.margin);
-    var leader = margin > 0 ? 'Democrat' : margin < 0 ? 'Republican' : 'Tie';
-    return result.name + ' (' + code + ') — ' + leader + ' lead\n' +
-      'Democrat: ' + pct(result.dem) + '\n' +
-      'Republican: ' + pct(result.rep) + '\n' +
-      'Margin: ' + (margin > 0 ? 'D+' : margin < 0 ? 'R+' : 'Even ') + Math.abs(margin).toFixed(2) +
+    var leader = margin > 0 ? 'Democrat lead' : margin < 0 ? 'Republican lead' : 'Tie';
+    var marginLabel = margin > 0 ? 'D+' : margin < 0 ? 'R+' : 'Even ';
+    return result.name + ' (' + code + ') — ' + leader + '\n' +
+      'Democrat: ' + formatPercent(result.dem) + '\n' +
+      'Republican: ' + formatPercent(result.rep) + '\n' +
+      'Margin: ' + marginLabel + Math.abs(margin).toFixed(2) +
       (Math.abs(margin) < 0.01 ? '' : ' points') + '\n' + result.ev + ' electoral votes';
   }
 
@@ -80,11 +78,10 @@
   function updateMap() {
     var drawer = document.getElementById('polling-map-drawer');
     if (!drawer || !drawer.classList.contains('open')) return;
-    var polling = results();
-    if (!polling || !mapReady) return;
-
+    var polling = pollingResults();
     var svg = drawer.querySelector('svg.polling-us-map');
-    if (!svg) return;
+    if (!polling || !svg || !mapReady) return;
+
     var demEV = 0;
     var repEV = 0;
     Object.keys(polling).forEach(function(code) {
@@ -157,7 +154,7 @@
     document.head.appendChild(style);
   }
 
-  function setLegend() {
+  function legendHtml() {
     return '<div class="polling-map-legend" aria-label="Map legend">' +
       '<span><i class="polling-map-swatch" style="background:#a51c30"></i>Republican 15+ points</span>' +
       '<span><i class="polling-map-swatch" style="background:#d65757"></i>Republican 5–15</span>' +
@@ -169,21 +166,28 @@
       '<span><i class="polling-map-swatch" style="background:#174a7e"></i>Democrat 15+ points</span></div>';
   }
 
-  function loadLocalMap(drawer, pathIndex) {
-    if (pathIndex >= MAP_PATHS.length) {
-      var wrap = drawer.querySelector('.polling-map-svg-wrap');
-      if (wrap) wrap.innerHTML = '<p class="polling-map-error">Could not load the local Blank_US_Map_(states_only).svg file.</p>';
-      return;
-    }
+  function loadMap() {
+    var drawer = document.getElementById('polling-map-drawer');
+    if (!drawer || drawer.querySelector('.polling-map-content')) return;
+    addStyles();
+    drawer.innerHTML = '<button type="button" class="polling-map-close" onclick="window.closePollingMaps();">Close ×</button>' +
+      '<h2>U.S. Electoral Map</h2><div class="polling-map-content"><p class="polling-map-score">Loading current state polling…</p>' +
+      legendHtml() +
+      '<div class="polling-map-svg-wrap"><p class="polling-map-error">Loading local state map…</p></div>' +
+      '<p class="polling-map-credit">State outline: <a href="https://github.com/leafleaf17/social_democracy_alternate_history/blob/main/Blank_US_Map_(states_only).svg" target="_blank" rel="noopener">Uploaded state SVG</a>. Hover or focus a state for exact polling results.</p></div>';
 
-    fetch(MAP_PATHS[pathIndex])
-      .then(function(response) {
-        if (!response.ok) throw new Error('Local map request failed: ' + response.status);
-        return response.text();
-      })
-      .then(function(text) {
-        var parsed = new DOMParser().parseFromString(text, 'image/svg+xml');
-        if (parsed.querySelector('parsererror')) throw new Error('The local map SVG could not be parsed.');
+    var request = new XMLHttpRequest();
+    request.open('GET', MAP_URL, true);
+    request.onreadystatechange = function() {
+      if (request.readyState !== 4) return;
+      var wrap = drawer.querySelector('.polling-map-svg-wrap');
+      if (request.status < 200 || request.status >= 300) {
+        if (wrap) wrap.innerHTML = '<p class="polling-map-error">Could not load the uploaded SVG from raw.githubusercontent.com (HTTP ' + request.status + ').</p>';
+        return;
+      }
+      try {
+        var parsed = new DOMParser().parseFromString(request.responseText, 'image/svg+xml');
+        if (parsed.querySelector('parsererror')) throw new Error('Invalid SVG XML');
         var svg = parsed.documentElement;
         svg.classList.add('polling-us-map');
         svg.removeAttribute('width');
@@ -194,30 +198,19 @@
         Object.keys(stateNames).forEach(function(code) {
           if (stateShapes(svg, code).length) stateCount += 1;
         });
-        if (stateCount < 45) throw new Error('State paths were not found in the local SVG.');
-        var wrap = drawer.querySelector('.polling-map-svg-wrap');
-        if (!wrap) return;
-        wrap.textContent = '';
-        wrap.appendChild(document.importNode(svg, true));
+        if (stateCount < 45) throw new Error('Expected state class paths were not found in the SVG (' + stateCount + ' states found).');
+        if (wrap) {
+          wrap.textContent = '';
+          wrap.appendChild(document.importNode(svg, true));
+        }
         mapReady = true;
         updateMap();
-      })
-      .catch(function(error) {
-        if (window.console) console.warn('Polling map local asset path failed:', MAP_PATHS[pathIndex], error);
-        loadLocalMap(drawer, pathIndex + 1);
-      });
-  }
-
-  function loadMap() {
-    var drawer = document.getElementById('polling-map-drawer');
-    if (!drawer || drawer.querySelector('.polling-map-content')) return;
-    addStyles();
-    drawer.innerHTML = '<button type="button" class="polling-map-close" onclick="window.closePollingMaps();">Close ×</button>' +
-      '<h2>U.S. Electoral Map</h2><div class="polling-map-content"><p class="polling-map-score">Loading current state polling…</p>' +
-      setLegend() +
-      '<div class="polling-map-svg-wrap"><p class="polling-map-error">Loading local state map…</p></div>' +
-      '<p class="polling-map-credit">State outline: <a href="https://github.com/leafleaf17/social_democracy_alternate_history/blob/main/Blank_US_Map_(states_only).svg" target="_blank" rel="noopener">Uploaded state SVG</a>. Hover or focus a state for exact polling results.</p></div>';
-    loadLocalMap(drawer, 0);
+      } catch (error) {
+        if (wrap) wrap.innerHTML = '<p class="polling-map-error">The uploaded file could not be used as an SVG: ' + error.message + '.</p>';
+        if (window.console) console.warn('Polling map SVG parse:', error);
+      }
+    };
+    request.send();
   }
 
   function initialize() {
