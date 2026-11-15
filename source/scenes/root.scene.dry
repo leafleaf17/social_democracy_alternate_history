@@ -55,59 +55,78 @@ Q.cabinet_enabled = 0;
 
 // whether or not hindenburg can dismiss the government.
 Q.hindenburg_enabled = 0;
-Q.state_db = {
-    AL: ["Alabama",        9, -15, [65,27,5,3], , [18,42,40], [15,25,35,25], [32,48,20]],
-    AK: ["Alaska",         3,  -8, [62,4,8,26], , [28,38,34], [18,28,34,20], [22,48,30]],
-    AZ: ["Arizona",       11,  -2, [58,5,31,6], , [35,50,15], [18,26,31,25], [26,49,25]],
-    AR: ["Arkansas",       6, -16, [72,16,8,4], , [18,38,44], [16,25,34,25], [34,47,19]],
-    CA: ["California",    54,  13, [37,6,39,18], [38,62], [42,48,10], [19,28,32,21], [24,44,32]],
-    CO: ["Colorado",      10,   4, [67,4,22,7], , [32,52,16], [19,29,31,21], [21,47,32]],
-    CT: ["Connecticut",    7,   7, [66,11,17,6], [42,58], [28,60,12], [16,25,35,24], [21,45,34]],
-    DE: ["Delaware",       3,   7, [62,23,10,5], [35,65], [22,60,18], [16,25,34,25], [23,49,28]],
-    DC: ["D.C.",           3,  43, [38,45,11,6], [63,37], [100,0,0], , [24,38,38]],
-    FL: ["Florida",       30,  -3, [54,15,27,4], [33,67], [30,58,12], [15,24,32,29], [27,49,24]],
-    GA: ["Georgia",       16,  -3, [52,33,10,5], [35,65], [26,52,22], [18,27,34,21], [27,48,25]],
-    HI: ["Hawaii",         4,  14, [22,2,10,66], [36,64], [35,50,15], [17,26,32,25], [20,47,33]],
-    ID: ["Idaho",          4, -18, [81,1,13,5], , [20,42,38], [18,26,32,24], [27,51,22]],
-    IL: ["Illinois",      19,   7, [61,14,18,7], [38,62], [35,50,15], [17,27,33,23], [24,47,29]],
-    IN: ["Indiana",       11, -11, [78,10,8,4], , [24,46,30], [18,26,33,23], [27,51,22]],
-    IA: ["Iowa",           6,  -6, [84,4,7,5], , [20,40,40], [18,25,33,24], [25,52,23]],
-    KS: ["Kansas",         6, -10, [75,6,13,6], , [24,44,32], [18,26,32,24], [25,50,25]],
-    KY: ["Kentucky",       8, -16, [84,8,4,4], , [20,40,40], [17,25,34,24], [32,48,20]],
-    LA: ["Louisiana",      8, -12, [58,32,6,4], , [25,45,30], [17,26,34,23], [33,46,21]],
-    ME: ["Maine",          4,   2, [91,2,2,5], , [15,35,50], [14,23,35,28], [26,50,24]],
-    MD: ["Maryland",      10,  14, [49,31,11,9], [43,57], [28,60,12], [17,27,34,22], [19,44,37]],
-    MA: ["Massachusetts", 11,  15, [69,8,13,10], [47,53], [32,58,10], [18,27,33,22], [20,43,37]],
-    MI: ["Michigan",      15,  -1, [74,14,6,6], , [24,50,26], [17,25,34,24], [26,49,25]],
-    MN: ["Minnesota",     10,   1, [78,7,6,9], , [26,48,26], [17,27,33,23], [21,49,30]],
-    MS: ["Mississippi",    6, -11, [56,38,3,3], , [15,35,50], [17,25,34,24], [35,47,18]],
-    MO: ["Missouri",      10, -10, [78,12,5,5], , [24,46,30], [17,26,33,24], [27,49,24]],
-    MT: ["Montana",        4, -11, [85,1,4,10], , [16,34,50], [16,25,33,26], [27,50,23]],
-    NE: ["Nebraska",       5, -13, [78,5,12,5], , [26,40,34], [18,26,32,24], [24,51,25]],
-    NV: ["Nevada",         6,  -1, [48,10,30,12],[28,72], [38,52,10], [18,28,32,22], [25,50,25]],
-    NH: ["New Hampshire",  4,   1, [88,2,4,6], , [16,52,32], [15,24,36,25], [19,48,33]],
-    NJ: ["New Jersey",    14,   6, [54,14,21,11],[43,57], [28,64,8], , [20,44,36]],
-    NM: ["New Mexico",     5,   3, [37,2,49,12], [30,70], [28,44,28], [18,26,31,25], [31,47,22]],
-    NY: ["New York",      28,  10, [55,15,19,11],[40,60], [46,42,12], [18,27,33,22], [25,44,31]],
-    NC: ["North Carolina",16,  -3, [62,22,10,6], [35,65], [25,48,27], [18,26,33,23], [27,49,24]],
-    ND: ["North Dakota",   3, -20, [83,3,4,10], , [20,35,45], [20,27,31,22], [23,51,26]],
-    OH: ["Ohio",          17,  -6, [77,13,4,6], , [25,50,25], [17,25,34,24], [27,49,24]],
-    OK: ["Oklahoma",       7, -20, [65,8,12,15], [28,72], [24,42,34], [18,26,32,24], [30,49,21]],
-    OR: ["Oregon",         8,   6, [74,2,14,10], [36,64], [30,48,22], [17,28,32,23], [24,49,27]],
-    PA: ["Pennsylvania",  19,  -2, [75,11,8,6], , [25,52,23], [16,25,34,25], [25,48,27]],
-    RI: ["Rhode Island",   4,   8, [70,7,17,6], , [30,60,10], [18,26,33,23], [23,47,30]],
-    SC: ["South Carolina", 9,  -8, [64,26,6,4], , [22,48,30], [17,25,33,25], [28,49,23]],
-    SD: ["South Dakota",   3, -16, [81,2,4,13], , [18,34,48], [18,25,32,25], [25,51,24]],
-    TN: ["Tennessee",     11, -14, [73,17,6,4], , [24,46,30], [17,26,34,23], [29,49,22]],
-    TX: ["Texas",         40,  -5, [41,12,40,7], [33,67], [36,48,16], [19,28,32,21], [26,48,26]],
-    UT: ["Utah",           6, -13, [77,1,15,7], , [26,56,18], [23,29,29,19], [20,52,28]],
-    VT: ["Vermont",        3,  16, [92,1,2,5], , [12,33,55], [16,24,35,25], [23,50,27]],
-    VA: ["Virginia",      13,   2, [61,19,10,10],[44,56], [22,56,22], [17,28,33,22], [22,46,32]],
-    WA: ["Washington",    12,   8, [66,4,14,16], [39,61], [32,52,16], [18,29,32,21], [21,47,32]],
-    WV: ["West Virginia",  4, -22, [91,4,2,3], , [14,36,50], [15,24,35,26], [34,48,18]],
-    WI: ["Wisconsin",     10,  -2, [80,6,8,6], , [24,46,30], [17,25,34,24], [24,51,25]],
-    WY: ["Wyoming",        3, -25, [83,1,11,5], , [16,34,50], [17,26,33,24], [24,51,25]]
+// ============================================================================
+// 1. NATIONAL DEMOGRAPHIC SUPPORT (% voting for Candidate A / Democrat)
+// ============================================================================
+Q.nat_support = {
+    race: { white: 42, black: 87, hispanic: 60, asian: 62 },
+    edu:  { college: 57, noncollege: 44 },
+    geo:  { urban: 65, suburban: 51, rural: 35 },
+    age:  { youth: 60, mid: 52, old: 46, senior: 47 },
+    inc:  { low: 55, mid: 49, high: 47 }
 };
+
+// ============================================================================
+// 2. COMPLETE 50-STATE + DC DATABASE
+// Format: Name, EVs, PVI, Race(W,B,H,A), Edu(Col,Non), Geo(Urb,Sub,Rur), Age(18-29,30-44,45-64,65+), Inc(Low,Mid,High)
+// ============================================================================
+Q.state_db = {
+    AL: Array.of("Alabama",        9, -15, Array.of(65,27,5,3),   Array.of(27,73), Array.of(18,42,40), Array.of(15,25,35,25), Array.of(32,48,20)),
+    AK: Array.of("Alaska",         3,  -8, Array.of(62,4,8,26),   Array.of(32,68), Array.of(28,38,34), Array.of(18,28,34,20), Array.of(22,48,30)),
+    AZ: Array.of("Arizona",       11,  -2, Array.of(58,5,31,6),   Array.of(33,67), Array.of(35,50,15), Array.of(18,26,31,25), Array.of(26,49,25)),
+    AR: Array.of("Arkansas",       6, -16, Array.of(72,16,8,4),   Array.of(25,75), Array.of(18,38,44), Array.of(16,25,34,25), Array.of(34,47,19)),
+    CA: Array.of("California",    54,  13, Array.of(37,6,39,18),  Array.of(38,62), Array.of(42,48,10), Array.of(19,28,32,21), Array.of(24,44,32)),
+    CO: Array.of("Colorado",      10,   4, Array.of(67,4,22,7),   Array.of(45,55), Array.of(32,52,16), Array.of(19,29,31,21), Array.of(21,47,32)),
+    CT: Array.of("Connecticut",    7,   7, Array.of(66,11,17,6),  Array.of(42,58), Array.of(28,60,12), Array.of(16,25,35,24), Array.of(21,45,34)),
+    DE: Array.of("Delaware",       3,   7, Array.of(62,23,10,5),  Array.of(35,65), Array.of(22,60,18), Array.of(16,25,34,25), Array.of(23,49,28)),
+    DC: Array.of("D.C.",           3,  43, Array.of(38,45,11,6),  Array.of(63,37), Array.of(100,0,0), Array.of(24,33,27,16), Array.of(24,38,38)),
+    FL: Array.of("Florida",       30,  -3, Array.of(54,15,27,4),  Array.of(34,66), Array.of(30,58,12), Array.of(15,24,32,29), Array.of(27,49,24)),
+    GA: Array.of("Georgia",       16,  -3, Array.of(52,33,10,5),  Array.of(35,65), Array.of(26,52,22), Array.of(18,27,34,21), Array.of(27,48,25)),
+    HI: Array.of("Hawaii",         4,  14, Array.of(22,2,10,66),  Array.of(36,64), Array.of(35,50,15), Array.of(17,26,32,25), Array.of(20,47,33)),
+    ID: Array.of("Idaho",          4, -18, Array.of(81,1,13,5),   Array.of(31,69), Array.of(20,42,38), Array.of(18,26,32,24), Array.of(27,51,22)),
+    IL: Array.of("Illinois",      19,   7, Array.of(61,14,18,7),  Array.of(38,62), Array.of(35,50,15), Array.of(17,27,33,23), Array.of(24,47,29)),
+    IN: Array.of("Indiana",       11, -11, Array.of(78,10,8,4),   Array.of(29,71), Array.of(24,46,30), Array.of(18,26,33,23), Array.of(27,51,22)),
+    IA: Array.of("Iowa",           6,  -6, Array.of(84,4,7,5),    Array.of(31,69), Array.of(20,40,40), Array.of(18,25,33,24), Array.of(25,52,23)),
+    KS: Array.of("Kansas",         6, -10, Array.of(75,6,13,6),   Array.of(35,65), Array.of(24,44,32), Array.of(18,26,32,24), Array.of(25,50,25)),
+    KY: Array.of("Kentucky",       8, -16, Array.of(84,8,4,4),    Array.of(27,73), Array.of(20,40,40), Array.of(17,25,34,24), Array.of(32,48,20)),
+    LA: Array.of("Louisiana",      8, -12, Array.of(58,32,6,4),   Array.of(27,73), Array.of(25,45,30), Array.of(17,26,34,23), Array.of(33,46,21)),
+    ME: Array.of("Maine",          4,   2, Array.of(91,2,2,5),    Array.of(35,65), Array.of(15,35,50), Array.of(14,23,35,28), Array.of(26,50,24)),
+    MD: Array.of("Maryland",      10,  14, Array.of(49,31,11,9),  Array.of(43,57), Array.of(28,60,12), Array.of(17,27,34,22), Array.of(19,44,37)),
+    MA: Array.of("Massachusetts", 11,  15, Array.of(69,8,13,10),  Array.of(47,53), Array.of(32,58,10), Array.of(18,27,33,22), Array.of(20,43,37)),
+    MI: Array.of("Michigan",      15,  -1, Array.of(74,14,6,6),   Array.of(32,68), Array.of(24,50,26), Array.of(17,25,34,24), Array.of(26,49,25)),
+    MN: Array.of("Minnesota",     10,   1, Array.of(78,7,6,9),    Array.of(39,61), Array.of(26,48,26), Array.of(17,27,33,23), Array.of(21,49,30)),
+    MS: Array.of("Mississippi",    6, -11, Array.of(56,38,3,3),   Array.of(25,75), Array.of(15,35,50), Array.of(17,25,34,24), Array.of(35,47,18)),
+    MO: Array.of("Missouri",      10, -10, Array.of(78,12,5,5),   Array.of(32,68), Array.of(24,46,30), Array.of(17,26,33,24), Array.of(27,49,24)),
+    MT: Array.of("Montana",        4, -11, Array.of(85,1,4,10),   Array.of(35,65), Array.of(16,34,50), Array.of(16,25,33,26), Array.of(27,50,23)),
+    NE: Array.of("Nebraska",       5, -13, Array.of(78,5,12,5),   Array.of(34,66), Array.of(26,40,34), Array.of(18,26,32,24), Array.of(24,51,25)),
+    NV: Array.of("Nevada",         6,  -1, Array.of(48,10,30,12), Array.of(28,72), Array.of(38,52,10), Array.of(18,28,32,22), Array.of(25,50,25)),
+    NH: Array.of("New Hampshire",  4,   1, Array.of(88,2,4,6),    Array.of(40,60), Array.of(16,52,32), Array.of(15,24,36,25), Array.of(19,48,33)),
+    NJ: Array.of("New Jersey",    14,   6, Array.of(54,14,21,11), Array.of(43,57), Array.of(28,64,8),  Array.of(16,26,35,23), Array.of(20,44,36)),
+    NM: Array.of("New Mexico",     5,   3, Array.of(37,2,49,12),  Array.of(30,70), Array.of(28,44,28), Array.of(18,26,31,25), Array.of(31,47,22)),
+    NY: Array.of("New York",      28,  10, Array.of(55,15,19,11), Array.of(40,60), Array.of(46,42,12), Array.of(18,27,33,22), Array.of(25,44,31)),
+    NC: Array.of("North Carolina",16,  -3, Array.of(62,22,10,6),  Array.of(35,65), Array.of(25,48,27), Array.of(18,26,33,23), Array.of(27,49,24)),
+    ND: Array.of("North Dakota",   3, -20, Array.of(83,3,4,10),   Array.of(32,68), Array.of(20,35,45), Array.of(20,27,31,22), Array.of(23,51,26)),
+    OH: Array.of("Ohio",          17,  -6, Array.of(77,13,4,6),   Array.of(31,69), Array.of(25,50,25), Array.of(17,25,34,24), Array.of(27,49,24)),
+    OK: Array.of("Oklahoma",       7, -20, Array.of(65,8,12,15),  Array.of(28,72), Array.of(24,42,34), Array.of(18,26,32,24), Array.of(30,49,21)),
+    OR: Array.of("Oregon",         8,   6, Array.of(74,2,14,10),  Array.of(36,64), Array.of(30,48,22), Array.of(17,28,32,23), Array.of(24,49,27)),
+    PA: Array.of("Pennsylvania",  19,  -2, Array.of(75,11,8,6),   Array.of(35,65), Array.of(25,52,23), Array.of(16,25,34,25), Array.of(25,48,27)),
+    RI: Array.of("Rhode Island",   4,   8, Array.of(70,7,17,6),   Array.of(37,63), Array.of(30,60,10), Array.of(18,26,33,23), Array.of(23,47,30)),
+    SC: Array.of("South Carolina", 9,  -8, Array.of(64,26,6,4),   Array.of(31,69), Array.of(22,48,30), Array.of(17,25,33,25), Array.of(28,49,23)),
+    SD: Array.of("South Dakota",   3, -16, Array.of(81,2,4,13),   Array.of(31,69), Array.of(18,34,48), Array.of(18,25,32,25), Array.of(25,51,24)),
+    TN: Array.of("Tennessee",     11, -14, Array.of(73,17,6,4),   Array.of(30,70), Array.of(24,46,30), Array.of(17,26,34,23), Array.of(29,49,22)),
+    TX: Array.of("Texas",         40,  -5, Array.of(41,12,40,7),  Array.of(33,67), Array.of(36,48,16), Array.of(19,28,32,21), Array.of(26,48,26)),
+    UT: Array.of("Utah",           6, -13, Array.of(77,1,15,7),   Array.of(37,63), Array.of(26,56,18), Array.of(23,29,29,19), Array.of(20,52,28)),
+    VT: Array.of("Vermont",        3,  16, Array.of(92,1,2,5),    Array.of(42,58), Array.of(12,33,55), Array.of(16,24,35,25), Array.of(23,50,27)),
+    VA: Array.of("Virginia",      13,   2, Array.of(61,19,10,10), Array.of(44,56), Array.of(22,56,22), Array.of(17,28,33,22), Array.of(22,46,32)),
+    WA: Array.of("Washington",    12,   8, Array.of(66,4,14,16),  Array.of(39,61), Array.of(32,52,16), Array.of(18,29,32,21), Array.of(21,47,32)),
+    WV: Array.of("West Virginia",  4, -22, Array.of(91,4,2,3),    Array.of(24,76), Array.of(14,36,50), Array.of(15,24,35,26), Array.of(34,48,18)),
+    WI: Array.of("Wisconsin",     10,  -2, Array.of(80,6,8,6),    Array.of(33,67), Array.of(24,46,30), Array.of(17,25,34,24), Array.of(24,51,25)),
+    WY: Array.of("Wyoming",        3, -25, Array.of(83,1,11,5),   Array.of(29,71), Array.of(16,34,50), Array.of(17,26,33,24), Array.of(24,51,25))
+};
+
+// ============================================================================
+// 3. SIMULATE POLLING FUNCTION
+// ============================================================================
 window.simulate_polling = function() {
     const sup = Q.nat_support;
     const toLogOdds = (pct) => {
@@ -117,106 +136,96 @@ window.simulate_polling = function() {
     const fromLogOdds = (lo) => (1 / (1 + Math.exp(-lo))) * 100;
 
     const loSup = {
-        race: [toLogOdds(sup.race.white), toLogOdds(sup.race.black), toLogOdds(sup.race.hispanic), toLogOdds(sup.race.asian)],
-        edu:  [toLogOdds(sup.edu.college), toLogOdds(sup.edu.noncollege)],
-        geo:  [toLogOdds(sup.geo.urban), toLogOdds(sup.geo.suburban), toLogOdds(sup.geo.rural)],
-        age:  [toLogOdds(sup.age.youth), toLogOdds(sup.age.mid), toLogOdds(sup.age.old), toLogOdds(sup.age.senior)],
-        inc:  [toLogOdds(sup.inc.low), toLogOdds(sup.inc.mid), toLogOdds(sup.inc.high)]
+        race: Array.of(toLogOdds(sup.race.white), toLogOdds(sup.race.black), toLogOdds(sup.race.hispanic), toLogOdds(sup.race.asian)),
+        edu:  Array.of(toLogOdds(sup.edu.college), toLogOdds(sup.edu.noncollege)),
+        geo:  Array.of(toLogOdds(sup.geo.urban), toLogOdds(sup.geo.suburban), toLogOdds(sup.geo.rural)),
+        age:  Array.of(toLogOdds(sup.age.youth), toLogOdds(sup.age.mid), toLogOdds(sup.age.old), toLogOdds(sup.age.senior)),
+        inc:  Array.of(toLogOdds(sup.inc.low), toLogOdds(sup.inc.mid), toLogOdds(sup.inc.high))
     };
 
-    const weights = [0.35, 0.25, 0.20, 0.10, 0.10];
+    const weights = Array.of(0.35, 0.25, 0.20, 0.10, 0.10);
     let totalDemEV = 0;
     let totalRepEV = 0;
     Q.polling = {};
 
     for (let code of Object.keys(Q.state_db)) {
         const stateData = Q.state_db[code];
-        const name = stateData[0];
-        const ev = stateData[1];
-        const pvi = stateData[2];
-        const targets = [stateData[3], stateData[4], stateData[5], stateData[6], stateData[7]];
+        const name = stateData.at(0);
+        const ev = stateData.at(1);
+        const pvi = stateData.at(2);
+        const targets = Array.of(stateData.at(3), stateData.at(4), stateData.at(5), stateData.at(6), stateData.at(7));
 
-        let buckets = [];
+        let buckets = new Array();
         for (let r = 0; r < 4; r++) {
             for (let e = 0; e < 2; e++) {
-                for (let g = 0; g < 3; g++) {
-                    for (let a = 0; a < 4; a++) {
-                        for (let i = 0; i < 3; i++) {
-                            let pop = (targets[0][r]/100) * (targets[1][e]/100) * (targets[2][g]/100) * (targets[3][a]/100) * (targets[4][i]/100);
-                            if (pop === 0) continue;
-
-                            if (e === 0 && g === 0) pop *= 1.25;
-                            if (e === 0 && g === 2) pop *= 0.70;
-                            if (e === 0 && i === 2) pop *= 1.35;
-                            if (e === 1 && i === 0) pop *= 1.30;
-
-                            buckets.push({ idx: [r, e, g, a, i], pop: pop });
-                        }
-                    }
-                }
-            }
-        }
-
-        for (let iter = 0; iter < 5; iter++) {
-            for (let c = 0; c < 5; c++) {
-                let sums =;
-                for (let b of buckets) {
-                    sums[b.idx[c]] += b.pop;
-                }
-                for (let b of buckets) {
-                    let valIdx = b.idx[c];
-                    let target = targets[c][valIdx] / 100;
-                    if (sums[valIdx] > 0) {
-                        b.pop *= (target / sums[valIdx]);
-                    }
-                }
-            }
-        }
-
-        let demVotes = 0;
-        let totalPop = 0;
-        for (let b of buckets) {
-            const r = b.idx[0];
-            const e = b.idx[1];
-            const g = b.idx[2];
-            const a = b.idx[3];
-            const i = b.idx[4];
-
-            let lo = (weights[0] * loSup.race[r]) +
-                     (weights[1] * loSup.edu[e]) +
-                     (weights[2] * loSup.geo[g]) +
-                     (weights[3] * loSup.age[a]) +
-                     (weights[4] * loSup.inc[i]) +
-                     (pvi * 0.04);
-
-            demVotes += b.pop * fromLogOdds(lo);
-            totalPop += b.pop;
-        }
-
-        let demPct = +(demVotes / totalPop).toFixed(2);
-        let repPct = +(100 - demPct).toFixed(2);
-        let leader = demPct >= repPct ? "DEM" : "REP";
-
-        if (leader === "DEM") {
-            totalDemEV += ev;
-        } else {
-            totalRepEV += ev;
-        }
-
-        Q.polling[code] = {
-            name: name,
-            ev: ev,
-            dem: demPct,
-            rep: repPct,
-            margin: +(demPct - repPct).toFixed(2),
-            leader: leader
-        };
-    }
-
-    Q.projected_dem_ev = totalDemEV;
-    Q.projected_rep_ev = totalRepEV;
+for (let g = 0; g < 3; g++) {
+for (let a = 0; a < 4; a++) {
+for (let i = 0; i < 3; i++) {
+let pop = (targets.at(0).at(r)/100) * (targets.at(1).at(e)/100) * (targets.at(2).at(g)/100) * (targets.at(3).at(a)/100) * (targets.at(4).at(i)/100);
+if (pop === 0) continue;
+if (e === 0 && g === 0) pop *= 1.25;
+if (e === 0 && g === 2) pop *= 0.70;
+if (e === 0 && i === 2) pop *= 1.35;
+if (e === 1 && i === 0) pop *= 1.30;
+buckets.push({ idx: Array.of(r, e, g, a, i), pop: pop });
+}
+}
+}
+}
+}
+for (let iter = 0; iter < 5; iter++) {
+for (let c = 0; c < 5; c++) {
+let sums = new Array(4).fill(0);
+for (let b of buckets) {
+let valIdx = b.idx.at(c);
+sums[valIdx] += b.pop;
+}
+for (let b of buckets) {
+let valIdx = b.idx.at(c);
+let target = targets.at(c).at(valIdx) / 100;
+if (sums[valIdx] > 0) {
+b.pop *= (target / sums[valIdx]);
+}
+}
+}
+}
+let demVotes = 0;
+let totalPop = 0;
+for (let b of buckets) {
+const r = b.idx.at(0);
+const e = b.idx.at(1);
+const g = b.idx.at(2);
+const a = b.idx.at(3);
+const i = b.idx.at(4);
+let lo = (weights.at(0) * loSup.race.at(r)) +
+(weights.at(1) * loSup.edu.at(e)) +
+(weights.at(2) * loSup.geo.at(g)) +
+(weights.at(3) * loSup.age.at(a)) +
+(weights.at(4) * loSup.inc.at(i)) +
+(pvi * 0.04);
+demVotes += b.pop * fromLogOdds(lo);
+totalPop += b.pop;
+}
+let demPct = +(demVotes / totalPop).toFixed(2);
+let repPct = +(100 - demPct).toFixed(2);
+let leader = demPct >= repPct ? "DEM" : "REP";
+if (leader === "DEM") {
+totalDemEV += ev;
+} else {
+totalRepEV += ev;
+}
+Q.polling[code] = {
+name: name,
+ev: ev,
+dem: demPct,
+rep: repPct,
+margin: +(demPct - repPct).toFixed(2),
+leader: leader
 };
-
+}
+Q.projected_dem_ev = totalDemEV;
+Q.projected_rep_ev = totalRepEV;
+};
 window.simulate_polling();
 
 
