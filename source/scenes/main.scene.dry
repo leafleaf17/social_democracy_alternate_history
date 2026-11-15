@@ -44,7 +44,7 @@ max-cards: 4
 # Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
 {!<div class="scrollable-box">!}
-[? if democrat_senate_seats == 50: It is a bright time for German democracy. After a period of struggle, inflation is finally under control, and the economy is expanding steadily. In foreign policy, we have reached agreements with the Western powers and the <span style="color: #750e0e;">Soviet Union</span> that might make genuine peace a reality.<br><br>Now, the task of <span style="color: #c00000;">Social Democracy</span> is to prepare for the next election. The bourgeois-<span style="color: #3E88B3;">right</span> government of Wilhelm Marx is unpopular, and we stand to gain. Perhaps the next government will have a <span style="color: #c00000;">socialist</span> majority. ?]
+[? if year == 2021 and month == 1: It is a bright time for American democracy. After a period of struggle, inflation is finally under control, and the economy is expanding steadily. In foreign policy, we have reached agreements with the Western powers and the <span style="color: #750e0e;">Soviet Union</span> that might make genuine peace a reality.<br><br>Now, the task of <span style="color: #c00000;">Social Democracy</span> is to prepare for the next election. The bourgeois-<span style="color: #3E88B3;">right</span> government of Wilhelm Marx is unpopular, and we stand to gain. Perhaps the next government will have a <span style="color: #c00000;">socialist</span> majority. ?]
 {!</div>!}
 
 - @party
