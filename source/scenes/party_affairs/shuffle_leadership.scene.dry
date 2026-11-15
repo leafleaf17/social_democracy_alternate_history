@@ -35,8 +35,8 @@ tags: remove_advisor
 
 @remove_hilferding
 title: Remove Hilferding
-view-if: hilferding_advisor = 1
-on-arrival: hilferding_advisor = 0; progressive_dissent += 5; n_advisors -= 1
+view-if: klobuchar_advisor = 1
+on-arrival: klobuchar_advisor = 0; progressive_dissent += 5; n_advisors -= 1
 tags: remove_advisor
 go-to: rm_main
 
@@ -44,18 +44,18 @@ Hilferding has been removed as an advisor. The Centrist faction disapproves.
 
 @remove_wels
 title: Remove Wels
-view-if: wels_advisor = 1
+view-if: pelosi_advisor = 1
 tags: remove_advisor
-on-arrival: wels_advisor = 0; progressive_dissent += 5; n_advisors -= 1
+on-arrival: pelosi_advisor = 0; progressive_dissent += 5; n_advisors -= 1
 go-to: rm_main
 
 Wels has been removed as an advisor. The Centrist faction disapproves.
 
 @remove_muller
 title: Remove Müller
-view-if: muller_advisor = 1
+view-if: schumer_advisor = 1
 tags: remove_advisor
-on-arrival: muller_advisor = 0; progressive_dissent += 5; n_advisors -= 1
+on-arrival: schumer_advisor = 0; progressive_dissent += 5; n_advisors -= 1
 go-to: rm_main
 
 Müller has been removed as an advisor. The Centrist faction disapproves.
@@ -335,8 +335,8 @@ subtitle: Rudolf Hilferding is an economist and one of our chief Marxist theoret
 is-card: true
 card-image: img/portraits/HilferdingRudolf.jpg
 tags: center_advisor
-view-if: hilferding_advisor = 0 and n_advisors < 3 and centrists_resign = 0
-on-arrival: hilferding_advisor = 1; n_advisors += 1
+view-if: klobuchar_advisor = 0 and n_advisors < 3 and centrists_resign = 0
+on-arrival: klobuchar_advisor = 1; n_advisors += 1
 go-to: advisor_menu
 
 Rudolf Hilferding is now an advisor.
@@ -347,8 +347,8 @@ subtitle: Otto Wels is a long-time party organizer and member of the leadership,
 is-card: true
 card-image: img/portraits/WelsRudolf.jpg
 tags: center_advisor
-view-if: wels_advisor = 0 and n_advisors < 3 and centrists_resign = 0
-on-arrival: wels_advisor = 1; n_advisors += 1
+view-if: pelosi_advisor = 0 and n_advisors < 3 and centrists_resign = 0
+on-arrival: pelosi_advisor = 1; n_advisors += 1
 go-to: advisor_menu
 
 Otto Wels is now an advisor.
@@ -359,8 +359,8 @@ subtitle: Hermann Müller is the last Social Democratic Chancellor. {!<br><br>!}
 is-card: true
 card-image: img/portraits/MüllerHermann.jpg
 tags: center_advisor
-view-if: muller_advisor = 0 and muller_dead = 0 and n_advisors < 3 and centrists_resign = 0
-on-arrival: muller_advisor = 1; n_advisors += 1
+view-if: schumer_advisor = 0 and muller_dead = 0 and n_advisors < 3 and centrists_resign = 0
+on-arrival: schumer_advisor = 1; n_advisors += 1
 go-to: advisor_menu
 
 Hermann Müller is now an advisor.
