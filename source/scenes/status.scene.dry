@@ -33,7 +33,7 @@ House of Representatives: [+ democrat_house_seats +]/435 [? if democrat_house_ma
 
 Senate: [+ democrat_senate_seats +]/100 [? if democrat_senate_majority: (<span style="color: #3E88B3;">**Democrat**</span> majority) ?]
 
-Supreme court: [ + democrat_supreme_court_seats]/[ + supreme_court_seats] [? if democrat_supreme_court_seats < republican_supreme_court_seats: (<span style="color: #DE0100;">**Conservative**</span> majority) ?]
+Supreme court: [ + democrat_supreme_court_seats +]/[ + supreme_court_seats +] [? if democrat_supreme_court_seats < republican_supreme_court_seats: (<span style="color: #DE0100;">**Conservative**</span> majority) ?]
 
 [? if spd_in_government = 1 : Budget: [+ budget +] ?]
 
