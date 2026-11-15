@@ -33,6 +33,7 @@ Q.democrat_house_seats = 222;
 Q.democrat_house_majority = 1;
 Q.democrat_senate_seats = 50;
 Q.democrat_senate_majority = 1;
+Q.political_capital = 3;
 // old demographics
 Q.old_demographics = 0;
 // use decimals for reichstag seats

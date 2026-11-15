@@ -20,10 +20,8 @@ if (Q.economic_growth) {
 
 Resources available: [+ resources +]
 
+Political capital: [+ political_capital +]
 
-House of Representatives: [+ democrat_house_seats +]/435 [? if democrat_house_majority: (<span style="color: #3E88B3;">**democrat**</span> majority) ?]
-
-Senate: [+ democrat_senate_seats +]/100 [? if democrat_senate_majority: (<span style="color: #3E88B3;">**democrat**</span> majority) ?]
 
 Internal dissent: [+ dissent_percent : dissent +]
 
@@ -31,7 +29,9 @@ Internal dissent: [+ dissent_percent : dissent +]
 
 President: [+ president +]
 
-Chancellor: [+ chancellor +] ([+ chancellor_party +])
+House of Representatives: [+ democrat_house_seats +]/435 [? if democrat_house_majority: (<span style="color: #3E88B3;">**democrat**</span> majority) ?]
+
+Senate: [+ democrat_senate_seats +]/100 [? if democrat_senate_majority: (<span style="color: #3E88B3;">**democrat**</span> majority) ?]
 
 Reichstag composition:
 
