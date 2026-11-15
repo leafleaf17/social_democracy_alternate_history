@@ -112,7 +112,7 @@
           // top-level
           'main_tab': "Main",
           'politics_tab': "Politics",
-          'paramilitary_tab': "Defense",
+          'paramilitary_tab': "Wins",
           'poll_tab': "Polls",
           'stats-link': "Library",
           'save-link': "Save/Load",
