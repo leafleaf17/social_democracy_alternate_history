@@ -9,17 +9,14 @@ if (Q.advisor_action_timer <= 0) {
 } else {
     Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' months.';
 }
+const boxes = document.querySelectorAll('.scrollable-box');
+if (boxes.length >= 2) {
+    boxes[1].remove();
+}
+Q.last_time_updated = Q.time;
+if (Q.week) Q.last_week_updated = Q.week;
 !}
 max-cards: 3
-
-#Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
-
-[? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
-
-- @party
-- @govt
-- #advisor
-- @shuffle_leadership_pinned
 on-display: {!
 if (!document.getElementById('news_tab')) {
     var button = document.createElement('button');
@@ -60,6 +57,15 @@ if (boxes.length >= 2) {
     boxes[1].remove();
 }
 !}
+{!<div class="scrollable-box">!}
+#Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
+
+[? if year = 1928 and month = 2 : The current bourgeois-right government has fallen. The next elections are slated for May of this year. ?]
+
+- @party
+- @govt
+- #advisor
+- @shuffle_leadership_pinned
 
 @main_easy
 set-bg: img/map_2.jpg
