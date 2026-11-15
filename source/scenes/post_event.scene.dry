@@ -293,6 +293,9 @@ if (Q.month_actions >= 1) {
             Q.rural_nsdap += 4/12;
         }
     }
+if (window.simulate_polling) {
+    window.simulate_polling();
+}
 
     ////////////////////////// annual support changes
     if (Q.year == 1929) {

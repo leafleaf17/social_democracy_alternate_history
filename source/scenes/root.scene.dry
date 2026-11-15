@@ -108,6 +108,109 @@ Q.state_db = {
     WI: ["Wisconsin",     10,  -2, [80,6,8,6], , [24,46,30], [17,25,34,24], [24,51,25]],
     WY: ["Wyoming",        3, -25, [83,1,11,5], , [16,34,50], [17,26,33,24], [24,51,25]]
 };
+window.simulate_polling = function() {
+    const sup = Q.nat_support;
+    const toLogOdds = (pct) => {
+        const p = Math.max(0.01, Math.min(0.99, pct / 100));
+        return Math.log(p / (1 - p));
+    };
+    const fromLogOdds = (lo) => (1 / (1 + Math.exp(-lo))) * 100;
+
+    const loSup = {
+        race: [toLogOdds(sup.race.white), toLogOdds(sup.race.black), toLogOdds(sup.race.hispanic), toLogOdds(sup.race.asian)],
+        edu:  [toLogOdds(sup.edu.college), toLogOdds(sup.edu.noncollege)],
+        geo:  [toLogOdds(sup.geo.urban), toLogOdds(sup.geo.suburban), toLogOdds(sup.geo.rural)],
+        age:  [toLogOdds(sup.age.youth), toLogOdds(sup.age.mid), toLogOdds(sup.age.old), toLogOdds(sup.age.senior)],
+        inc:  [toLogOdds(sup.inc.low), toLogOdds(sup.inc.mid), toLogOdds(sup.inc.high)]
+    };
+
+    const weights = [0.35, 0.25, 0.20, 0.10, 0.10];
+    let totalDemEV = 0;
+    let totalRepEV = 0;
+    Q.polling = {};
+
+    for (let code of Object.keys(Q.state_db)) {
+        const [name, ev, pvi, race, edu, geo, age, inc] = Q.state_db[code];
+        const targets = [race, edu, geo, age, inc];
+
+        let buckets = [];
+        for (let r = 0; r < 4; r++) {
+            for (let e = 0; e < 2; e++) {
+                for (let g = 0; g < 3; g++) {
+                    for (let a = 0; a < 4; a++) {
+                        for (let i = 0; i < 3; i++) {
+                            let pop = (race[r]/100) * (edu[e]/100) * (geo[g]/100) * (age[a]/100) * (inc[i]/100);
+                            if (pop === 0) continue;
+
+                            if (e === 0 && g === 0) pop *= 1.25;
+                            if (e === 0 && g === 2) pop *= 0.70;
+                            if (e === 0 && i === 2) pop *= 1.35;
+                            if (e === 1 && i === 0) pop *= 1.30;
+
+                            buckets.push({ idx: [r, e, g, a, i], pop: pop });
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let iter = 0; iter < 5; iter++) {
+            for (let c = 0; c < 5; c++) {
+                let sums =;
+                for (let b of buckets) {
+                    sums[b.idx[c]] += b.pop;
+                }
+                for (let b of buckets) {
+                    let valIdx = b.idx[c];
+                    let target = targets[c][valIdx] / 100;
+                    if (sums[valIdx] > 0) {
+                        b.pop *= (target / sums[valIdx]);
+                    }
+                }
+            }
+        }
+
+        let demVotes = 0;
+        let totalPop = 0;
+        for (let b of buckets) {
+            const [r, e, g, a, i] = b.idx;
+            let lo = (weights[0] * loSup.race[r]) +
+                     (weights[1] * loSup.edu[e]) +
+                     (weights[2] * loSup.geo[g]) +
+                     (weights[3] * loSup.age[a]) +
+                     (weights[4] * loSup.inc[i]) +
+                     (pvi * 0.04);
+
+            demVotes += b.pop * fromLogOdds(lo);
+            totalPop += b.pop;
+        }
+
+        let demPct = +(demVotes / totalPop).toFixed(2);
+        let repPct = +(100 - demPct).toFixed(2);
+        let leader = demPct >= repPct ? "DEM" : "REP";
+
+        if (leader === "DEM") {
+            totalDemEV += ev;
+        } else {
+            totalRepEV += ev;
+        }
+
+        Q.polling[code] = {
+            name: name,
+            ev: ev,
+            dem: demPct,
+            rep: repPct,
+            margin: +(demPct - repPct).toFixed(2),
+            leader: leader
+        };
+    }
+
+    Q.projected_dem_ev = totalDemEV;
+    Q.projected_rep_ev = totalRepEV;
+};
+
+// Run once at game start so initial polling is ready immediately
+window.simulate_polling();
 
 
 
