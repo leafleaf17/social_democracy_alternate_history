@@ -35,19 +35,17 @@ Senate: [+ democrat_senate_seats +]/100 [? if democrat_senate_majority: (<span s
 
 Supreme court: [ + democrat_supreme_court_seats +]/[ + supreme_court_seats +] [? if democrat_supreme_court_seats < republican_supreme_court_seats: (<span style="color: #DE0100;">**Conservative**</span> majority) ?]
 
-[? if spd_in_government = 1 : Budget: [+ budget +] ?]
-
 Next election: [+ next_election_month : month +] [+ next_election_year +]
 
 = Economics
 
 Inflation: [+ inflation_2 +]%
 
-[? if black_thursday_seen = 1 : Unemployment: [+ unemployed_2 +]% ?]
+Unemployment: [+ unemployed_2 +]% 
 
 Economic growth: [+ economic_growth_2 +]%
 
-
+Budget: [+ budget +] ?
 
 # = Public Opinion
 

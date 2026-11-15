@@ -217,8 +217,8 @@ Q.nsdap_banned = 0;
 Q.coup_progress = 0;
 Q.capital_strike_progress = 0;
 
-Q.starting_budget = 4;
-Q.budget = 4;
+Q.starting_budget = -29;
+Q.budget = -29;
 
 // Proportion of different social groups
 // source: https://surface.syr.edu/cgi/viewcontent.cgi?filename=3&article=1016&context=books&type=additional page 45, table 3.4 - using 1925 figures
