@@ -130,8 +130,11 @@ window.simulate_polling = function() {
     Q.polling = {};
 
     for (let code of Object.keys(Q.state_db)) {
-        const [name, ev, pvi, race, edu, geo, age, inc] = Q.state_db[code];
-        const targets = [race, edu, geo, age, inc];
+        const stateData = Q.state_db[code];
+        const name = stateData[0];
+        const ev = stateData[1];
+        const pvi = stateData[2];
+        const targets = [stateData[3], stateData[4], stateData[5], stateData[6], stateData[7]];
 
         let buckets = [];
         for (let r = 0; r < 4; r++) {
@@ -139,7 +142,7 @@ window.simulate_polling = function() {
                 for (let g = 0; g < 3; g++) {
                     for (let a = 0; a < 4; a++) {
                         for (let i = 0; i < 3; i++) {
-                            let pop = (race[r]/100) * (edu[e]/100) * (geo[g]/100) * (age[a]/100) * (inc[i]/100);
+                            let pop = (targets[0][r]/100) * (targets[1][e]/100) * (targets[2][g]/100) * (targets[3][a]/100) * (targets[4][i]/100);
                             if (pop === 0) continue;
 
                             if (e === 0 && g === 0) pop *= 1.25;
@@ -173,7 +176,12 @@ window.simulate_polling = function() {
         let demVotes = 0;
         let totalPop = 0;
         for (let b of buckets) {
-            const [r, e, g, a, i] = b.idx;
+            const r = b.idx[0];
+            const e = b.idx[1];
+            const g = b.idx[2];
+            const a = b.idx[3];
+            const i = b.idx[4];
+
             let lo = (weights[0] * loSup.race[r]) +
                      (weights[1] * loSup.edu[e]) +
                      (weights[2] * loSup.geo[g]) +
@@ -208,6 +216,9 @@ window.simulate_polling = function() {
     Q.projected_dem_ev = totalDemEV;
     Q.projected_rep_ev = totalRepEV;
 };
+
+window.simulate_polling();
+
 
 // Run once at game start so initial polling is ready immediately
 window.simulate_polling();
