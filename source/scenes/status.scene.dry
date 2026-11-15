@@ -63,7 +63,7 @@ Progressive strength: [+ progressive_strength : strength +], dissent: [+ progres
 
 New liberal strength: [+ new_liberal_strength : strength +], dissent: [+ new_liberal_dissent : dissent +]
 
-Blue Dog strength: [+ blue_dog_strength : strength +], dissent: [+ blue_dog_dissent : dissent +]
+Blue Dogs strength: [+ blue_dog_strength : strength +], dissent: [+ blue_dog_dissent : dissent +]
 
 [? if neorevisionism > 0 : Neorevisionist strength: [+ neorevisionist_strength : strength +], dissent: [+ neorevisionist_dissent : dissent +] ?]
 
