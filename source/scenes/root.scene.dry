@@ -544,7 +544,7 @@ Q.economic_records = [];
 
 
 // State of the government
-Q.president = "<span style="color: #3E88B3;">**Bernie Sanders**</span>";
+Q.president = "Hindenberg";
 // starting chancellor: Wilhelm Marx
 Q.chancellor = "Marx";
 Q.chancellor_party = 'Z';
