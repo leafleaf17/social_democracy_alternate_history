@@ -248,6 +248,7 @@ Q.dues = 2;
 Q.border_security = 50;
 // the state of the party
 Q.youth_loyalty = 30;
+Q.nato_unity = 35;
 Q.dove_loyalty = 30;
 Q.latino_loyalty = 35;
 Q.labor_loyalty = 41;
