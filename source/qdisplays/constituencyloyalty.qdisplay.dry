@@ -1,0 +1,8 @@
+
+# faction strength
+
+(0..10) <span style="color: #d42f2f;">Defecting in mass</span>
+(10..25) <span style="color: #FFB74D;">Feeling alienated</span>
+(25..40) <span style="color: #FFD54F;">Accepting of the administration</span>
+(40..60) <span style="color: #81C784;">Excited with the administration</span>
+(60..) <span style="color: #66BB6A;">Completely loyal and completely mobilized</span>
