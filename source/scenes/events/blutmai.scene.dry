@@ -1,29 +1,25 @@
-title: May Day, 1929
+title: American Rescue Plan
 new-page: true
-subtitle: A Communist demonstration
+subtitle: Congress debates economic relief for Americans
 tags: event
 view-if: year = 2021` and month = 4
 max-visits: 1
 face-image: img/redfront.jpg
 
-= May Day, 1929
+= American Rescue Plan
 
-Tensions run high in Berlin. The Communists are planning a demonstration to commemorate the 10th anniversary of the Spartacist Uprising. No one has forgotten that it was our party members who ordered the uprising's suppression, and the Communists still blame us for the deaths of Rosa Luxemburg and Karl Liebknecht.
+The Covid-19 pandemic has plunged America into economic recession. Tens of millions of Americans are at risk of eviction, unemployment, and are food insecure. Even Donald Trump recognized the need for direct aid to the American people, in the CARES act of March 2020. A kew promise on the campaign trail for Bernie Sanders was the passing of an expanded stimulus package that would give $2000 checks to Americans.
 
-Many non-communists are afraid of the possibility of another violent uprising, and our allies in the Prussian coalition are asking the Prussian Interior Ministry to ban the demonstrations.
+Now, the bill is finally being debated in the Senate. Republicans repeatedly blocked attempts to expand stimilus expansions in the past under Donald Trump, and they are attempting to do the same now. Congresional Republicans are only agreeing to a 600 dollar check, which is unacceptable. Therefore, we will employ the use of the budget reconciliation process which will allow us to pass this bill without any Republican support. Since this bill only need 50 Democratic votes to pass, progressives in the administration have also added an expansion of the minimum wage to the bill seeing the low vote thresehold as a unique opportunity to actually get it passed. 
 
-- @ban: Ban the demonstrations.
-- @allow_police: Allow the demonstrations to proceed, but maintain a heavy police presence.
-- @allow: Allow the demonstrations to proceed.
-- @join: Join in the demonstrations ourselves.
+- @expand_minimum_wage_fail: The Senate Parliamentarian rules the minimum wage increase as compatible with the Senate's budget reconciliation process!
+subtitle: A testiment to how biased the establishment is against real change
 
-@ban
+@expand_minimum_wage_fail
 on-arrival: blutmai = 1; kpd_relation -= 25; z_relation += 5; dvp_relation += 5; workers_spd -= 3; unemployed_spd -= 3; workers_kpd += 3; unemployed_kpd += 3; communist_coalition -= 3; strife += 1
 face-image: img/blutmai.jpg
 
-We issued the order to ban the demonstrations, and sent police to enforce the ban. There was a confrontation between the police and Communists, and violence erupted. Reports say that the Berlin police killed dozens of demonstrators and innocent bystanders. The Communists are already calling this incident *Blutmai*, "Bloody May".
-
-This may end any attempt at reconciliation with the KPD, but the Center and People's parties approve of our action.
+The enate Parliamentarian, Elizabeth MacDonough, has ruled that the minimum wage increase in the American Rescue Act is an "extraneous provision" which is not allowed in the budget reconcialation progress. This is a bitter dissapointment to many progressives, and is demoralizing much of our base. Yet technically, the Senate Parliamentarians ruling can be overruled by the Senate President, Amy Klobuchar. Many progressives are calling for us to overrule Macdonough and push for the minimum wage increase anyways, yet doing this will surely anger moderate Republicans and even moderates in out own party. 
 
 - @corrupt_police: It is the fault of corrupt and reactionary elements within the police. Purge those responsible.
 - @communist_fault: It is the fault of the Communists for refusing to follow the rule of law.
