@@ -24,8 +24,8 @@
   ];
 
   var colors = {
-    dem: ['#d6e5f4', '#91b9df', '#4b8ac6', '#174a7e'],
-    rep: ['#f2d5d5', '#e59b9b', '#d65757', '#a51c30']
+    dem: ['#949bb3', '#8aafff', '#577ccc', '#1c408c'],
+    rep: ['#cf8980', '#ff8b98', '#ff5865', '#bf1d29']
   };
 
   var mapReady = false;
