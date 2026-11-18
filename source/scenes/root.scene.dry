@@ -301,8 +301,7 @@ window.boost_state_demo = function(state, category, group, pctChange) {
 window.simulate_polling();
 
 
-// Run once at game start so initial polling is ready immediately
-window.simulate_polling();
+
 
 window.boost_state_turnout = function(state, category, group, multiplierChange) {
     Q.state_turnout[state] = Q.state_turnout[state] || {};
@@ -318,6 +317,8 @@ window.boost_state_demo = function(state, category, group, pctChange) {
     Q.state_dem_support[state][category][group] = current + pctChange;
 };
 
+// Run once at game start so initial polling is ready immediately
+window.simulate_polling();
 
 // party resources
 Q.starting_resources = 2;
