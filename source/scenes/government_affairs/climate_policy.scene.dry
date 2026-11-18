@@ -49,7 +49,7 @@ WIP
 @declare_a_climate_emergy
 title: Declare A National Climate Emergency
 subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. 
-unavailable-subtitle: [? The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court would declare this improper. ?]
+unavailable-subtitle: The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court would declare this improper.
 choose-if: democrat_supreme_court_seats > republican_supreme_court_seats
 on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15
 max-visits: 1
