@@ -102,20 +102,26 @@
   }
 
   function applyStateFill(shape, color) {
-    shape.style.fill = color;
+    shape.style.setProperty('fill', color, 'important');
     shape.setAttribute('fill', color);
     var children = shape.querySelectorAll('path, circle, polygon');
     children.forEach(function(child) {
-      child.style.fill = color;
+      child.style.setProperty('fill', color, 'important');
       child.setAttribute('fill', color);
     });
+  }
+
+  function findStateShape(svg, code) {
+    return svg.querySelector('#' + code) ||
+           svg.querySelector('#' + code.toLowerCase()) ||
+           svg.querySelector('[data-id="' + code + '"]');
   }
 
   function updateMap() {
     var drawer = document.getElementById('polling-map-drawer');
     if (!drawer || !drawer.classList.contains('open')) return;
     var polling = pollingResults();
-    var svg = drawer.querySelector('svg.polling-us-map');
+    var svg = drawer.querySelector('.polling-map-svg-wrap svg');
     if (!polling || !svg || !mapReady) return;
 
     var demEV = 0;
@@ -131,11 +137,11 @@
     var tooltip = drawer.querySelector('.polling-map-tooltip') || makeTooltip(drawer);
     stateCodes.forEach(function(code) {
       var result = polling[code];
-      var shape = svg.querySelector('#' + code);
+      var shape = findStateShape(svg, code);
       if (!result || !shape) return;
 
       applyStateFill(shape, colorForMargin(Number(result.margin)));
-      shape.classList.add('polling-map-state');
+      shape.setAttribute('class', (shape.getAttribute('class') || '') + ' polling-map-state');
       shape.setAttribute('aria-label', tooltipText(code, result).replace(/\n/g, ', '));
       shape.setAttribute('tabindex', '0');
 
@@ -189,17 +195,18 @@
       .then(function(svgText) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(svgText, 'image/svg+xml');
-        var svg = doc.querySelector('svg');
-        if (!svg) throw new Error('Invalid SVG document');
+        var parsedSvg = doc.querySelector('svg');
+        if (!parsedSvg) throw new Error('Invalid SVG document');
 
-        svg.classList.add('polling-us-map');
+        var svg = document.importNode(parsedSvg, true);
+        svg.setAttribute('class', 'polling-us-map');
         svg.removeAttribute('width');
         svg.removeAttribute('height');
         if (!svg.getAttribute('viewBox')) {
           svg.setAttribute('viewBox', '0 0 959 593');
         }
 
-        var dc = svg.querySelector('#DC');
+        var dc = findStateShape(svg, 'DC');
         if (dc && dc.tagName.toLowerCase() === 'circle') {
           dc.setAttribute('r', '6');
           dc.style.stroke = '#ffffff';
@@ -207,7 +214,7 @@
         }
 
         wrap.textContent = '';
-        wrap.appendChild(document.importNode(svg, true));
+        wrap.appendChild(svg);
         mapReady = true;
         updateMap();
       })
@@ -222,16 +229,15 @@
     addStyles();
     drawer.innerHTML = '<button type="button" class="polling-map-close" onclick="window.closePollingMaps();">Close ×</button>' +
       '<h2>U.S. Electoral Map</h2><div class="polling-map-content"><p class="polling-map-score">Loading current state polling…</p>' +
-      legendHtml() +
-      '<div class="polling-map-svg-wrap"></div>' +
-      '<p class="polling-map-credit">Hover or focus a state for exact polling results.</p></div>';
-    buildWikiMap(drawer);
-  }
-
-  function initialize() {
-    var drawer = document.getElementById('polling-map-drawer');
-    if (!drawer) return;
-    loadMap();
+legendHtml() +
+'' +
+'Hover or focus a state for exact polling results.';
+buildWikiMap(drawer);
+}
+function initialize() {
+var drawer = document.getElementById('polling-map-drawer');
+if (!drawer) return;
+loadMap();
 if (!renderTimer) renderTimer = window.setInterval(updateMap, 1500);
 var observer = new MutationObserver(function() {
 if (drawer.classList.contains('open')) updateMap();
