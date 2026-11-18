@@ -1,6 +1,6 @@
 title: Agricultural Revolt
 subtitle: Small farmers are in revolt over debts and taxes...
-view-if: ((year = 1929 and month >= 2)) and spd_in_government and agricultural_finance < 2
+view-if: ((year = 1929 and month >= 2)) and dems_in_government and agricultural_finance < 2
 max-visits: 1
 on-arrival: agricultural_crisis_seen = 1; rural_dnvp -= 2; rural_spd -= 2; rural_nsdap += 2
 new-page: true
