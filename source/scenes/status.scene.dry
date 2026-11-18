@@ -84,7 +84,11 @@ if (Q.sa_strength) {
 }
 !}
 
-= Policy achievements
+= Policy Achievements
+
+We have made [+ climate_progress : policyprogress +] progress on the issue of the climate
+
+= Border
 
 The state of the US-Mexican border is currently: [+ border_security : border +]
 

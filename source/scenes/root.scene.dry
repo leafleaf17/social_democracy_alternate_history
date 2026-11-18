@@ -549,6 +549,8 @@ Q.president = "Hindenberg";
 Q.chancellor = "Marx";
 Q.chancellor_party = 'Z';
 Q.dems_in_government = 1;
+Q.times_strengthened_pollution = 0;
+Q.climate_progress = 0;
 Q.z_in_government = 1;
 Q.ddp_in_government = 0;
 Q.dvp_in_government = 1;
@@ -722,7 +724,7 @@ Q.next_election_year = 1928;
 Q.next_election_month = 5;
 Q.next_election_time = 5;
 // government affairs timers
-Q.agricultural_policy_timer = 0;
+Q.climate_policy_timer = 0;
 Q.domestic_enemies_timer = 0;
 Q.economic_policy_timer = 0;
 Q.fiscal_policy_timer = 0;
