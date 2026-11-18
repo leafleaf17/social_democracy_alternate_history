@@ -130,7 +130,8 @@
     stateTiles.forEach(function(tile) {
       var code = tile[0];
       var result = polling[code];
-      var shape = svg.querySelector('[data-state-code="' + code + '"]');
+     // Change this line in updateMap():
+var shape = svg.querySelector('[data-state-code="' + code + '"] rect');
       if (!result || !shape) return;
       shape.setAttribute('fill', colorForMargin(Number(result.margin)));
       shape.setAttribute('aria-label', tooltipText(code, result).replace(/\n/g, ', '));
