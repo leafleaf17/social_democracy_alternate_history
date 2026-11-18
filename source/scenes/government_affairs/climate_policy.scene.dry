@@ -32,7 +32,7 @@ The EPA announces a series of new regulations hitting vehicle tailpipes and dirt
 @cancel_oil_drilling
 title: Revoke Visa's For Projects Involving Dirty Energy, And Speed Up Approval For Green Energy Projects
 subtitle: This is more effective in aiding the transition to green energy then strengthening pollution regulations, but may lead to more backlash. 
-on-arrival: republican_radicalization +=2; green_backlash +=2; climate_progress +=6; inflation +=0.1; blue_dog_dissent +=4; economic_growth -=0.1; Q.state_buffs.PA = (Q.state_buffs.PA || 0) + 4; window.simulate_polling();
+on-arrival: republican_radicalization +=2; green_backlash +=2; climate_progress +=6; inflation +=0.1; blue_dog_dissent +=4; economic_growth -=0.1; state_buffs.PA = (state_buffs.PA || 0) + 4; window.simulate_polling();
 
 max-visits: 3
 
