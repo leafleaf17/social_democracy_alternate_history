@@ -181,14 +181,14 @@
         '<h2>U.S. Electoral Map</h2><div class="polling-map-content">' +
         '<p class="polling-map-score">Loading current state polling…</p>' +
         '<div class="polling-map-legend">' +
-        '<span><i class="polling-map-swatch" style="background:#a51c30"></i>Republican 15+ points</span>' +
-        '<span><i class="polling-map-swatch" style="background:#d65757"></i>Republican 5–15</span>' +
-        '<span><i class="polling-map-swatch" style="background:#e59b9b"></i>Republican 1–5</span>' +
-        '<span><i class="polling-map-swatch" style="background:#f2d5d5"></i>Republican under 1</span>' +
-        '<span><i class="polling-map-swatch" style="background:#d6e5f4"></i>Democrat under 1</span>' +
-        '<span><i class="polling-map-swatch" style="background:#91b9df"></i>Democrat 1–5</span>' +
-        '<span><i class="polling-map-swatch" style="background:#4b8ac6"></i>Democrat 5–15</span>' +
-        '<span><i class="polling-map-swatch" style="background:#174a7e"></i>Democrat 15+ points</span></div>' +
+        '<span><i class="polling-map-swatch" style="background:#8b080d"></i>Republican 15+ points</span>' +
+        '<span><i class="polling-map-swatch" style="background:#bf1d29"></i>Republican 5–15</span>' +
+        '<span><i class="polling-map-swatch" style="background:#ff5865"></i>Republican 1–5</span>' +
+        '<span><i class="polling-map-swatch" style="background:#ff8b98"></i>Republican under 1</span>' +
+        '<span><i class="polling-map-swatch" style="background:#8aafff"></i>Democrat under 1</span>' +
+        '<span><i class="polling-map-swatch" style="background:#577ccc"></i>Democrat 1–5</span>' +
+        '<span><i class="polling-map-swatch" style="background:#1c408c"></i>Democrat 5–15</span>' +
+        '<span><i class="polling-map-swatch" style="background:#052163"></i>Democrat 15+ points</span></div>' +
         '<div class="polling-map-svg-wrap"><p style="padding:1em;">Loading U.S. SVG map…</p></div>' +
         '<p style="font-size:.75em;margin:.4em 0 0;">Hover or focus a state for exact polling results.</p></div>';
       tryLoadSvg(svgUrls, 0, drawer.querySelector('.polling-map-svg-wrap'));
