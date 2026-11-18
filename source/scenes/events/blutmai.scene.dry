@@ -12,10 +12,11 @@ The Covid-19 pandemic has plunged America into economic recession. Tens of milli
 
 Now, the bill is finally being debated in the Senate. Republicans repeatedly blocked attempts to expand stimilus expansions in the past under Donald Trump, and they are attempting to do the same now. Congresional Republicans are only agreeing to a 600 dollar check, which is unacceptable. Therefore, we will employ the use of the budget reconciliation process which will allow us to pass this bill without any Republican support. Since this bill only need 50 Democratic votes to pass, progressives in the administration have also added an expansion of the minimum wage to the bill seeing the low vote thresehold as a unique opportunity to actually get it passed. 
 
-- @expand_minimum_wage_fail: The Senate Parliamentarian rules the minimum wage increase as compatible with the Senate's budget reconciliation process!
-subtitle: A testiment to how biased the establishment is against real change
+- @expand_minimum_wage_fail 
 
 @expand_minimum_wage_fail
+title: The Senate Parliamentarian rules the minimum wage increase as compatible with the Senate's budget reconciliation process!
+subtitle: A testiment to how biased the establishment is against real change
 on-arrival: blutmai = 1; kpd_relation -= 25; z_relation += 5; dvp_relation += 5; workers_spd -= 3; unemployed_spd -= 3; workers_kpd += 3; unemployed_kpd += 3; communist_coalition -= 3; strife += 1
 face-image: img/blutmai.jpg
 
