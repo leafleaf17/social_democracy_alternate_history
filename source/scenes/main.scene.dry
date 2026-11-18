@@ -12,7 +12,7 @@ if (Q.advisor_action_timer <= 0) {
 if (!window.pollingMapScriptLoaded) {
     window.pollingMapScriptLoaded = true;
     var pollingMapScript = document.createElement('script');
-    pollingMapScript.src = 'polling-map.js?v=wiki-svg-1';
+    pollingMapScript.src = 'polling-map.js?v=wiki-svg-2';
     document.head.appendChild(pollingMapScript);
 }
 !}
@@ -45,7 +45,7 @@ if (Q.week) Q.last_week_updated = Q.week;
 if (!window.pollingMapScriptLoaded) {
     window.pollingMapScriptLoaded = true;
     var pollingMapScript = document.createElement('script');
-    pollingMapScript.src = 'polling-map.js?v=wiki-svg-1';
+    pollingMapScript.src = 'polling-map.js?v=wiki-svg-2';
     document.head.appendChild(pollingMapScript);
 }
 !}
