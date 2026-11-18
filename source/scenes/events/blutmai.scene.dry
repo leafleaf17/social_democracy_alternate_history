@@ -2,7 +2,7 @@ title: American Rescue Plan
 new-page: true
 subtitle: Congress debates economic relief for Americans
 tags: event
-view-if: year = 2021` and month = 4
+view-if: year = 2021 and month = 4
 max-visits: 1
 face-image: img/redfront.jpg
 
