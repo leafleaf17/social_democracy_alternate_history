@@ -251,6 +251,12 @@ blockquote + blockquote.attribution {
 .tab_button:hover {
     background-color: var(--tab-hover-color);
 }
+p.other {
+  display: block;
+}
+p.dnvp {
+  display: none;
+}
 .scrollable-box {
   width: 540px;
   /* Default width */
