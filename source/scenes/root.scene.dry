@@ -624,7 +624,7 @@ Q.womens_rights = 0;
 // level of welfare relative to 1928 (can go negative)
 Q.welfare = 0;
 // level of support for farmers
-Q.agricultural_policy = 0;
+Q.climate_policy = 0;
 Q.land_reform = 0;
 // works-creation programs (i.e. WTB-plan) - how much have they implemented?
 Q.works_program = 0;
@@ -682,7 +682,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'shuffle_leadership', 'streetfighting', 'peoples_party',
             'party_disunity',
             // govt
-            'agricultural_policy', 'domestic_enemies', 'fiscal_policy',
+            'climate_policy', 'domestic_enemies', 'fiscal_policy',
             'foreign_policy', 'judiciary', 'labor_affairs', 'military_policy',
             'police', 'prussian_affairs', 'shuffle_cabinet', 'social_welfare',
             'homosexual_rights', 'economic_policy', 'coalition_affairs',
