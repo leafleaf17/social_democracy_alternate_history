@@ -347,7 +347,6 @@ Q.state_dem_support = {
     // 4. DEEP SOUTH (GA, NC, SC): Older Black voters start more cautious/moderate than Northern Black voters
     GA: {
         race: { black: -6 },
-        race: { white: -3 },
         geo:  { suburban: -3 }
     },
     NC: {
@@ -361,9 +360,8 @@ Q.state_dem_support = {
     },
     WI: {
         edu: { noncollege: 3 },
-        geo: { rural: 8 },
-race: { white: 5 }   
- },
+        geo: { rural: 3 }
+    },
     PA: {
         edu: { noncollege: 2 }
     }
