@@ -1,0 +1,57 @@
+title: Antitrust Action
+new-page: true
+is-card: true
+on-arrival: anti_trust_timer += 5; month_actions += 1
+view-if: dems_in_government = 1
+card-image: img/portraits/BaadeFritz.jpg
+tags: govt_affairs, cabinet
+
+= Antitrust Action
+
+Corporatations have for far too long been held unaccountable for their monopolistic practices. We must bring the full power of the law upon corporations who are engaged in these practices.
+
+- @stop_mergers
+- @cancel_oil_drilling
+- @carbon_tax
+- @declare_a_climate_emergy
+- @root: Do not enact any policies for now.
+- @easy_discard
+- @cancel_advisor_action
+
+@stop_mergers
+title: Sue To Prevent Monopolistic Mergers, And To Break Up Existing Ones
+subtitle: The EPA will set stricter federal pollution standards on power generation and vehicles. This will anger coal country, especially since we have not provided any aid for job transitioning.
+unavailable-subtitle: [? if democrat_supreme_court_seats < republican_supreme_court_seats : The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court will strike down any further expansion. ?]
+choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
+on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2
+max-visits: 4
+
+The EPA announces a series of new regulations hitting vehicle tailpipes and dirty powerplants. This necessary step will improve the longterm health of the enviornment. Republicans will try and blame job losses in coal states on these measures. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
+
+
+@cancel_oil_drilling
+title: Revoke Visa's For Projects Involving Dirty Energy, And Speed Up Approval For Green Energy Projects
+subtitle: This is more effective in aiding the transition to green energy then strengthening pollution regulations, but may lead to more backlash. 
+on-arrival: republican_radicalization +=2; green_backlash +=2; climate_progress +=6; inflation +=0.1; blue_dog_dissent +=4; economic_growth -=0.1
+max-visits: 3
+
+A series of dirty energy projects, especially in alaska and the pacific are canceled. This pleases those with enviornmental concerns and will certainly encourage energy companies to switch to green energy production instead, although Republicans will attempt to tie these measures to the cost of living. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
+
+@carbon_tax
+title: Can We Tax Carbon?
+subtitle: +2 budget. This will modestly speed up the transition to green energy. This will harm the economy of states with large gas and coal industries.
+choose-if: filibuster_gone = 1
+unavailable-subtitle: This will never survive the fillibuster.
+on-arrival: budget += 2; republican_radicalization +=5; green_backlash +=5; climate_progress +=15; blue_dog_dissent +=10; economic_growth -=0.2; inflation +=0.25;
+
+WIP 
+
+@declare_a_climate_emergy
+title: Declare A National Climate Emergency
+subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. 
+unavailable-subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court would declare this improper.
+choose-if: democrat_supreme_court_seats > republican_supreme_court_seats
+on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15
+max-visits: 1
+
+Bernie Sanders announces a climate emergency on prime tv. We have unlocked significantly more funding for green energy products, which may help lower general energy prices. Republicans claim this is a fragrant abuse of executive power.
