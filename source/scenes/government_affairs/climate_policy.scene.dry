@@ -8,7 +8,7 @@ tags: govt_affairs, cabinet
 
 = Climate Policy
 
-This administration must take action to combat climate change, which threatens the very extinction of mankind. Through various departments, we can enact new regulations to help protect the climate. Hopefully, we can pass climate policy through congress too, althbough it will likely be harder.
+Through both executive departments, and hopefully congress, we can push the country to reduce its pollutions and use of dirty energy, and towards the use of green energy.
 
 - @strengthen_pollution_regulations
 - @agricultural_finance
@@ -19,8 +19,8 @@ This administration must take action to combat climate change, which threatens t
 - @cancel_advisor_action
 
 @strengthen_pollution_regulations
-title: Strengthen Pollution regulations
-subtitle: Set stricker pollution standards on power generation and vehicles. 
+title: Strengthen Pollution Regulations
+subtitle: Set stricter pollution standards on power generation and vehicles. 
 unavailable-subtitle: [? if democrat_supreme_court_seats < republican_supreme_court_seats : The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court will strike down any further expansion. ?]
 choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
 on-arrival: times_strengthened_pollution += 1
