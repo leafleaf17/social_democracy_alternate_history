@@ -38,7 +38,7 @@ max-visits: 3
 A series of dirty energy projects, especially in alaska and the pacific are canceled. This pleases those with enviornmental concerns and will certainly encourage energy companies to switch to green energy production instead, although Republicans will attempt to tie these measures to the cost of living. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
 
 @carbon_tax
-title: Can we tax carbon?
+title: Can We Tax Carbon?
 subtitle: +2 budget. This will modestly speed up the transition to green energy. This will harm the economy of states with large gas and coal industries.
 choose-if: filibuster_gone = 1
 unavailable-subtitle: This will never survive the fillibuster.
