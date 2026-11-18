@@ -360,8 +360,8 @@ Q.state_dem_support = {
     },
     WI: {
         edu: { noncollege: 3 },
-        geo: { rural: 3 }
-    },
+        geo: { rural: 8 },
+race: { white: 5 }    }
     PA: {
         edu: { noncollege: 2 }
     }
