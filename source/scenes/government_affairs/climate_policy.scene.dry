@@ -12,8 +12,8 @@ Through both executive departments, and hopefully congress, we can push the coun
 
 - @strengthen_pollution_regulations
 - @cancel_oil_drilling
-- @pro_consumer
-- @state_buyer
+- @carbon_tax
+- @declare_a_climate_emergy
 - @root: Do not enact any policies for now.
 - @easy_discard
 - @cancel_advisor_action
@@ -23,34 +23,35 @@ title: Strengthen Pollution Regulations
 subtitle: Set stricter federal pollution standards on power generation and vehicles. This will anger coal country, especially since we have not provided any aid for job transitioning.
 unavailable-subtitle: [? if democrat_supreme_court_seats < republican_supreme_court_seats : The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court will strike down any further expansion. ?]
 choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3
+on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2
 max-visits: 4
 
-With our policy of land reform, we are acquiring farmland from large estates, and giving the land to farmworkers' associations and small peasants. In essence, this brings class struggle to the countryside, breaking the semi-feudal property relations present in East Prussia and other areas with large estates. The bourgeois parties and large farmers despise our intrusion into the sacredness of private property, while leftists are cautiously optimistic.
+The EPA announces a series of new regulations hitting vehicle tailpipes and dirty powerplants. This necessary step will improve the longterm health of the enviornment. Republicans will try and blame job losses in coal states on these measures. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
 
 
 @cancel_oil_drilling
-title: Restrict Projects Involving Dirty Energy
-subtitle: Revoke leases for oil and gas drilling and projects, especially in areas with ecosystem concerns. This is more effective then strengthening pollution regulations but may lead to more backlash.
-on-arrival: republican_radicalization +=1; green_backlash +=2; climate_progress +=6
+title: Restrict Projects Involving Dirty Energy, And Speed Up Approval For Green Energy Projects
+subtitle: The department of interior will pause leases for oil and gas drilling and projects, especially in areas with ecosystem concerns. This is more effective in aiding the transition to green energy then strengthening pollution regulations but may lead to more backlash. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
+on-arrival: republican_radicalization +=2; green_backlash +=2; climate_progress +=6; inflation +=0.1; blue_dog_dissent +=4; economic_growth -=0.1
 max-visits: 3
 
-We have increased financial support for small farmers, providing access to credit and insurance, saving them from privation. The left and center of our party are opposed to our rural policy, seeing these policies as giveaways to petit-bourgeois farmers.
+A series of dirty energy projects, especially in alaska and the pacific are canceled. This pleases those with enviornmental concerns and will certainly encourage energy companies to switch to green energy production instead, although Republicans will attempt to tie these measures to the cost of living.
 
+@carbon_tax
+title: Can we tax carbon?
+subtitle: +2 budget. This will modestly speed up the transition to green energy. This will harm the economy of states with large gas and coal industries.
+choose-if: filibuster_gone = 1
+unavailable-subtitle: This will never survive the fillibuster.
+on-arrival: budget += 2; republican_radicalization +=5; green_backlash +=5; climate_progress +=15; blue_dog_dissent +=10; economic_growth -=0.2; inflation +=0.25;
 
-@pro_consumer
-title: Food Procurement
-subtitle: -1 budget - Provide inexpensive food for workers.
-choose-if: budget >= 1
-on-arrival: budget -= 1; pro_consumer += 1; workers_spd += 4*(1-dissent); unemployed_spd += 4*(1-dissent); workers_sol += 4; coalition_dissent += 1 if black_thursday_seen; economic_growth += 0.2;
+WIP 
 
-We have increased state purchasing of food staples to provide to urban workers and the poor. This benefits workers more than it benefits farmers, as we are negotiating for lower purchase prices. [? if black_thursday_seen and (in_weimar_coalition or in_grand_coalition) : Our coalition partners consider this policy to be a wasteful handout. ?]
-
-@state_buyer
-title: State Buyer
-subtitle: -2 budget - Create a state monopoly for grain purchases, guaranteeing prices for farmers and stable prices for consumers. [? if judicial_reform < 2 : The judiciary would never allow this. ?]
-choose-if: budget >= 2 and judicial_reform >= 2
-on-arrival: budget -= 2; state_buyer = 1; rural_spd += 5*(1-dissent); rural_nsdap -= 3*(1-dissent); workers_spd += 4*(1-dissent); unemployed_spd += 5*(1-dissent); coalition_dissent += 1 if (in_grand_coalition or in_weimar_coalition); dvp_relation -= 5; z_relation -= 3; peoples_party_support += 1; rural_policy += 2; capital_strike_progress += 1; economic_growth += 0.4;
+@declare_a_climate_emergy
+title: Declare A National Climate Emergency
+subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. 
+unavailable-subtitle: [? The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court would declare this improper. ?]
+choose-if: democrat_supreme_court_seats > republican_supreme_court_seats
+on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15
 max-visits: 1
 
-Our new purchasing agency guarantees fair prices for farmers, while also providing lower food prices for workers and the urban poor. This policy necessitates heavy spending and an unprecedented level of state intervention in the economy, raising the ire of conservative economists.
+Bernie Sanders announces a climate emergency on prime tv. We have unlocked significantly more funding for green energy products, which may help lower general energy prices. Republicans claim this is a fragrant abuse of executive power.
