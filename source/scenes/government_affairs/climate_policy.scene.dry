@@ -39,9 +39,6 @@ Q.climate_progress += 6;
 Q.inflation += 0.1;
 Q.blue_dog_dissent += 4;
 Q.economic_growth -= 0.1;
-Q.state_buffs = Q.state_buffs || {};
-Q.state_buffs.PA = (Q.state_buffs.PA || 0) + 4;
-window.simulate_polling();
 !}
 max-visits: 3
 
