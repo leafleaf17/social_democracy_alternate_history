@@ -1,30 +1,24 @@
 (function() {
   'use strict';
 
-  // Offline electoral cartogram: each state is drawn as an SVG tile, so no map asset or
-  // network request is needed. Coordinates are a simplified US tile-grid layout.
-  var stateTiles = [
-    ['AK','Alaska',0,5], ['WA','Washington',1,0], ['OR','Oregon',1,1], ['CA','California',1,2],
-    ['ID','Idaho',2,1], ['NV','Nevada',2,2], ['AZ','Arizona',2,3], ['HI','Hawaii',2,5],
-    ['MT','Montana',3,0], ['WY','Wyoming',3,1], ['UT','Utah',3,2], ['CO','Colorado',3,3],
-    ['NM','New Mexico',3,4], ['ND','North Dakota',4,0], ['SD','South Dakota',4,1], ['NE','Nebraska',4,2],
-    ['KS','Kansas',4,3], ['OK','Oklahoma',4,4], ['TX','Texas',4,5], ['MN','Minnesota',5,0],
-    ['IA','Iowa',5,1], ['MO','Missouri',5,2], ['AR','Arkansas',5,3], ['LA','Louisiana',5,4],
-    ['WI','Wisconsin',6,0], ['IL','Illinois',6,1], ['KY','Kentucky',6,2], ['TN','Tennessee',6,3],
-    ['MS','Mississippi',6,4], ['MI','Michigan',7,0], ['IN','Indiana',7,1], ['OH','Ohio',7,2],
-    ['WV','West Virginia',7,3], ['AL','Alabama',7,4], ['NY','New York',8,0], ['PA','Pennsylvania',8,1],
-    ['VA','Virginia',8,2], ['NC','North Carolina',8,3], ['GA','Georgia',8,4], ['FL','Florida',8,5],
-    ['VT','Vermont',9,0], ['NJ','New Jersey',9,1], ['MD','Maryland',9,2], ['SC','South Carolina',9,3],
-    ['NH','New Hampshire',10,0], ['DE','Delaware',10,2], ['ME','Maine',11,0], ['MA','Massachusetts',11,1],
-    ['CT','Connecticut',11,2], ['RI','Rhode Island',11,3], ['DC','District of Columbia',10,3]
+  var stateCodes = [
+    'AK','WA','OR','CA','ID','NV','AZ','HI','MT','WY','UT','CO','NM',
+    'ND','SD','NE','KS','OK','TX','MN','IA','MO','AR','LA','WI','IL',
+    'KY','TN','MS','MI','IN','OH','WV','AL','NY','PA','VA','NC','GA',
+    'FL','VT','NJ','MD','SC','NH','DE','ME','MA','CT','RI','DC'
   ];
+
+  var svgSources = [
+    'img/Blank_US_Map_(states_only).svg',
+    'Blank_US_Map_(states_only).svg',
+    'https://wikimedia.org'
+  ];
+
   var colors = {
     dem: ['#d6e5f4', '#91b9df', '#4b8ac6', '#174a7e'],
     rep: ['#f2d5d5', '#e59b9b', '#d65757', '#a51c30']
   };
-  var tileWidth = 58;
-  var tileHeight = 42;
-  var gap = 4;
+
   var mapReady = false;
   var renderTimer;
 
@@ -33,7 +27,6 @@
     return ui && ui.dendryEngine && ui.dendryEngine.state && ui.dendryEngine.state.qualities;
   }
 
-  // Under 1, 1–5, 5–15, and 15+ percentage points.
   function marginBand(margin) {
     var absolute = Math.abs(margin);
     if (absolute >= 15) return 3;
@@ -78,10 +71,9 @@
       '.polling-map-content { position:relative; }',
       '.polling-map-score { margin:.3em 0 .75em; font-weight:bold; }',
       '.polling-map-svg-wrap { width:100%; min-height:300px; background:#f7f8fa; border:1px solid #bbb; overflow:auto; }',
-      '.polling-map-svg-wrap svg { display:block; width:100%; min-width:660px; height:auto; }',
-      '.polling-map-tile { stroke:#fff; stroke-width:2; cursor:pointer; }',
-      '.polling-map-tile:focus { outline:none; stroke:#111; stroke-width:3; }',
-      '.polling-map-state-label { font: bold 13px sans-serif; fill:#222; text-anchor:middle; dominant-baseline:middle; pointer-events:none; }',
+      '.polling-map-svg-wrap svg { display:block; width:100%; max-width:960px; height:auto; margin:0 auto; }',
+      '.polling-map-state { cursor:pointer; transition:opacity .12s ease; }',
+      '.polling-map-state:hover, .polling-map-state:focus { opacity:.85; outline:none; }',
       '.polling-map-legend { display:flex; flex-wrap:wrap; gap:.4em 1em; margin:.6em 0; font-size:.9em; }',
       '.polling-map-legend span { white-space:nowrap; }',
       '.polling-map-swatch { display:inline-block; width:1em; height:1em; vertical-align:-.15em; margin-right:.25em; border:1px solid #555; }',
@@ -109,6 +101,16 @@
     tooltip.style.top = Math.min(y, Math.max(12, rect.height - 145)) + 'px';
   }
 
+  function applyStateFill(shape, color) {
+    shape.style.fill = color;
+    shape.setAttribute('fill', color);
+    var children = shape.querySelectorAll('path, circle, polygon');
+    children.forEach(function(child) {
+      child.style.fill = color;
+      child.setAttribute('fill', color);
+    });
+  }
+
   function updateMap() {
     var drawer = document.getElementById('polling-map-drawer');
     if (!drawer || !drawer.classList.contains('open')) return;
@@ -127,15 +129,16 @@
     if (score) score.textContent = 'Projected Electoral Votes: Democrat ' + demEV + ' · Republican ' + repEV;
 
     var tooltip = drawer.querySelector('.polling-map-tooltip') || makeTooltip(drawer);
-    stateTiles.forEach(function(tile) {
-      var code = tile[0];
+    stateCodes.forEach(function(code) {
       var result = polling[code];
-     // Change this line in updateMap():
-var shape = svg.querySelector('[data-state-code="' + code + '"] rect');
+      var shape = svg.querySelector('#' + code);
       if (!result || !shape) return;
-      shape.setAttribute('fill', colorForMargin(Number(result.margin)));
+
+      applyStateFill(shape, colorForMargin(Number(result.margin)));
+      shape.classList.add('polling-map-state');
       shape.setAttribute('aria-label', tooltipText(code, result).replace(/\n/g, ', '));
       shape.setAttribute('tabindex', '0');
+
       shape.onpointerenter = function(event) {
         tooltip.textContent = tooltipText(code, result);
         tooltip.classList.add('visible');
@@ -163,53 +166,54 @@ var shape = svg.querySelector('[data-state-code="' + code + '"] rect');
       '<span><i class="polling-map-swatch" style="background:#174a7e"></i>Democrat 15+ points</span></div>';
   }
 
-  function buildOfflineMap(drawer) {
+  function fetchFirstAvailableSvg(urls, index) {
+    if (index >= urls.length) {
+      return Promise.reject(new Error('Could not load U.S. SVG map from any source.'));
+    }
+    return fetch(urls[index])
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .catch(function() {
+        return fetchFirstAvailableSvg(urls, index + 1);
+      });
+  }
+
+  function buildWikiMap(drawer) {
     var wrap = drawer.querySelector('.polling-map-svg-wrap');
     if (!wrap) return;
-    var ns = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('class', 'polling-us-map');
-    svg.setAttribute('viewBox', '0 0 744 404');
-    svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', 'Offline United States electoral polling tile map');
+    wrap.innerHTML = '<p style="padding:1em;">Loading U.S. SVG map…</p>';
 
-    stateTiles.forEach(function(tile) {
-      var code = tile[0];
-      var name = tile[1];
-      var x = tile[2] * (tileWidth + gap);
-      var y = tile[3] * (tileHeight + gap);
-      var group = document.createElementNS(ns, 'g');
-      group.setAttribute('data-state-code', code);
-      group.setAttribute('aria-label', name);
-      group.setAttribute('tabindex', '0');
+    fetchFirstAvailableSvg(svgSources, 0)
+      .then(function(svgText) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(svgText, 'image/svg+xml');
+        var svg = doc.querySelector('svg');
+        if (!svg) throw new Error('Invalid SVG document');
 
-      var rect = document.createElementNS(ns, 'rect');
-      rect.setAttribute('class', 'polling-map-tile');
-      rect.setAttribute('x', x);
-      rect.setAttribute('y', y);
-      rect.setAttribute('width', tileWidth);
-      rect.setAttribute('height', tileHeight);
-      rect.setAttribute('rx', '3');
-      rect.setAttribute('fill', '#d0d0d0');
-      group.appendChild(rect);
+        svg.classList.add('polling-us-map');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        if (!svg.getAttribute('viewBox')) {
+          svg.setAttribute('viewBox', '0 0 959 593');
+        }
 
-      var label = document.createElementNS(ns, 'text');
-      label.setAttribute('class', 'polling-map-state-label');
-      label.setAttribute('x', x + tileWidth / 2);
-      label.setAttribute('y', y + tileHeight / 2);
-      label.textContent = code;
-      group.appendChild(label);
+        var dc = svg.querySelector('#DC');
+        if (dc && dc.tagName.toLowerCase() === 'circle') {
+          dc.setAttribute('r', '6');
+          dc.style.stroke = '#ffffff';
+          dc.style.strokeWidth = '1.5';
+        }
 
-      var title = document.createElementNS(ns, 'title');
-      title.textContent = name;
-      group.appendChild(title);
-      svg.appendChild(group);
-    });
-
-    wrap.textContent = '';
-    wrap.appendChild(svg);
-    mapReady = true;
-    updateMap();
+        wrap.textContent = '';
+        wrap.appendChild(document.importNode(svg, true));
+        mapReady = true;
+        updateMap();
+      })
+      .catch(function(err) {
+        wrap.innerHTML = '<p style="padding:1em;color:#a51c30;">Unable to load U.S. map SVG (' + err.message + ').</p>';
+      });
   }
 
   function loadMap() {
@@ -220,22 +224,21 @@ var shape = svg.querySelector('[data-state-code="' + code + '"] rect');
       '<h2>U.S. Electoral Map</h2><div class="polling-map-content"><p class="polling-map-score">Loading current state polling…</p>' +
       legendHtml() +
       '<div class="polling-map-svg-wrap"></div>' +
-      '<p class="polling-map-credit">Offline state tile map; no external file or network request is needed. Hover or focus a state for exact polling results.</p></div>';
-    buildOfflineMap(drawer);
+      '<p class="polling-map-credit">Hover or focus a state for exact polling results.</p></div>';
+    buildWikiMap(drawer);
   }
 
   function initialize() {
     var drawer = document.getElementById('polling-map-drawer');
     if (!drawer) return;
     loadMap();
-    if (!renderTimer) renderTimer = window.setInterval(updateMap, 1500);
-    var observer = new MutationObserver(function() {
-      if (drawer.classList.contains('open')) updateMap();
-    });
-    observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
-    window.renderPollingMap = updateMap;
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize);
-  else initialize();
+if (!renderTimer) renderTimer = window.setInterval(updateMap, 1500);
+var observer = new MutationObserver(function() {
+if (drawer.classList.contains('open')) updateMap();
+});
+observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
+window.renderPollingMap = updateMap;
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize);
+else initialize();
 }());
