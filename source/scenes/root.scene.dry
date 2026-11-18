@@ -59,11 +59,11 @@ Q.hindenburg_enabled = 0;
 // 1. NATIONAL DEMOGRAPHIC SUPPORT (% voting for Candidate A / Democrat)
 // ============================================================================
 Q.nat_support = {
-    race: { white: 42, black: 87, hispanic: 60, asian: 62 },
-    edu:  { college: 57, noncollege: 44 },
-    geo:  { urban: 65, suburban: 51, rural: 35 },
-    age:  { youth: 60, mid: 52, old: 46, senior: 47 },
-    inc:  { low: 55, mid: 49, high: 47 }
+    race: { white: 43, black: 83, hispanic: 64, asian: 65 },
+    edu:  { college: 55, noncollege: 49 },
+    geo:  { urban: 65, suburban: 49, rural: 38 },
+    age:  { youth: 65, mid: 52, old: 46, senior: 42 },
+    inc:  { low: 61, mid: 49, high: 41 }
 };
 // 1. State-level demographic turnout multipliers (default is 1.0 = normal turnout)
 // Example: Q.state_turnout = { GA: { race: { black: 1.15 } } }
