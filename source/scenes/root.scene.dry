@@ -65,7 +65,17 @@ Q.nat_support = {
     age:  { youth: 60, mid: 52, old: 46, senior: 47 },
     inc:  { low: 55, mid: 49, high: 47 }
 };
+// 1. State-level demographic turnout multipliers (default is 1.0 = normal turnout)
+// Example: Q.state_turnout = { GA: { race: { black: 1.15 } } }
+Q.state_turnout = {};
 
+// 2. State-level demographic party support shifts (+ = Dem boost, - = Rep boost)
+// Example: Q.state_dem_support = { FL: { race: { hispanic: -8 } } }
+Q.state_dem_support = {};
+
+// Flat percentage point modifiers (positive = Dem boost, negative = Rep boost)
+Q.nat_flat_buff = 0; 
+Q.state_buffs = {}; // Example usage later: Q.state_buffs.PA = 3.5;
 // ============================================================================
 // 2. COMPLETE 50-STATE + DC DATABASE
 // Format: Name, EVs, PVI, Race(W,B,H,A), Edu(Col,Non), Geo(Urb,Sub,Rur), Age(18-29,30-44,45-64,65+), Inc(Low,Mid,High)
@@ -127,6 +137,9 @@ Q.state_db = {
 // ============================================================================
 // 3. SIMULATE POLLING FUNCTION
 // ============================================================================
+// ============================================================================
+// 3. SIMULATE POLLING FUNCTION (WITH FLAT BUFFS, STATE SUPPORT & TURNOUT)
+// ============================================================================
 window.simulate_polling = function() {
     const sup = Q.nat_support;
     const toLogOdds = (pct) => {
@@ -134,14 +147,6 @@ window.simulate_polling = function() {
         return Math.log(p / (1 - p));
     };
     const fromLogOdds = (lo) => (1 / (1 + Math.exp(-lo))) * 100;
-
-    const loSup = {
-        race: Array.of(toLogOdds(sup.race.white), toLogOdds(sup.race.black), toLogOdds(sup.race.hispanic), toLogOdds(sup.race.asian)),
-        edu:  Array.of(toLogOdds(sup.edu.college), toLogOdds(sup.edu.noncollege)),
-        geo:  Array.of(toLogOdds(sup.geo.urban), toLogOdds(sup.geo.suburban), toLogOdds(sup.geo.rural)),
-        age:  Array.of(toLogOdds(sup.age.youth), toLogOdds(sup.age.mid), toLogOdds(sup.age.old), toLogOdds(sup.age.senior)),
-        inc:  Array.of(toLogOdds(sup.inc.low), toLogOdds(sup.inc.mid), toLogOdds(sup.inc.high))
-    };
 
     const weights = Array.of(0.35, 0.25, 0.20, 0.10, 0.10);
     let totalDemEV = 0;
@@ -153,90 +158,165 @@ window.simulate_polling = function() {
         const name = stateData.at(0);
         const ev = stateData.at(1);
         const pvi = stateData.at(2);
-        const targets = Array.of(stateData.at(3), stateData.at(4), stateData.at(5), stateData.at(6), stateData.at(7));
 
+        // --- A. STATE-SPECIFIC DEMOGRAPHIC SUPPORT ---
+        const stSup = (Q.state_dem_support && Q.state_dem_support[code]) ? Q.state_dem_support[code] : {};
+        const getVal = (cat, key) => {
+            let base = sup[cat][key];
+            let mod = (stSup[cat] && stSup[cat][key]) ? stSup[cat][key] : 0;
+            return base + mod;
+        };
+
+        const stateLoSup = {
+            race: Array.of(toLogOdds(getVal('race','white')), toLogOdds(getVal('race','black')), toLogOdds(getVal('race','hispanic')), toLogOdds(getVal('race','asian'))),
+            edu:  Array.of(toLogOdds(getVal('edu','college')), toLogOdds(getVal('edu','noncollege'))),
+            geo:  Array.of(toLogOdds(getVal('geo','urban')), toLogOdds(getVal('geo','suburban')), toLogOdds(getVal('geo','rural'))),
+            age:  Array.of(toLogOdds(getVal('age','youth')), toLogOdds(getVal('age','mid')), toLogOdds(getVal('age','old')), toLogOdds(getVal('age','senior'))),
+            inc:  Array.of(toLogOdds(getVal('inc','low')), toLogOdds(getVal('inc','mid')), toLogOdds(getVal('inc','high')))
+        };
+
+        // --- B. STATE-SPECIFIC TURNOUT MULTIPLIERS ---
+        const stTurn = (Q.state_turnout && Q.state_turnout[code]) ? Q.state_turnout[code] : {};
+        const applyTurnout = (rawArr, cat, keys) => {
+            if (!stTurn[cat]) return rawArr;
+            let adjusted = rawArr.map((val, idx) => val * (stTurn[cat][keys[idx]] || 1));
+            let sum = adjusted.reduce((a, b) => a + b, 0);
+            return adjusted.map(val => (val / sum) * 100);
+        };
+
+        const targets = Array.of(
+            applyTurnout(stateData.at(3), 'race', ['white', 'black', 'hispanic', 'asian']),
+            applyTurnout(stateData.at(4), 'edu',  ['college', 'noncollege']),
+            applyTurnout(stateData.at(5), 'geo',  ['urban', 'suburban', 'rural']),
+            applyTurnout(stateData.at(6), 'age',  ['youth', 'mid', 'old', 'senior']),
+            applyTurnout(stateData.at(7), 'inc',  ['low', 'mid', 'high'])
+        );
+
+        // --- C. IPF BUCKET GENERATION ---
         let buckets = new Array();
         for (let r = 0; r < 4; r++) {
             for (let e = 0; e < 2; e++) {
-for (let g = 0; g < 3; g++) {
-for (let a = 0; a < 4; a++) {
-for (let i = 0; i < 3; i++) {
-let pop = (targets.at(0).at(r)/100) * (targets.at(1).at(e)/100) * (targets.at(2).at(g)/100) * (targets.at(3).at(a)/100) * (targets.at(4).at(i)/100);
-if (pop === 0) continue;
-if (e === 0 && g === 0) pop *= 1.25;
-if (e === 0 && g === 2) pop *= 0.70;
-if (e === 0 && i === 2) pop *= 1.35;
-if (e === 1 && i === 0) pop *= 1.30;
-buckets.push({ idx: Array.of(r, e, g, a, i), pop: pop });
-}
-}
-}
-}
-}
-for (let iter = 0; iter < 5; iter++) {
-for (let c = 0; c < 5; c++) {
-let sums = new Array(4).fill(0);
-for (let b of buckets) {
-let valIdx = b.idx.at(c);
-sums[valIdx] += b.pop;
-}
-for (let b of buckets) {
-let valIdx = b.idx.at(c);
-let target = targets.at(c).at(valIdx) / 100;
-if (sums[valIdx] > 0) {
-b.pop *= (target / sums[valIdx]);
-}
-}
-}
-}
-let demVotes = 0;
-let totalPop = 0;
-for (let b of buckets) {
-const r = b.idx.at(0);
-const e = b.idx.at(1);
-const g = b.idx.at(2);
-const a = b.idx.at(3);
-const i = b.idx.at(4);
-let lo = (weights.at(0) * loSup.race.at(r)) +
-(weights.at(1) * loSup.edu.at(e)) +
-(weights.at(2) * loSup.geo.at(g)) +
-(weights.at(3) * loSup.age.at(a)) +
-(weights.at(4) * loSup.inc.at(i)) +
-(pvi * 0.04);
-demVotes += b.pop * fromLogOdds(lo);
-totalPop += b.pop;
-}
-let demPct = +(demVotes / totalPop).toFixed(2);
-let repPct = +(100 - demPct).toFixed(2);
-let leader = demPct >= repPct ? "DEM" : "REP";
-if (leader === "DEM") {
-totalDemEV += ev;
-} else {
-totalRepEV += ev;
-}
-Q.polling[code] = {
-name: name,
-ev: ev,
-dem: demPct,
-rep: repPct,
-margin: +(demPct - repPct).toFixed(2),
-leader: leader
-};
-let lower = code.toLowerCase();
+                for (let g = 0; g < 3; g++) {
+                    for (let a = 0; a < 4; a++) {
+                        for (let i = 0; i < 3; i++) {
+                            let pop = (targets.at(0).at(r)/100) * (targets.at(1).at(e)/100) * (targets.at(2).at(g)/100) * (targets.at(3).at(a)/100) * (targets.at(4).at(i)/100);
+                            if (pop === 0) continue;
+                            if (e === 0 && g === 0) pop *= 1.25;
+                            if (e === 0 && g === 2) pop *= 0.70;
+                            if (e === 0 && i === 2) pop *= 1.35;
+                            if (e === 1 && i === 0) pop *= 1.30;
+                            buckets.push({ idx: Array.of(r, e, g, a, i), pop: pop });
+                        }
+                    }
+                }
+            }
+        }
+        for (let iter = 0; iter < 5; iter++) {
+            for (let c = 0; c < 5; c++) {
+                let sums = new Array(4).fill(0);
+                for (let b of buckets) {
+                    let valIdx = b.idx.at(c);
+                    sums[valIdx] += b.pop;
+                }
+                for (let b of buckets) {
+                    let valIdx = b.idx.at(c);
+                    let target = targets.at(c).at(valIdx) / 100;
+                    if (sums[valIdx] > 0) {
+                        b.pop *= (target / sums[valIdx]);
+                    }
+                }
+            }
+        }
+
+        // --- D. VOTE CALCULATION & FLAT BUFFS ---
+        let demVotes = 0;
+        let totalPop = 0;
+        for (let b of buckets) {
+            const r = b.idx.at(0);
+            const e = b.idx.at(1);
+            const g = b.idx.at(2);
+            const a = b.idx.at(3);
+            const i = b.idx.at(4);
+            let lo = (weights.at(0) * stateLoSup.race.at(r)) +
+                     (weights.at(1) * stateLoSup.edu.at(e)) +
+                     (weights.at(2) * stateLoSup.geo.at(g)) +
+                     (weights.at(3) * stateLoSup.age.at(a)) +
+                     (weights.at(4) * stateLoSup.inc.at(i)) +
+                     (pvi * 0.04);
+            demVotes += b.pop * fromLogOdds(lo);
+            totalPop += b.pop;
+        }
+
+        let baseDemPct = demVotes / totalPop;
+        let stateBuff = (Q.state_buffs && Q.state_buffs[code]) ? Q.state_buffs[code] : 0;
+        let totalBuff = (Q.nat_flat_buff || 0) + stateBuff;
+
+        let demPct = +(Math.max(1, Math.min(99, baseDemPct + totalBuff))).toFixed(2);
+        let repPct = +(100 - demPct).toFixed(2);
+        let leader = demPct >= repPct ? "DEM" : "REP";
+
+        if (leader === "DEM") {
+            totalDemEV += ev;
+        } else {
+            totalRepEV += ev;
+        }
+
+        Q.polling[code] = {
+            name: name,
+            ev: ev,
+            dem: demPct,
+            rep: repPct,
+            margin: +(demPct - repPct).toFixed(2),
+            leader: leader
+        };
+
+        let lower = code.toLowerCase();
         Q[lower + '_dem'] = demPct;
         Q[lower + '_rep'] = repPct;
         Q[lower + '_margin'] = +(demPct - repPct).toFixed(2);
         Q[lower + '_leader'] = leader;
-}
-Q.projected_dem_ev = totalDemEV;
-Q.projected_rep_ev = totalRepEV;
+    }
+
+    Q.projected_dem_ev = totalDemEV;
+    Q.projected_rep_ev = totalRepEV;
 };
+
+// Helper functions for easy in-game editing
+window.boost_state_turnout = function(state, category, group, multiplierChange) {
+    Q.state_turnout = Q.state_turnout || {};
+    Q.state_turnout[state] = Q.state_turnout[state] || {};
+    Q.state_turnout[state][category] = Q.state_turnout[state][category] || {};
+    let current = Q.state_turnout[state][category][group] || 1.0;
+    Q.state_turnout[state][category][group] = Math.max(0.1, current + multiplierChange);
+};
+
+window.boost_state_demo = function(state, category, group, pctChange) {
+    Q.state_dem_support = Q.state_dem_support || {};
+    Q.state_dem_support[state] = Q.state_dem_support[state] || {};
+    Q.state_dem_support[state][category] = Q.state_dem_support[state][category] || {};
+    let current = Q.state_dem_support[state][category][group] || 0;
+    Q.state_dem_support[state][category][group] = current + pctChange;
+};
+
 window.simulate_polling();
 
 
 // Run once at game start so initial polling is ready immediately
 window.simulate_polling();
 
+window.boost_state_turnout = function(state, category, group, multiplierChange) {
+    Q.state_turnout[state] = Q.state_turnout[state] || {};
+    Q.state_turnout[state][category] = Q.state_turnout[state][category] || {};
+    let current = Q.state_turnout[state][category][group] || 1.0;
+    Q.state_turnout[state][category][group] = Math.max(0.1, current + multiplierChange);
+};
+
+window.boost_state_demo = function(state, category, group, pctChange) {
+    Q.state_dem_support[state] = Q.state_dem_support[state] || {};
+    Q.state_dem_support[state][category] = Q.state_dem_support[state][category] || {};
+    let current = Q.state_dem_support[state][category][group] || 0;
+    Q.state_dem_support[state][category][group] = current + pctChange;
+};
 
 
 // party resources
