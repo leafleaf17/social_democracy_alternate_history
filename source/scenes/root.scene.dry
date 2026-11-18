@@ -318,6 +318,54 @@ window.boost_state_demo = function(state, category, group, pctChange) {
 };
 
 window.simulate_polling();
+Q.state_dem_support = {
+    // 1. FLORIDA: Cuban/Venezuelan/Colombian diaspora & retirees react strongly to "socialist" label
+    FL: {
+        race: { hispanic: -22 },
+        age:  { senior: -6 }
+    },
+
+    // 2. TEXAS & ARIZONA: Tejano/border Hispanics are slightly more socially conservative than CA/NV Latinos
+    TX: {
+        race: { hispanic: -10 }
+    },
+    AZ: {
+        race: { hispanic: -5 },
+        age:  { senior: -4 }
+    },
+
+    // 3. NEW ENGLAND (NH & ME): Sanders' home-region advantage & independent/libertarian rural streak
+    NH: {
+        geo: { rural: 10 },
+        edu: { noncollege: 8 }
+    },
+    ME: {
+        geo: { rural: 8 },
+        edu: { noncollege: 6 }
+    },
+
+    // 4. DEEP SOUTH (GA, NC, SC): Older Black voters start more cautious/moderate than Northern Black voters
+    GA: {
+        race: { black: -6 },
+        geo:  { suburban: -3 }
+    },
+    NC: {
+        race: { black: -5 },
+        geo:  { suburban: -3 }
+    },
+
+    // 5. RUST BELT (MI, WI, PA): Stronger union/economic-populist appeal among working-class whites
+    MI: {
+        edu: { noncollege: 3 }
+    },
+    WI: {
+        edu: { noncollege: 3 },
+        geo: { rural: 3 }
+    },
+    PA: {
+        edu: { noncollege: 2 }
+    }
+};
 // Run once at game start so initial polling is ready immediately
 window.simulate_polling();
 

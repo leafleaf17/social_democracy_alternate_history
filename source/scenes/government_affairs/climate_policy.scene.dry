@@ -2,7 +2,7 @@ title: Combatting Climate Change
 new-page: true
 is-card: true
 on-arrival: climate_policy_timer += 5; month_actions += 1
-view-if: dems_in_government = 1
+view-if: dems_in_government = 1 and climate_policy_timer <= 0
 card-image: img/portraits/BaadeFritz.jpg
 tags: govt_affairs, cabinet
 
