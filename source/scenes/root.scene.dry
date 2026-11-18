@@ -316,7 +316,11 @@ window.boost_state_demo = function(state, category, group, pctChange) {
     let current = Q.state_dem_support[state][category][group] || 0;
     Q.state_dem_support[state][category][group] = current + pctChange;
 };
-
+{!
+Q.state_buffs.PA = (Q.state_buffs.PA || 0) + 4;
+Q.state_buffs.FL = (Q.state_buffs.FL || 0) - 3;
+window.simulate_polling();
+!}
 // Run once at game start so initial polling is ready immediately
 window.simulate_polling();
 
