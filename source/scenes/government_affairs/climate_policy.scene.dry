@@ -23,7 +23,7 @@ title: Strengthen Pollution Regulations
 subtitle: Set stricter federal pollution standards on power generation and vehicles. This will anger coal country, especially since we have not provided any aid for job transitioning.
 unavailable-subtitle: [? if democrat_supreme_court_seats < republican_supreme_court_seats : The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court will strike down any further expansion. ?]
 choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1, climate_progress +=3
+on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3
 max-visits: 4
 
 With our policy of land reform, we are acquiring farmland from large estates, and giving the land to farmworkers' associations and small peasants. In essence, this brings class struggle to the countryside, breaking the semi-feudal property relations present in East Prussia and other areas with large estates. The bourgeois parties and large farmers despise our intrusion into the sacredness of private property, while leftists are cautiously optimistic.
@@ -32,8 +32,8 @@ With our policy of land reform, we are acquiring farmland from large estates, an
 @cancel_oil_drilling
 title: Restrict Projects Involving Dirty Energy
 subtitle: Revoke leases for oil and gas drilling and projects, especially in areas with ecosystem concerns. This is more effective then strengthening pollution regulations but may lead to more backlash.
-choose-if: budget >= 1
-on-arrival: budget -= 1; agricultural_finance += 1; rural_spd += 5*(1-dissent); rural_nsdap -= 3*(1-dissent); peoples_party_support += 1; progressive_dissent += 5; socialist_dissent += 4; rural_sol += 4; rural_policy += 1; economic_growth += 0.2;
+on-arrival: republican_radicalization +=1; green_backlash +=2; climate_progress +=6
+max-visits: 3
 
 We have increased financial support for small farmers, providing access to credit and insurance, saving them from privation. The left and center of our party are opposed to our rural policy, seeing these policies as giveaways to petit-bourgeois farmers.
 
