@@ -49,12 +49,12 @@
     var m = Number(res.margin);
     var lead = m > 0 ? 'Democrat lead' : m < 0 ? 'Republican lead' : 'Tie';
     var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
-    return res.name + ' (' + code + ') — ' + lead + '\n' +
-      '<span style="color: #3E88B3;">**Democrat**</span>: ' + Number(res.dem).toFixed(2) + '%\n' +
-      '<span style="color: #DE0100;">**Republican**</span>: ' + Number(res.rep).toFixed(2) + '%\n' +
-      'Margin: ' + pre + Math.abs(m).toFixed(2) + ' points\n' +
-      res.ev + ' electoral votes';
-  }
+    return res.name + ' (' + code + ') — ' + lead + '<br>' +
+        '<span style="color:#5c9eff;"><strong>Democrat</strong></span>: ' + Number(res.dem).toFixed(2) + '%<br>' +
+        '<span style="color:#ff5865;"><strong>Republican</strong></span>: ' + Number(res.rep).toFixed(2) + '%<br>' +
+        'Margin: ' + pre + Math.abs(m).toFixed(2) + ' points<br>' +
+        res.ev + ' electoral votes';
+}
 
 function addStyles() {
     if (document.getElementById('polling-map-styles')) return;
