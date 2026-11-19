@@ -49,19 +49,13 @@ function tooltipText(code, res) {
     var m = Number(res.margin);
     var lead = m > 0 ? 'Democrat lead' : m < 0 ? 'Republican lead' : 'Tie';
     var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
-    var html = res.name + ' (' + code + ') — ' + lead + '<br>' +
+    return res.name + ' (' + code + ') — ' + lead + '<br>' +
         '<span style="color:#5c9eff !important;"><strong>Democrat</strong></span>: ' + Number(res.dem).toFixed(2) + '%<br>' +
         '<span style="color:#ff5865 !important;"><strong>Republican</strong></span>: ' + Number(res.rep).toFixed(2) + '%<br>' +
         'Margin: ' + pre + Math.abs(m).toFixed(2) + ' points<br>' +
         res.ev + ' electoral votes';
-
-    setTimeout(function() {
-        var el = document.querySelector('.polling-map-tooltip');
-        if (el) el.innerHTML = html;
-    }, 0);
-
-    return '';
 }
+
 
 
 
@@ -143,7 +137,7 @@ function addStyles() {
 
       shape.classList.add('polling-map-state');
       shape.onpointerenter = function(e) {
-        tip.textContent = tooltipText(code, res);
+               tip.innerHTML = tooltipText(code, res);
         tip.classList.add('visible');
         var r = drawer.getBoundingClientRect();
         tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 245) + 'px';
