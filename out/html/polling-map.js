@@ -50,8 +50,8 @@
     var lead = m > 0 ? 'Democrat lead' : m < 0 ? 'Republican lead' : 'Tie';
     var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
     return res.name + ' (' + code + ') — ' + lead + '\n' +
-      'Democrat: ' + Number(res.dem).toFixed(2) + '%\n' +
-      'Republican: ' + Number(res.rep).toFixed(2) + '%\n' +
+      '<span style="color: #3E88B3;">**Democrat**</span>: ' + Number(res.dem).toFixed(2) + '%\n' +
+      '<span style="color: #DE0100;">**Republican**</span>: ' + Number(res.rep).toFixed(2) + '%\n' +
       'Margin: ' + pre + Math.abs(m).toFixed(2) + ' points\n' +
       res.ev + ' electoral votes';
   }
