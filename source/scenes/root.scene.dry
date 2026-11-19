@@ -327,38 +327,38 @@ Q.state_dem_support = {
     NH: { race: { white: 6 },  geo: { rural: 10 }, edu: { noncollege: 8 } },
     ME: { race: { white: 5 },  geo: { rural: 8 },  edu: { noncollege: 6 } },
     MA: { race: { white: 10 }, edu: { college: 6 } },
-    RI: { race: { white: 8 },  edu: { noncollege: 5 } },
-    CT: { race: { white: 6 },  geo: { suburban: 4 } },
+    RI: { race: { white: 6 },  edu: { noncollege: 3 } },
+    CT: { race: { white: 3 },  geo: { suburban: 2 } },
 
     // --- MID-ATLANTIC ---
     NY: { race: { white: 7, hispanic: 4 }, geo: { urban: 5 } },
-    NJ: { race: { white: 5 },  geo: { suburban: 3 } },
+    NJ: { race: { white: -2 },  geo: { suburban: -3 } },
     PA: { race: { white: 2 },  edu: { noncollege: 3 }, geo: { rural: -2 } },
-    DE: { race: { white: 4, black: -3 } },
-    MD: { race: { white: 6, black: 2 },  geo: { suburban: 5 } },
+    DE: { race: { white: 1, black: -3 } },
+    MD: { race: { white: 6, black: 2 },  geo: { suburban: 2 } },
     DC: { race: { white: 25, black: 8 }, geo: { urban: 10 } },
 
     // --- UPPER MIDWEST / RUST BELT (Union Populism vs. Rural Polarization) ---
-    WI: { race: { white: 5 },  edu: { noncollege: 3 }, geo: { rural: 3 } },
-    MI: { race: { white: 3, black: 2 }, edu: { noncollege: 3 } },
-    MN: { race: { white: 6 },  edu: { noncollege: 3 }, geo: { rural: 2 } },
+    WI: { race: { white: 6 },  edu: { noncollege: 3 }, geo: { rural: 5 } },
+    MI: { race: { white: 3, black: 2 }, edu: { noncollege: 4 } },
+    MN: { race: { white: 6 },  edu: { noncollege: 5 }, geo: { rural: 5 } },
     IL: { race: { white: 5, hispanic: 4 }, geo: { urban: 5 } },
-    OH: { race: { white: -2 }, edu: { noncollege: -2 }, geo: { rural: -4 } },
-    IA: { race: { white: 2 },  edu: { noncollege: 2 }, geo: { rural: -2 } },
-    IN: { race: { white: -5 }, geo: { rural: -5 } },
+    OH: { race: { white: 2 }, edu: { noncollege: 2 }, geo: { rural: -2 } },
+    IA: { race: { white: 2 },  edu: { noncollege: 2 }, geo: { rural: 2 } },
+    IN: { race: { white: -1 }, geo: { rural: -1 } },
 
     // --- DEEP SOUTH (High Racial Polarization & Cautious Older Black Electorate) ---
-    GA: { race: { white: -14, black: -6 }, geo: { suburban: -2 } },
-    NC: { race: { white: -10, black: -5 }, geo: { suburban: -2 } },
+    GA: { race: { white: -13, black: -6 }, geo: { suburban: -2 } },
+    NC: { race: { white: -7, black: -5 }, geo: { suburban: -2 } },
     VA: { race: { white: -3,  black: -4 }, geo: { suburban: 4 } },
-    SC: { race: { white: -16, black: -7 } },
-    AL: { race: { white: -22, black: -6 } },
-    MS: { race: { white: -24, black: -5 } },
-    LA: { race: { white: -20, black: -6 } },
+    SC: { race: { white: -13, black: -7 } },
+    AL: { race: { white: -20, black: -6 } },
+    MS: { race: { white: -20, black: -5 } },
+    LA: { race: { white: -18, black: -6 } },
     AR: { race: { white: -16 }, geo: { rural: -6 } },
     TN: { race: { white: -15 }, geo: { rural: -6 } },
-    KY: { race: { white: -12 }, edu: { noncollege: -4 } },
-    WV: { race: { white: -10 }, edu: { noncollege: -5 }, geo: { rural: -6 } },
+    KY: { race: { white: -10 }, edu: { noncollege: -4 } },
+    WV: { race: { white: -5 }, edu: { noncollege: 5 }, geo: { rural: 2 } },
 
     // --- FLORIDA & TEXAS (Distinct Hispanic Coalitions & Retirees) ---
     FL: { race: { hispanic: -22, white: -4 }, age: { senior: -6 } },
@@ -366,7 +366,7 @@ Q.state_dem_support = {
 
     // --- SOUTHWEST / SUN BELT (Strong Latino & Youth Appeal) ---
     AZ: { race: { hispanic: -4, white: -2 }, age: { senior: -4 } },
-    NV: { race: { hispanic: 5 }, inc: { low: 4 }, geo: { urban: 3 } },
+    NV: { race: { hispanic: 2 }, inc: { low: 4 }, geo: { urban: 3 } },
     NM: { race: { hispanic: 4, white: 3 } },
     CO: { race: { white: 7, hispanic: 4 }, edu: { college: 5 }, age: { youth: 4 } },
 
