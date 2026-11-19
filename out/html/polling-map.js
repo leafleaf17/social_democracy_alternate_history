@@ -68,6 +68,7 @@ function addStyles() {
       '.polling-map-content,.polling-map-content h2,.polling-map-content p,.polling-map-score,.polling-map-legend,.polling-map-tooltip{color:#ffffff !important}' +
 '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:4px 10px;cursor:pointer}' +
 
+
       '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
       '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
       '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
