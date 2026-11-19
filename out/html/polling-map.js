@@ -50,8 +50,8 @@ function tooltipText(code, res) {
     var lead = m > 0 ? 'Democrat lead' : m < 0 ? 'Republican lead' : 'Tie';
     var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
     var html = res.name + ' (' + code + ') — ' + lead + '<br>' +
-        '<span style="color:#5c9eff;"><strong>Democrat</strong></span>: ' + Number(res.dem).toFixed(2) + '%<br>' +
-        '<span style="color:#ff5865;"><strong>Republican</strong></span>: ' + Number(res.rep).toFixed(2) + '%<br>' +
+        '<span style="color:#5c9eff !important;"><strong>Democrat</strong></span>: ' + Number(res.dem).toFixed(2) + '%<br>' +
+        '<span style="color:#ff5865 !important;"><strong>Republican</strong></span>: ' + Number(res.rep).toFixed(2) + '%<br>' +
         'Margin: ' + pre + Math.abs(m).toFixed(2) + ' points<br>' +
         res.ev + ' electoral votes';
 
