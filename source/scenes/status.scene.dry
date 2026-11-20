@@ -84,8 +84,6 @@ if (Q.sa_strength) {
 
 = Policy Achievements
 
-On the issue of the cost of living, the American public views our administration as: [+ cost_of_living_opinion : costol +] 
-
 We have made [+ climate_progress : policyprogress +] progress on the issue of the climate
 
 The state of the US-Mexican border is currently: [+ border_security : border +]
