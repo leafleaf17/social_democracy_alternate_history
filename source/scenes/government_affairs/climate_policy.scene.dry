@@ -23,7 +23,7 @@ title: Strengthen Pollution Regulations
 subtitle: The EPA will set stricter federal pollution standards on power generation and vehicles. This will anger coal country, especially since we have not provided any aid for job transitioning.
 unavailable-subtitle: [? if democrat_supreme_court_seats < republican_supreme_court_seats : The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court will strike down any further expansion. ?]
 choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2; cost_of_living_opinion -=1; unemployment +=0.1
+on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2; cost_of_living_opinion -=1; unemployment +=0.1; progressive_dissent -=2; socialist_dissent -=2
 max-visits: 4
 
 The EPA announces a series of new regulations hitting vehicle tailpipes and dirty powerplants. This necessary step will improve the longterm health of the enviornment. Republicans will try and blame job losses in coal states on these measures. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
@@ -41,6 +41,8 @@ Q.blue_dog_dissent += 4;
 Q.economic_growth -= 0.1;
 Q.cost_of_living_opinion -=1; 
 Q.unemployment +=0.1;
+Q.progressive_dissent -=2; 
+Q.socialist_dissent -=2;
 !}
 max-visits: 3
 
@@ -51,7 +53,8 @@ title: Can We Tax Carbon?
 subtitle: +2 budget. This will modestly speed up the transition to green energy. This will harm the economy of states with large gas and coal industries.
 choose-if: filibuster_gone = 1
 unavailable-subtitle: This will never survive the fillibuster.
-on-arrival: budget += 2; republican_radicalization +=5; green_backlash +=5; climate_progress +=15; blue_dog_dissent +=10; economic_growth -=0.2; inflation +=0.25;
+on-arrival: budget += 2; republican_radicalization +=5; green_backlash +=5; climate_progress +=15; blue_dog_dissent +=10; economic_growth -=0.2; inflation +=0.25; progressive_dissent -=5; socialist_dissent -=5; new_liberal_dissent -=5
+max-visits: 1
 
 WIP 
 
@@ -60,7 +63,7 @@ title: Declare A National Climate Emergency
 subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. 
 unavailable-subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court would declare this improper.
 choose-if: democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15
+on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15; progressive_dissent -=5; socialist_dissent -=5
 max-visits: 1
 
 Bernie Sanders announces a climate emergency on prime tv. We have unlocked significantly more funding for green energy products, which may help lower general energy prices. Republicans claim this is a fragrant abuse of executive power.
