@@ -21,8 +21,7 @@ Corporatations have for far too long been held unaccountable for their monopolis
 @war_with_tech
 title: Sue Big Tech Companies Such As Amazon And Meta
 subtitle: This will lead to a drawn out legal battle and will radicalize the tech sector towards the right. 
-choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2
+on-arrival: big_tech_lawsuit += 1; corporate_backlash +=5; tech_ideology +=10;
 max-visits: 1
 
 The EPA announces a series of new regulations hitting vehicle tailpipes and dirty powerplants. This necessary step will improve the longterm health of the enviornment. Republicans will try and blame job losses in coal states on these measures. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]

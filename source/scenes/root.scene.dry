@@ -473,7 +473,10 @@ Q.moderates_loyalty = 30;
 // overall dissent reduces every increase in party support.
 Q.dissent = 0.05;
 Q.dissent_percent = 5;
-
+Q.big_tech_lawsuit = 0;
+Q.corporate_backlash = 0;
+Q.tech_ideology = 0;
+Q.cost_of_living_opinion = 33;
 // factions
 Q.factions = ['left', 'center', 'labor', 'reformist', 'neorevisionist'];
 // should this be normalized to 100%?
