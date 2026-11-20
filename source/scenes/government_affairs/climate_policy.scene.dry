@@ -23,7 +23,7 @@ title: Strengthen Pollution Regulations
 subtitle: The EPA will set stricter federal pollution standards on power generation and vehicles. This will anger coal country, especially since we have not provided any aid for job transitioning.
 unavailable-subtitle: [? if democrat_supreme_court_seats < republican_supreme_court_seats : The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court will strike down any further expansion. ?]
 choose-if: times_strengthened_pollution <= 2 and democrat_supreme_court_seats < republican_supreme_court_seats or democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2
+on-arrival: times_strengthened_pollution += 1; republican_radicalization +=1; green_backlash +=1; climate_progress +=3; blue_dog_dissent +=2; cost_of_living_opinion -=1; unemployment +=0.1
 max-visits: 4
 
 The EPA announces a series of new regulations hitting vehicle tailpipes and dirty powerplants. This necessary step will improve the longterm health of the enviornment. Republicans will try and blame job losses in coal states on these measures. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
@@ -39,6 +39,8 @@ Q.climate_progress += 6;
 Q.inflation += 0.1;
 Q.blue_dog_dissent += 4;
 Q.economic_growth -= 0.1;
+Q.cost_of_living_opinion -=1; 
+Q.unemployment +=0.1;
 !}
 max-visits: 3
 
