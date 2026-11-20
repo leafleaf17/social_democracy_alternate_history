@@ -24,8 +24,7 @@ subtitle: This will lead to a drawn out legal battle and will radicalize the tec
 on-arrival: big_tech_lawsuit += 1; corporate_backlash +=5; tech_ideology +=10
 max-visits: 1
 
-The EPA announces a series of new regulations hitting vehicle tailpipes and dirty powerplants. This necessary step will improve the longterm health of the enviornment. Republicans will try and blame job losses in coal states on these measures. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
-
+WIP
 
 @sue_big_agri
 title: Sue Major Agricultural Giants 
