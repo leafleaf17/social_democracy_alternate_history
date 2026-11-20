@@ -65,6 +65,13 @@ Blue Dogs strength: [+ blue_dog_strength : strength +], dissent: [+ blue_dog_dis
 
 [? if neorevisionism > 0 : Neorevisionist strength: [+ neorevisionist_strength : strength +], dissent: [+ neorevisionist_dissent : dissent +] ?]
 
+= Ideology
+
+On social issues, our administration is viewed as: [+ bop_social : socialissues +]
+
+On economic issues, our administration is governing in the style of a: [+ bop_econ : econissues +]
+
+On foreign policy, our administration is: [+ bop_foreign : foreignissue +]
 
 @paramilitaries
 on-arrival: {!

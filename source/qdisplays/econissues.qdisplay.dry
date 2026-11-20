@@ -1,0 +1,8 @@
+
+# faction strength
+
+(-1000..-10) <span style="color: #D32F2F;">democratic socialist</span>
+(-10..-5) <span style="color: #E65100;">social democrat</span>
+(-5..0) <span style="color: #F57C00;">left-liberal</span>
+(0..5) <span style="color: #FFA000;">new liberal</span>
+(10..) <span style="color: #FBC02D;">neoliberal</span>
