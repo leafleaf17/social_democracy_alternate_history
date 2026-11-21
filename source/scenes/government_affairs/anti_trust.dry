@@ -13,7 +13,7 @@ Corporatations have for far too long been held unaccountable for their monopolis
 - @war_with_tech
 - @sue_big_agri
 - @junk_fees
-- @credit_industry
+- @transport_mon
 - @root: Do not enact any policies for now.
 - @easy_discard
 - @cancel_advisor_action
@@ -21,7 +21,7 @@ Corporatations have for far too long been held unaccountable for their monopolis
 @war_with_tech
 title: Sue Big Tech Companies Such As Amazon And Meta
 subtitle: This will lead to a drawn out legal battle and will radicalize the tech sector towards the right. 
-on-arrival: big_tech_lawsuit += 1; corporate_backlash +=5; tech_ideology +=10; socialist_strength +=5; socialist_dissent -=5; progressive_dissent -=5
+on-arrival: big_tech_lawsuit += 1; corporate_backlash +=5; tech_ideology +=10; socialist_strength +=5; socialist_dissent -=5; progressive_dissent -=5; bop_econ -=0.75
 max-visits: 1
 
 WIP
@@ -29,7 +29,7 @@ WIP
 @sue_big_agri
 title: Sue Major Agricultural Giants 
 subtitle: We will target agricultural giants accused of engaging in monopolistic and deceptive practices at the expense of small farmers. 
-on-arrival: nat_support.geo.rural +=2; corporate_backlash +=1
+on-arrival: nat_support.geo.rural +=2; corporate_backlash +=1; bop_econ -=0.2
 max-visits: 3
 
 A series of dirty energy projects, especially in alaska and the pacific are canceled. This pleases those with enviornmental concerns and will certainly encourage energy companies to switch to green energy production instead, although Republicans will attempt to tie these measures to the cost of living. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
@@ -37,18 +37,15 @@ A series of dirty energy projects, especially in alaska and the pacific are canc
 @junk_fees
 title: Target Junk Fees And Pricing Algorithms 
 subtitle: This is appreciated by all Americans, less so by corporations.
-choose-if: filibuster_gone = 1
-unavailable-subtitle: This will never survive the fillibuster.
 on-arrival: cost_of_living_opinion +=2; corporate_backlash +=2; nat_flat_buff += 0.1;
+max-visits: 2
 
 WIP 
 
-@credit_industry
-title: Tighten Regulations On The Credit Industry
-subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. 
-unavailable-subtitle: This allow the limited redirecting of military spending for the construction of green energy projects instead. The <span style="color: #DE0100;">**Conservative**</span> majority on the supreme court would declare this improper.
-choose-if: democrat_supreme_court_seats > republican_supreme_court_seats
-on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15
-max-visits: 1
+@transport_mon
+title: Sue To Break Up And Prevent The Formation Of Monopolies In The Transport Industry
+subtitle: This will ideally place a downward pressure on prices in the transportation industry
+on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15; bop_econ -=0.2
+max-visits: 2
 
 Bernie Sanders announces a climate emergency on prime tv. We have unlocked significantly more funding for green energy products, which may help lower general energy prices. Republicans claim this is a fragrant abuse of executive power.
