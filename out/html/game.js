@@ -24,6 +24,7 @@
       elements.forEach(function(element) { if (element.style.display !== 'block') { element.style.display = 'block'; button.innerHTML = "View Other News"; } else { element.style.display = 'none'; button.innerHTML = "View Right-Wing News"; } });
       elements2.forEach(function(element) { element.style.display = element.style.display !== 'none' ? 'none' : 'block'; });
       button.style.backgroundColor = '#dddddd';
+      
   };
   window.loadEnglish = function() {
       ui.loadGame('game.json'); dendryUI.language = "en"; localStorage[game.title + '_language'] = "en";
