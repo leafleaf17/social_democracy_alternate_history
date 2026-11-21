@@ -477,9 +477,9 @@ Q.big_tech_lawsuit = 0;
 Q.corporate_backlash = 0;
 Q.tech_ideology = 0;
 Q.cost_of_living_opinion = 33;
-Q.bop_econ = -3;
-Q.bop_social = -3;
-Q.bop_foreign = -3;
+Q.bop_econ = 10;
+Q.bop_social = 7;
+Q.bop_foreign = 9;
 // factions
 Q.factions = ['left', 'center', 'labor', 'reformist', 'neorevisionist'];
 // should this be normalized to 100%?

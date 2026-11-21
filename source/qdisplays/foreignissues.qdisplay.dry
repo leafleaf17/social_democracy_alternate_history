@@ -1,8 +1,8 @@
 
 # faction strength
 
-(-1000..-10) <span style="color: #0288D1;">isolationist</span>
-(-10..-5) <span style="color: #29B6F6;">non-interventionalist</span>
-(-5..0) <span style="color: #78909C;">neither hawkish nor dovish</span>
-(0..5) <span style="color: #E64A19;">hawish</span>
-(10..) <span style="color: #B71C1C;">very hawish</span>
+(0..4) <span style="color: #0288D1;">isolationist</span>
+(4..8) <span style="color: #29B6F6;">non-interventionalist</span>
+(8..12) <span style="color: #78909C;">neither hawkish nor dovish</span>
+(12..16) <span style="color: #E64A19;">hawish</span>
+(16..) <span style="color: #B71C1C;">very hawish</span>

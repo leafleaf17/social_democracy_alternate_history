@@ -1,8 +1,8 @@
 
 # faction strength
 
-(-1000..-10) <span style="color: #00F800;">woke</span>
-(-10..-5) <span style="color: #00E54B;">very progressive</span>
-(-5..0) <span style="color: #00D4B0;">progressive</span>
-(0..5) <span style="color: #00B7D8;">liberal</span>
-(10..) <span style="color: #188AF0;">centrist</span>
+(0..4) <span style="color: #00F800;">woke</span>
+(4..8) <span style="color: #00E54B;">very progressive</span>
+(8..12) <span style="color: #00D4B0;">progressive</span>
+(12..16) <span style="color: #00B7D8;">liberal</span>
+(16..) <span style="color: #188AF0;">centrist</span>
