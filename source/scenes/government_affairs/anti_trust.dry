@@ -45,7 +45,7 @@ WIP
 @transport_mon
 title: Sue To Break Up And Prevent The Formation Of Monopolies In The Transport Industry
 subtitle: This will ideally place a downward pressure on prices in the transportation industry
-on-arrival: republican_radicalization +=2; climate_progress +=6; blue_dog_dissent +=3; economic_growth +=0.1; inflation -=0.15; bop_econ -=0.2
+on-arrival: cost_of_living_opinion +=2; corporate_backlash +=2; nat_support.geo.urban +=2;
 max-visits: 2
 
 Bernie Sanders announces a climate emergency on prime tv. We have unlocked significantly more funding for green energy products, which may help lower general energy prices. Republicans claim this is a fragrant abuse of executive power.
