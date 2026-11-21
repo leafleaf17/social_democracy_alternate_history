@@ -58,6 +58,8 @@ max-cards: 4
 
 {!<p class="dnvp">!}[? if year == 2021 and month == 1 and democrat_president == 1: In the primary for Virginia governor, co-chair of the Sanders campaign in Virgnia and <span style="color: #DE0100;">DSA</span> member Lee J. Carter is soaring in the polls. Currently, moderate democrat and former governor Terry McAuliffe leads the polls by a modest amount, while Carter and Jennifer Carroll, a progressive canidate, tie for second place. With the current tide of the <span style="color: #3E88B3;">Democrat party</span> favoring the left, and a possible Bernie Sanders endorsement, the <span style="color: #DE0100;">Democratic Socialists of America</span>, are hoping that his canidacy may be a chance to capture a governorship, which would be a commanding win for the organization and give it much needed public spotlight. ?]{!</p>!}
 
+{!<p class="other">!}[? if year == 2021 and month == 1 and democrat_president == 1: In the primary for Virginia governor, co-chair of the Sanders campaign in Virgnia and <span style="color: #DE0100;">DSA</span> member Lee J. Carter is soaring in the polls. Currently, moderate democrat and former governor Terry McAuliffe leads the polls by a modest amount, while Carter and Jennifer Carroll, a progressive canidate, tie for second place. With the current tide of the <span style="color: #3E88B3;">Democrat party</span> favoring the left, and a possible Bernie Sanders endorsement, the <span style="color: #DE0100;">Democratic Socialists of America</span>, are hoping that his canidacy may be a chance to capture a governorship, which would be a commanding win for the organization and give it much needed public spotlight. ?]{!</p>!}
+
 {!</div>!}
 
 - @party
