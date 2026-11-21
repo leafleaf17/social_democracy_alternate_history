@@ -54,10 +54,11 @@ max-cards: 4
 # Here, the main deck will be displayed. Clicking on the deck draws a card into your hand. Clicking on a card activates that card.
 
 {!<div class="scrollable-box">!}
-
-[? if always_one = 1 : = {!<h1>Electoral news</h1>!} ?]
+[? if always_one = 1 : {!<h1>Electoral news</h1>!} ?]
 
 [? if year == 2021 and month == 1 and democrat_president == 1: In the primary for Virginia governor, co-chair of the Sanders campaign in Virgnia and <span style="color: #DE0100;">DSA</span> member Lee J. Carter is soaring in the polls. Currently, moderate democrat and former governor Terry McAuliffe leads the polls by a modest amount, while Carter and Jennifer Carroll, a progressive canidate, tie for second place. With the current tide of the <span style="color: #3E88B3;">Democrat party</span> favoring the left, and a possible Bernie Sanders endorsement, the <span style="color: #DE0100;">Democratic Socialists of America</span>, are hoping that his canidacy may be a chance to capture a governorship, which would be a commanding win for the organization and give it much needed public spotlight. ?]
+
+[? if always_one = 1 : {!<h1>Republican news</h1>!} ?]
 
 [? if year == 2021 and month == 1 and democrat_president == 1: As congress considers a second impeachment of the disgraced former president Donald Trump, Trump seems set on attempting a political comback. Reports have leaked that the President, frustrated with the reluctance many in the <span style="color: #DE0100;">Republican party</span> have shown towards defending him, is seriously considering the formation of a third party, deemed the "<span style="color: #A356DE ;">Patriot Party</span>." The media has reported that a new PAC called the Patriot Party PAC was recently registered, and Trump has reportedly been calling up former allies in the <span style="color: #DE0100;">Republican party</span> to try and guage support. It is unclear if the President is serious, or if he is bluffing to try and pressure <span style="color: #DE0100;">Republicans</span> into supporting him in his upcoming impeachment trial. As a result of vote splitting, if Trump truly formed his own party, it would almost gurantee <span style="color: #3E88B3;">democratic</span> wins in competitive states. In response, <span style="color: #DE0100;">Republicans</span> such as minority speaker Kevin Mccarthy, who were talking about throwing Trump overseas just a few weeks ago, seem to be walking back their rhetoric. There are even reports that Mccarthy is preparing to meet Trump at Maralago in the coming weeks, at the great annoyance of moderate <span style="color: #DE0100;">Republican</span> house members who see the former President as nothing but a burden on the party. ?]
 
