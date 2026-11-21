@@ -1,7 +1,7 @@
 
 # faction strength
 
-(0..4) <span style="color: #D32F2F;">democratic socialist</span>
+(..4) <span style="color: #D32F2F;">democratic socialist</span>
 (4..8) <span style="color: #E65100;">social democrat</span>
 (8..12) <span style="color: #F57C00;">left-liberal</span>
 (12..16) <span style="color: #FFA000;">new liberal</span>
