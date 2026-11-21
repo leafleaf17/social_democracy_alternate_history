@@ -480,6 +480,7 @@ Q.cost_of_living_opinion = 33;
 Q.bop_econ = 10;
 Q.bop_social = 7;
 Q.bop_foreign = 9;
+Q.always_one = 1;
 // factions
 Q.factions = ['left', 'center', 'labor', 'reformist', 'neorevisionist'];
 // should this be normalized to 100%?
