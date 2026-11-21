@@ -67,7 +67,11 @@ Blue Dogs strength: [+ blue_dog_strength : strength +], dissent: [+ blue_dog_dis
 
 = Ideology
 
-On social issues, the administration is [+ bop_social : socialissues +]
+On social issues, the administration is: [+ bop_social : socialissues +]
+
+On economic issues, the administration is governing as a: [+ bop_econ : econissues +]
+
+On foreign policy, the administration is: [+ bop_foreign : foreignissues +]
 
 @paramilitaries
 on-arrival: {!
