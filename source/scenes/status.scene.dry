@@ -67,7 +67,7 @@ Blue Dogs strength: [+ blue_dog_strength : strength +], dissent: [+ blue_dog_dis
 
 = Ideology
 
-why
+On social issues, the administration is [+ bop_social : socialissues +]
 
 @paramilitaries
 on-arrival: {!
