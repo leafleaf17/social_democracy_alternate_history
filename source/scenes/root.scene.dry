@@ -481,6 +481,14 @@ Q.bop_econ = 10;
 Q.bop_social = 7;
 Q.bop_foreign = 9;
 Q.always_one = 1;
+
+
+Q.primaries = {
+    va:  { prog: 1, mod: 4 },
+    nyc: { prog: 3, mod: 4 }
+};
+
+
 // factions
 Q.factions = ['left', 'center', 'labor', 'reformist', 'neorevisionist'];
 // should this be normalized to 100%?
