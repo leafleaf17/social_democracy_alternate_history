@@ -103,7 +103,7 @@ The youth are currently: [+ youth_loyalty : constituencyloyalty +]
 
 Doves are currently: [+ dove_loyalty : constituencyloyalty +] 
 
-Latinos are currently: [+ latino_loyalty : constituencyloyalty +] 
+Marginalized communities are currently: [+ marginalized_community_loyalty : constituencyloyalty +] 
 
 Labor is currently: [+ labor_loyalty : constituencyloyalty +] 
 
