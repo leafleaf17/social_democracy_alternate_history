@@ -4,7 +4,6 @@ is-card: true
 on-arrival: labor_rights_timer += 6; month_actions += 1
 view-if: dems_in_government = 1 and labor_rights_timer <= 0 
 card-image: img/department_of_labor.png
-go-to: labor_rights_menu
 tags: govt_affairs, cabinet
 
 = Labor Rights
