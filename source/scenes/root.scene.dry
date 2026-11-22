@@ -343,8 +343,8 @@ Q.state_dem_support = {
     MI: { race: { white: 3, black: 2 }, edu: { noncollege: 4 } },
     MN: { race: { white: 6 },  edu: { noncollege: 5 }, geo: { rural: 5 } },
     IL: { race: { white: 5, hispanic: 4 }, geo: { urban: 5 } },
-    OH: { race: { white: 2 }, edu: { noncollege: 2 }, geo: { rural: 2 } },
-    IA: { race: { white: 2 },  edu: { noncollege: 5 }, geo: { rural: 5 } },
+    OH: { race: { white: 2 }, edu: { noncollege: 8 }, geo: { rural: 2 } },
+    IA: { race: { white: 2 },  edu: { noncollege: 9 }, geo: { rural: 5 } },
     IN: { race: { white: 2 }, geo: { rural: -1 } },
 
     // --- DEEP SOUTH (High Racial Polarization & Cautious Older Black Electorate) ---
@@ -361,8 +361,8 @@ Q.state_dem_support = {
     WV: { race: { white: -5 }, edu: { noncollege: 5 }, geo: { rural: 2 } },
 
     // --- FLORIDA & TEXAS (Distinct Hispanic Coalitions & Retirees) ---
-    FL: { race: { hispanic: -22, white: -4 }, age: { senior: -6 } },
-    TX: { race: { hispanic: -10, white: -10 }, geo: { suburban: -2 } },
+    FL: { race: { hispanic: -25, white: -4 }, age: { senior: -12 } },
+    TX: { race: { hispanic: -10, white: -15 }, geo: { suburban: -2 } },
 
     // --- SOUTHWEST / SUN BELT (Strong Latino & Youth Appeal) ---
     AZ: { race: { hispanic: -4, white: -2 }, age: { senior: -4 } },
