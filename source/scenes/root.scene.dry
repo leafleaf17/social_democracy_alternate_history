@@ -331,7 +331,7 @@ Q.state_dem_support = {
     CT: { race: { white: 3 },  geo: { suburban: 2 } },
 
     // --- MID-ATLANTIC ---
-    NY: { race: { white: 7, hispanic: 4 }, geo: { urban: 5 } },
+    NY: { race: { white: 5, hispanic: 4 }, geo: { urban: 5 } },
     NJ: { race: { white: -2 },  geo: { suburban: -3 } },
     PA: { race: { white: 2 },  edu: { noncollege: 3 }, geo: { rural: -2 } },
     DE: { race: { white: 1, black: -3 } },
@@ -343,8 +343,8 @@ Q.state_dem_support = {
     MI: { race: { white: 3, black: 2 }, edu: { noncollege: 4 } },
     MN: { race: { white: 6 },  edu: { noncollege: 5 }, geo: { rural: 5 } },
     IL: { race: { white: 5, hispanic: 4 }, geo: { urban: 5 } },
-    OH: { race: { white: 2 }, edu: { noncollege: 2 }, geo: { rural: -2 } },
-    IA: { race: { white: 2 },  edu: { noncollege: 2 }, geo: { rural: 2 } },
+    OH: { race: { white: 2 }, edu: { noncollege: 2 }, geo: { rural: 2 } },
+    IA: { race: { white: 2 },  edu: { noncollege: 2 }, geo: { rural: 5 } },
     IN: { race: { white: -1 }, geo: { rural: -1 } },
 
     // --- DEEP SOUTH (High Racial Polarization & Cautious Older Black Electorate) ---
@@ -353,8 +353,8 @@ Q.state_dem_support = {
     VA: { race: { white: -3,  black: -4 }, geo: { suburban: 4 } },
     SC: { race: { white: -13, black: -7 } },
     AL: { race: { white: -20, black: -6 } },
-    MS: { race: { white: -20, black: -5 } },
-    LA: { race: { white: -18, black: -6 } },
+    MS: { race: { white: -15, black: -5 } },
+    LA: { race: { white: -13, black: -6 } },
     AR: { race: { white: -16 }, geo: { rural: -6 } },
     TN: { race: { white: -15 }, geo: { rural: -6 } },
     KY: { race: { white: -10 }, edu: { noncollege: -4 } },
@@ -368,26 +368,26 @@ Q.state_dem_support = {
     AZ: { race: { hispanic: -4, white: -2 }, age: { senior: -4 } },
     NV: { race: { hispanic: 2 }, inc: { low: 4 }, geo: { urban: 3 } },
     NM: { race: { hispanic: 4, white: 3 } },
-    CO: { race: { white: 7, hispanic: 4 }, edu: { college: 5 }, age: { youth: 4 } },
+    CO: { race: { white: 2, hispanic: 4 }, edu: { college: 5 }, age: { youth: 4 } },
 
     // --- WEST COAST & PACIFIC (Progressive Base) ---
     CA: { race: { white: 10, hispanic: 6, asian: 4 }, age: { youth: 5 } },
-    OR: { race: { white: 11 }, geo: { urban: 6 }, age: { youth: 5 } },
-    WA: { race: { white: 10 }, edu: { college: 5 }, age: { youth: 4 } },
+    OR: { race: { white: 6 }, geo: { urban: 6 }, age: { youth: 5 } },
+    WA: { race: { white: 5 }, edu: { college: 5 }, age: { youth: 4 } },
     HI: { race: { asian: 8, white: 10 }, inc: { low: 5 } },
     AK: { race: { white: -2 }, geo: { rural: 4 } },
 
     // --- PLAINS & MOUNTAIN WEST (Socially Conservative Rural/White Electorates) ---
-    MT: { race: { white: -4 }, geo: { rural: 3 } },
-    ID: { race: { white: -15 }, geo: { rural: -8 } },
+    MT: { race: { white: 1 }, geo: { rural: 3 } },
+    ID: { race: { white: -5 }, geo: { rural: -5 } },
     WY: { race: { white: -18 }, geo: { rural: -10 } },
-    UT: { race: { white: -14 }, age: { youth: 4 } },
-    ND: { race: { white: -8 },  geo: { rural: -5 } },
-    SD: { race: { white: -8 },  geo: { rural: -5 } },
-    NE: { race: { white: -6 },  geo: { urban: 4 } },
-    KS: { race: { white: -5 },  geo: { suburban: 3 } },
-    OK: { race: { white: -16 }, geo: { rural: -8 } },
-    MO: { race: { white: -6 },  geo: { rural: -5 } }
+    UT: { race: { white: -5 }, age: { youth: 4 } },
+    ND: { race: { white: -3 },  geo: { rural: -1 } },
+    SD: { race: { white: -4 },  geo: { rural: -3 } },
+    NE: { race: { white: -3 },  geo: { urban: 4 } },
+    KS: { race: { white: 5 },  geo: { suburban: 3 } },
+    OK: { race: { white: -10 }, geo: { rural: -8 } },
+    MO: { race: { white: 6 },  geo: { rural: -2 } }
 };
 
 // ============================================================================
