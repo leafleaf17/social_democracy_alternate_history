@@ -68,16 +68,14 @@ function addStyles() {
     s.id = 'polling-map-styles';
     s.textContent =
       '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw);height:min(86vh,900px);top:7vh;right:3vw;overflow:auto;z-index:40;padding:1.2em;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
-      '.polling-map-content,.polling-map-content h2,.polling-map-content p,.polling-map-score,.polling-map-legend,.polling-map-tooltip{color:#ffffff !important}' +
-'.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:4px 10px;cursor:pointer}' +
-
-
+      '.polling-map-content,.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
+      '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:4px 10px;cursor:pointer}' +
+      '.polling-map-score{margin:0.4em 0 0.8em;font-size:1.45em;font-weight:bold;letter-spacing:0.02em}' +
+      '.polling-map-legend{display:none !important}' +
       '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
       '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
       '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
       '.polling-map-state{cursor:pointer;stroke:#555555 !important;stroke-width:0.75px}.polling-map-state:hover{opacity:.85;stroke:#ffffff !important}' +
-      '.polling-map-legend{display:flex;flex-wrap:wrap;gap:.4em 1em;margin:.6em 0;font-size:.9em}' +
-      '.polling-map-swatch{display:inline-block;width:1em;height:1em;vertical-align:-.15em;margin-right:.25em;border:1px solid #888}' +
       '.polling-map-tooltip{display:none;position:absolute;z-index:5;white-space:pre-line;padding:.55em .7em;max-width:230px;background:#171717 !important;color:#fff !important;border:1px solid #fff;font:14px/1.4 sans-serif;pointer-events:none}' +
       '.polling-map-tooltip.visible{display:block}';
     document.head.appendChild(s);
@@ -116,8 +114,14 @@ function addStyles() {
       if (Number(polling[c].margin) >= 0) demEV += Number(polling[c].ev);
       else repEV += Number(polling[c].ev);
     });
-    var score = drawer.querySelector('.polling-map-score');
-    if (score) score.textContent = 'Projected Electoral Votes: Democrat ' + demEV + ' · Republican ' + repEV;
+        var score = drawer.querySelector('.polling-map-score');
+    if (score) {
+      score.innerHTML =
+        '<span style="color:#5c9eff;">Democrat: ' + demEV + '</span>' +
+        ' <span style="color:#888888;margin:0 0.5em;">·</span> ' +
+        '<span style="color:#ff5865;">Republican: ' + repEV + '</span>';
+    }
+
 
     var tip = drawer.querySelector('.polling-map-tooltip');
     if (!tip) {
