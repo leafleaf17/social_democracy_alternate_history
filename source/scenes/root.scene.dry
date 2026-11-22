@@ -375,7 +375,7 @@ Q.state_dem_support = {
     OR: { race: { white: 6 }, geo: { urban: 6 }, age: { youth: 5 } },
     WA: { race: { white: 5 }, edu: { college: 5 }, age: { youth: 4 } },
     HI: { race: { asian: 8, white: 10 }, inc: { low: 5 } },
-    AK: { race: { white: -2 }, geo: { rural: 4 } },
+    AK: { race: { white: -2 }, geo: { urban: -15 } },
 
     // --- PLAINS & MOUNTAIN WEST (Socially Conservative Rural/White Electorates) ---
     MT: { race: { white: 1 }, geo: { rural: 10 } },
