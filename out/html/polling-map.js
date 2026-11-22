@@ -29,6 +29,7 @@
   };
 
   var mapReady = false;
+  var svgLoading = false;
   var activeTab = 'pres'; // 'pres', 'senate', or 'gov'
 
   function getQ() {
@@ -50,7 +51,7 @@
   }
 
   function getActiveRaces(q, tab) {
-    if (tab === 'pres') return null; // null = all 50 states + DC
+    if (tab === 'pres') return null;
     if (tab === 'senate') {
       return q.senate_races_2022 || [
         'AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IN','IA',
@@ -127,14 +128,13 @@
     var s = document.createElement('style');
     s.id = 'polling-map-styles';
     s.textContent =
-      '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw);height:min(86vh,900px);top:7vh;right:3vw;overflow:auto;z-index:40;padding:1.2em;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
+      '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw) !important;height:min(86vh,900px) !important;top:7vh !important;right:3vw !important;overflow:auto !important;z-index:40 !important;padding:1.2em !important;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
       '.polling-map-content,.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
       '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
       '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
       '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
       '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
       '.polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
-      '.polling-map-legend{display:none !important}' +
       '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
       '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
       '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
@@ -163,18 +163,24 @@
     return null;
   }
 
-  function ensureTabs(drawer) {
-    var content = drawer.querySelector('.polling-map-content') || drawer;
-    var tabBar = drawer.querySelector('.polling-map-tabs');
+  function ensureDrawerContent(drawer) {
+    addStyles();
+    var content = drawer.querySelector('.polling-map-content');
+    if (!content) {
+      content = document.createElement('div');
+      content.className = 'polling-map-content';
+      drawer.appendChild(content);
+    }
+
+    var tabBar = content.querySelector('.polling-map-tabs');
     if (!tabBar) {
       tabBar = document.createElement('div');
       tabBar.className = 'polling-map-tabs';
-      var tabs = [
+      [
         { id: 'pres', label: 'Presidential' },
         { id: 'senate', label: 'Senate' },
         { id: 'gov', label: 'Governor' }
-      ];
-      tabs.forEach(function(t) {
+      ].forEach(function(t) {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'polling-map-tab';
@@ -186,41 +192,52 @@
         };
         tabBar.appendChild(btn);
       });
-      var score = drawer.querySelector('.polling-map-score');
-      if (score && score.parentNode) {
-        score.parentNode.insertBefore(tabBar, score);
-      } else {
-        content.insertBefore(tabBar, content.firstChild);
-      }
+      content.appendChild(tabBar);
     }
+
     tabBar.querySelectorAll('.polling-map-tab').forEach(function(b) {
       if (b.dataset.tab === activeTab) b.classList.add('active');
       else b.classList.remove('active');
     });
+
+    var score = content.querySelector('.polling-map-score');
+    if (!score) {
+      score = document.createElement('div');
+      score.className = 'polling-map-score';
+      content.appendChild(score);
+    }
+
+    var wrap = content.querySelector('.polling-map-svg-wrap');
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'polling-map-svg-wrap';
+      wrap.innerHTML = '<p style="padding:1em;">Loading map...</p>';
+      content.appendChild(wrap);
+    }
+
+    if (!mapReady && !svgLoading) {
+      svgLoading = true;
+      tryLoadSvg(svgUrls, 0, wrap);
+    }
   }
 
   function updateMap() {
-    var drawer = document.getElementById('polling-map-drawer');
-    if (!drawer || !drawer.classList.contains('open')) return;
-    var q = getQ();
-    var polling = getPolling();
-    var svg = drawer.querySelector('.polling-map-svg-wrap svg');
-    if (!q || !polling || !svg || !mapReady) return;
-
-    ensureTabs(drawer);
-
-    var activeList = getActiveRaces(q, activeTab);
-    var demTotal = 0, repTotal = 0;
-
-    // Starting base seats for Senate (66 seats not up in 2022: 36 Dem + 30 Rep)
-    if (activeTab === 'senate') {
-      demTotal = 36;
-      repTotal = 30;
-    }
-
-    var tip = drawer.querySelector('.polling-map-tooltip');
-    if (!tip) {
-      tip = document.createElement('div');
+    var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+    if (!drawer) return;
+ensureDrawerContent(drawer);
+var q = getQ();
+var polling = getPolling();
+var svg = drawer.querySelector('.polling-map-svg-wrap svg');
+if (!q || !polling || !svg || !mapReady) return;
+var activeList = getActiveRaces(q, activeTab);
+var demTotal = 0, repTotal = 0;
+if (activeTab === 'senate') {
+demTotal = 36;
+repTotal = 30;
+}
+var tip = drawer.querySelector('.polling-map-tooltip');
+if (!tip) {
+tip = document.createElement('div');
 tip.className = 'polling-map-tooltip';
 drawer.appendChild(tip);
 }
@@ -272,6 +289,7 @@ cycleTag;
 }
 function tryLoadSvg(urls, idx, wrap) {
 if (idx >= urls.length) {
+svgLoading = false;
 wrap.innerHTML = 'Failed to load U.S. SVG map.';
 return;
 }
@@ -293,38 +311,32 @@ dc.style.stroke = '#fff';
 wrap.innerHTML = '';
 wrap.appendChild(svg);
 mapReady = true;
+svgLoading = false;
 updateMap();
 })
 .catch(function() { tryLoadSvg(urls, idx + 1, wrap); });
 }
-function buildDrawer() {
+function initObserver() {
 addStyles();
-var drawer = document.getElementById('polling-map-drawer');
-if (!drawer) {
-drawer = document.createElement('div');
-drawer.id = 'polling-map-drawer';
-drawer.className = 'drawer polling-map-drawer';
-drawer.innerHTML =
-'' +
-'' +
-'U.S. Electoral Map' +
-'Close' +
-'' +
-'' +
-'Loading map...' +
-'';
-document.body.appendChild(drawer);
-drawer.querySelector('#close-polling-map').onclick = function() {
-drawer.classList.remove('open');
-};
-tryLoadSvg(svgUrls, 0, drawer.querySelector('.polling-map-svg-wrap'));
-}
-return drawer;
-}
-window.openPollingMap = function() {
-var d = buildDrawer();
-d.classList.add('open');
+var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+if (drawer) {
+var obs = new MutationObserver(function() {
+if (drawer.classList.contains('open')) {
 updateMap();
-};
-
+}
+});
+obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
+if (drawer.classList.contains('open')) updateMap();
+}
+document.addEventListener('click', function() {
+setTimeout(updateMap, 50);
+});
+}
+window.openPollingMap = updateMap;
+window.updatePollingMap = updateMap;
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', initObserver);
+} else {
+initObserver();
+}
 })();
