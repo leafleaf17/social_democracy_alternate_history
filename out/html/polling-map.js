@@ -326,19 +326,5 @@ var d = buildDrawer();
 d.classList.add('open');
 updateMap();
 };
-function ensureOpenButton() {
-if (document.getElementById('open-polling-map-btn')) return;
-var btn = document.createElement('button');
-btn.id = 'open-polling-map-btn';
-btn.type = 'button';
-btn.textContent = 'Open polling maps';
-btn.style.cssText = 'position:fixed;top:10px;right:14px;z-index:35;padding:6px 12px;background:#171717;color:#fff;border:1px solid #666;cursor:pointer;';
-btn.onclick = window.openPollingMap;
-document.body.appendChild(btn);
-}
-if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', ensureOpenButton);
-} else {
-ensureOpenButton();
-}
+
 })();
