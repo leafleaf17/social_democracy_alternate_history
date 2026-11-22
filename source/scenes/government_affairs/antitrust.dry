@@ -42,7 +42,12 @@ WIP
 @junk_fees
 title: Target Junk Fees And Pricing Algorithms 
 subtitle: This is appreciated by all Americans, less so by corporations.
-on-arrival: cost_of_living_opinion +=2; corporate_backlash +=2; nat_flat_buff += 0.1;
+on-arrival: {!
+Q.cost_of_living_opinion +=2;
+Q.corporate_backlash +=2;
+Q.nat_flat_buff += 0.1;
+window.simulate_polling();
+!}
 max-visits: 2
 
 WIP 
