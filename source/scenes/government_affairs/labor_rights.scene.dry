@@ -1,21 +1,15 @@
 title: Labor Rights
 new-page: true
 is-card: true
-tags: govt_affairs, cabinet
 on-arrival: labor_rights_timer += 6; month_actions += 1
 view-if: dems_in_government = 1 and labor_rights_timer <= 0 
 card-image: img/department_of_labor.png
 go-to: labor_rights_menu
-#subtitle: Working hours, safety regulations, and unemployment insurance.
+tags: govt_affairs, cabinet
 
 = Labor Rights
 
 Corporations are attempting to avoid what limited regulations we have involving the rights of their workers. This government will do everything in its power to both expand the scope of these regulations and ensure companies are following them.
-
-# enforce a 40-hour work week d
-# develop and enforce safety regulations in mines and industries
-
-@labor_rights_menu
 
 - @working_hours_overtime: Expand Threshold For Overtime Pay
 - @restrict_gig_workers: Tighten The Classification Of "Gig Workers", To Force Companies To Pay Full Benefits To Their Workers
