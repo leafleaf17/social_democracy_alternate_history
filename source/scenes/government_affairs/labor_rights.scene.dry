@@ -29,13 +29,13 @@ wip
 @working_hours_overtime
 subtitle: We will raise the minimum salary to activate time-and-a-half pay after 40 hours.
 max-visits: 2
-on-arrival: corporate_backlash += 2; nat_support.inc.mid +=2; bop_econ -=0.1
+on-arrival: corporate_backlash +=2; nat_support.inc.mid +=2; bop_econ -=0.1
 
 IM NOT FUCKING WRITING THIS SHIT RN
 
 @restrict_gig_workers
 subtitle: Corporations are increasingly labeling their workers as "independent contractors" to avoid federal regulations surrounding their wages and benefits.
-on-arrival: corporate_backlash += 2; nat_support.inc.low +=2; youth_loyalty +=2
+on-arrival: corporate_backlash +=2; nat_support.inc.low +=2; youth_loyalty +=2
 
 Some in the labor movement argue that by reducing the maximum number of hours worked, employers would be induced to hire more workers, reducing unemployment. The argument also goes that this would be complementary to deflation, maintaining the same purchasing power for workers by cutting hours without cutting wages. Employers, however, resist this policy, arguing for more flexibility in hiring and firing.
 
