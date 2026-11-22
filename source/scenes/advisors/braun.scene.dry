@@ -10,7 +10,6 @@ new-page: true
 Braun [? if spd_prussia = 1 : is ?][? if spd_prussia = 0 : was ?] the Minister-President of Prussia, the largest state in Germany. He is a reformist leader who seeks to work with the bourgeois parties.
 
 - @coalition
-- @prussian_bulwark
 - @snap_election
 - @root: Return to main
 
@@ -23,13 +22,6 @@ on-arrival: advisor_action_timer = 6; coalition_dissent -= 1 if dems_in_governme
 
 We have improved our relations with the [? if in_grand_coalition : Center (Zentrum) Party, [+ ddp_name +], and DVP, ?][? if not in_grand_coalition: Center (Zentrum) Party and [+ ddp_name +], ?] and reduced tensions with the coalition.
 
-@prussian_bulwark
-title: The Prussian Bulwark
-subtitle: As the Minister-President of Prussia, Braun has power over the Prussian bureaucracy and security services.
-choose-if: advisor_action_timer <= 0 and spd_prussia = 1
-unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?][? if spd_prussia == 0 : The SPD does not control Prussia. ?]
-on-arrival: advisor_action_timer = 6; prussian_affairs_timer -= 6; last_advisor_action = 1
-go-to: prussian_affairs
 
 @snap_election
 title: Snap Election
