@@ -361,7 +361,7 @@ Q.state_dem_support = {
     WV: { race: { white: 15 }, edu: { noncollege: 5 }, geo: { rural: 12 } },
 
     // --- FLORIDA & TEXAS (Distinct Hispanic Coalitions & Retirees) ---
-    FL: { race: { hispanic: -25, white: -4 }, age: { senior: -12 } },
+    FL: { race: { hispanic: -25, white: -8 }, age: { senior: -15 } },
     TX: { race: { hispanic: -10, white: -15 }, geo: { suburban: -2 } },
 
     // --- SOUTHWEST / SUN BELT (Strong Latino & Youth Appeal) ---
