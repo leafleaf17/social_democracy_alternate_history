@@ -1,8 +1,8 @@
 title: Antitrust Action
 new-page: true
 is-card: true
-on-arrival: anti_trust_timer += 5; month_actions += 1
-view-if: dems_in_government = 1 and anti_trust_timer <= 0 
+on-arrival: antitrust_timer += 5; month_actions += 1
+view-if: dems_in_government = 1 and antitrust_timer <= 0 
 card-image: img/portraits/BaadeFritz.jpg
 tags: govt_affairs, cabinet
 
