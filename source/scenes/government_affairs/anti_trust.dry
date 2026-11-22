@@ -32,7 +32,7 @@ subtitle: We will target agricultural giants accused of engaging in monopolistic
 on-arrival: nat_support.geo.rural +=2; corporate_backlash +=1; bop_econ -=0.2
 max-visits: 3
 
-A series of dirty energy projects, especially in alaska and the pacific are canceled. This pleases those with enviornmental concerns and will certainly encourage energy companies to switch to green energy production instead, although Republicans will attempt to tie these measures to the cost of living. [? if manchin_is_a_dem = 1 : Joe Manchin makes his disagreements with this policy clear. ?]
+WIP
 
 @junk_fees
 title: Target Junk Fees And Pricing Algorithms 
