@@ -40,10 +40,14 @@ jobs:
         run: npm run dendrynexus make-html -- --pretty
       - name: Copy game.json to output
         run: cp out/game.json out/html/
+      - name: Package Pages artifact
+        run: tar -cvf artifact.tar -C out/html .
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
-          path: 'out/html'
+          name: github-pages
+          path: artifact.tar
+          if-no-files-found: error
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
