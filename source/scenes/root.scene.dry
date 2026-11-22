@@ -356,9 +356,9 @@ Q.state_dem_support = {
     MS: { race: { white: -15, black: -5 } },
     LA: { race: { white: -13, black: -6 } },
     AR: { race: { white: -16 }, geo: { rural: -6 } },
-    TN: { race: { white: -15 }, geo: { rural: -6 } },
-    KY: { race: { white: -10 }, edu: { noncollege: -4 } },
-    WV: { race: { white: -5 }, edu: { noncollege: 5 }, geo: { rural: 2 } },
+    TN: { race: { white: -5 }, geo: { rural: -6 } },
+    KY: { race: { white: -1 }, edu: { noncollege: 10 } },
+    WV: { race: { white: 15 }, edu: { noncollege: 5 }, geo: { rural: 12 } },
 
     // --- FLORIDA & TEXAS (Distinct Hispanic Coalitions & Retirees) ---
     FL: { race: { hispanic: -25, white: -4 }, age: { senior: -12 } },
@@ -386,7 +386,7 @@ Q.state_dem_support = {
     SD: { race: { white: -4 },  geo: { rural: -3 } },
     NE: { race: { white: -3 },  geo: { urban: 4 } },
     KS: { race: { white: 5 },  geo: { suburban: 3 } },
-    OK: { race: { white: -10 }, geo: { rural: -8 } },
+    OK: { race: { white: 0 }, geo: { rural: -2 } },
     MO: { race: { white: 6 },  geo: { rural: -2 } }
 };
 
