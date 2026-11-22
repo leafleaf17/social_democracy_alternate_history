@@ -371,17 +371,17 @@ Q.state_dem_support = {
     CO: { race: { white: 2, hispanic: 4 }, edu: { college: 5 }, age: { youth: 4 } },
 
     // --- WEST COAST & PACIFIC (Progressive Base) ---
-    CA: { race: { white: 10, hispanic: 6, asian: 4 }, age: { youth: 5 } },
+    CA: { race: { white: 1, hispanic: 1, asian: 1 }, age: { youth: 1 } },
     OR: { race: { white: 6 }, geo: { urban: 6 }, age: { youth: 5 } },
     WA: { race: { white: 5 }, edu: { college: 5 }, age: { youth: 4 } },
     HI: { race: { asian: 8, white: 10 }, inc: { low: 5 } },
     AK: { race: { white: -2 }, geo: { rural: 4 } },
 
     // --- PLAINS & MOUNTAIN WEST (Socially Conservative Rural/White Electorates) ---
-    MT: { race: { white: 1 }, geo: { rural: 3 } },
+    MT: { race: { white: 1 }, geo: { rural: 10 } },
     ID: { race: { white: -5 }, geo: { rural: -5 } },
     WY: { race: { white: -18 }, geo: { rural: -10 } },
-    UT: { race: { white: -5 }, age: { youth: 4 } },
+    UT: { race: { white: 5 }, age: { youth: 4 } },
     ND: { race: { white: -3 },  geo: { rural: -1 } },
     SD: { race: { white: -4 },  geo: { rural: -3 } },
     NE: { race: { white: -3 },  geo: { urban: 4 } },
