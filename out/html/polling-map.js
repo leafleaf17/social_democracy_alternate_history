@@ -29,11 +29,15 @@
   };
 
   var mapReady = false;
-  var renderTimer = null;
+  var activeTab = 'pres'; // 'pres', 'senate', or 'gov'
+
+  function getQ() {
+    var ui = window.dendryUI;
+    return (ui && ui.dendryEngine && ui.dendryEngine.state && ui.dendryEngine.state.qualities) || null;
+  }
 
   function getPolling() {
-    var ui = window.dendryUI;
-    var q = ui && ui.dendryEngine && ui.dendryEngine.state && ui.dendryEngine.state.qualities;
+    var q = getQ();
     if (!q) return null;
     if (typeof window.simulate_polling === 'function') window.simulate_polling();
     return q.polling || null;
@@ -45,43 +49,100 @@
     return (margin >= 0 ? colors.dem : colors.rep)[band];
   }
 
-function tooltipText(code, res) {
+  function getActiveRaces(q, tab) {
+    if (tab === 'pres') return null; // null = all 50 states + DC
+    if (tab === 'senate') {
+      return q.senate_races_2022 || [
+        'AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IN','IA',
+        'KS','KY','LA','MD','MO','NV','NH','NY','NC','ND','OH','OK','OR','PA',
+        'SC','SD','UT','VT','WA','WI'
+      ];
+    }
+    if (tab === 'gov') {
+      var yr = Number(q.year) || 2021;
+      var govMap = q.gov_races || {
+        2021: ['NJ', 'VA'],
+        2022: ['AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IA','KS','ME','MD','MA','MI','MN','NE','NV','NH','NM','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','VT','WI','WY'],
+        2023: ['KY', 'LA', 'MS']
+      };
+      if (govMap[yr]) return govMap[yr];
+      return yr < 2022 ? govMap[2021] : govMap[2022];
+    }
+    return null;
+  }
+
+  function calcRaceResult(q, polling, code, tab) {
+    var base = polling[code];
+    if (!base) return null;
+    var buff = 0;
+    if (tab === 'senate' && q.senate_buffs && q.senate_buffs[code]) buff = Number(q.senate_buffs[code]);
+    if (tab === 'gov' && q.gov_buffs && q.gov_buffs[code]) buff = Number(q.gov_buffs[code]);
+
+    var dem = +(Math.max(1, Math.min(99, Number(base.dem) + buff))).toFixed(2);
+    var rep = +(100 - dem).toFixed(2);
+    var margin = +(dem - rep).toFixed(2);
+
+    var cands = { dem: 'Generic Democrat', rep: 'Generic Republican' };
+    if (tab === 'pres' && q.candidates && q.candidates.pres) {
+      cands = q.candidates.pres;
+    } else if (tab === 'senate' && q.candidates && q.candidates.senate && q.candidates.senate[code]) {
+      cands = q.candidates.senate[code];
+    } else if (tab === 'gov' && q.candidates && q.candidates.gov && q.candidates.gov[code]) {
+      cands = q.candidates.gov[code];
+    }
+
+    return {
+      name: base.name,
+      ev: base.ev,
+      dem: dem,
+      rep: rep,
+      margin: margin,
+      demCand: cands.dem,
+      repCand: cands.rep
+    };
+  }
+
+  function tooltipText(code, res, tab, isActive) {
+    if (!isActive) {
+      var label = tab === 'senate' ? 'Senate' : 'Gubernatorial';
+      return '<strong>' + res.name + ' (' + code + ')</strong><br>' +
+        '<span style="color:#999999;">No ' + label + ' election this cycle</span>';
+    }
+
     var m = Number(res.margin);
     var lead = m > 0 ? 'Democrat lead' : m < 0 ? 'Republican lead' : 'Tie';
     var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
     var marginColor = m > 0 ? '#5c9eff' : m < 0 ? '#ff5865' : '#ffffff';
+    var extra = tab === 'pres' ? '<br>' + res.ev + ' electoral votes' : '';
 
-    return res.name + ' (' + code + ') — ' + lead + '<br>' +
-        '<span style="color:#5c9eff;"><strong>Democrat</strong></span>: ' + Number(res.dem).toFixed(2) + '%<br>' +
-        '<span style="color:#ff5865;"><strong>Republican</strong></span>: ' + Number(res.rep).toFixed(2) + '%<br>' +
-        'Margin: <span style="color:' + marginColor + ';"><strong>' + pre + Math.abs(m).toFixed(2) + '</strong></span> points<br>' +
-        res.ev + ' electoral votes';
-}
+    return '<strong>' + res.name + ' (' + code + ')</strong> — ' + lead + '<br>' +
+      '<span style="color:#5c9eff;"><strong>' + res.demCand + '</strong></span>: ' + res.dem.toFixed(2) + '%<br>' +
+      '<span style="color:#ff5865;"><strong>' + res.repCand + '</strong></span>: ' + res.rep.toFixed(2) + '%<br>' +
+      'Margin: <span style="color:' + marginColor + ';"><strong>' + pre + Math.abs(m).toFixed(2) + '</strong></span> points' +
+      extra;
+  }
 
-
-
-
-
-function addStyles() {
+  function addStyles() {
     if (document.getElementById('polling-map-styles')) return;
     var s = document.createElement('style');
     s.id = 'polling-map-styles';
     s.textContent =
       '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw);height:min(86vh,900px);top:7vh;right:3vw;overflow:auto;z-index:40;padding:1.2em;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
       '.polling-map-content,.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
-      '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:4px 10px;cursor:pointer}' +
-      '.polling-map-score{margin:0.4em 0 0.8em;font-size:1.45em;font-weight:bold;letter-spacing:0.02em}' +
+      '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
+      '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
+      '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
+      '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
+      '.polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
       '.polling-map-legend{display:none !important}' +
       '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
       '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
       '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
       '.polling-map-state{cursor:pointer;stroke:#555555 !important;stroke-width:0.75px}.polling-map-state:hover{opacity:.85;stroke:#ffffff !important}' +
-      '.polling-map-tooltip{display:none;position:absolute;z-index:5;white-space:pre-line;padding:.55em .7em;max-width:230px;background:#171717 !important;color:#fff !important;border:1px solid #fff;font:14px/1.4 sans-serif;pointer-events:none}' +
+      '.polling-map-tooltip{display:none;position:absolute;z-index:5;white-space:normal;padding:.55em .75em;max-width:265px;background:#171717 !important;color:#fff !important;border:1px solid #fff;font:14px/1.45 sans-serif;pointer-events:none}' +
       '.polling-map-tooltip.visible{display:block}';
     document.head.appendChild(s);
   }
-
-
 
   function findStateShape(svg, code, name) {
     var byId = svg.querySelector('#' + code) || svg.querySelector('#' + code.toLowerCase());
@@ -102,119 +163,182 @@ function addStyles() {
     return null;
   }
 
+  function ensureTabs(drawer) {
+    var content = drawer.querySelector('.polling-map-content') || drawer;
+    var tabBar = drawer.querySelector('.polling-map-tabs');
+    if (!tabBar) {
+      tabBar = document.createElement('div');
+      tabBar.className = 'polling-map-tabs';
+      var tabs = [
+        { id: 'pres', label: 'Presidential' },
+        { id: 'senate', label: 'Senate' },
+        { id: 'gov', label: 'Governor' }
+      ];
+      tabs.forEach(function(t) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'polling-map-tab';
+        btn.dataset.tab = t.id;
+        btn.textContent = t.label;
+        btn.onclick = function() {
+          activeTab = t.id;
+          updateMap();
+        };
+        tabBar.appendChild(btn);
+      });
+      var score = drawer.querySelector('.polling-map-score');
+      if (score && score.parentNode) {
+        score.parentNode.insertBefore(tabBar, score);
+      } else {
+        content.insertBefore(tabBar, content.firstChild);
+      }
+    }
+    tabBar.querySelectorAll('.polling-map-tab').forEach(function(b) {
+      if (b.dataset.tab === activeTab) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+  }
+
   function updateMap() {
     var drawer = document.getElementById('polling-map-drawer');
     if (!drawer || !drawer.classList.contains('open')) return;
+    var q = getQ();
     var polling = getPolling();
     var svg = drawer.querySelector('.polling-map-svg-wrap svg');
-    if (!polling || !svg || !mapReady) return;
+    if (!q || !polling || !svg || !mapReady) return;
 
-    var demEV = 0, repEV = 0;
-    Object.keys(polling).forEach(function(c) {
-      if (Number(polling[c].margin) >= 0) demEV += Number(polling[c].ev);
-      else repEV += Number(polling[c].ev);
-    });
-        var score = drawer.querySelector('.polling-map-score');
-    if (score) {
-      score.innerHTML =
-        '<span style="color:#5c9eff;">Democrat: ' + demEV + '</span>' +
-        ' <span style="color:#888888;margin:0 0.5em;">·</span> ' +
-        '<span style="color:#ff5865;">Republican: ' + repEV + '</span>';
+    ensureTabs(drawer);
+
+    var activeList = getActiveRaces(q, activeTab);
+    var demTotal = 0, repTotal = 0;
+
+    // Starting base seats for Senate (66 seats not up in 2022: 36 Dem + 30 Rep)
+    if (activeTab === 'senate') {
+      demTotal = 36;
+      repTotal = 30;
     }
-
 
     var tip = drawer.querySelector('.polling-map-tooltip');
     if (!tip) {
       tip = document.createElement('div');
-      tip.className = 'polling-map-tooltip';
-      drawer.appendChild(tip);
-    }
-
-    states.forEach(function(pair) {
-      var code = pair[0];
-      var name = pair[1];
-      var res = polling[code];
-      var shape = findStateShape(svg, code, name);
-      if (!res || !shape) return;
-
-      var col = colorForMargin(Number(res.margin));
-      shape.style.setProperty('fill', col, 'important');
-      shape.setAttribute('fill', col);
-      shape.querySelectorAll('path, circle, polygon').forEach(function(el) {
-        el.style.setProperty('fill', col, 'important');
-        el.setAttribute('fill', col);
-      });
-
-      shape.classList.add('polling-map-state');
-      shape.onpointerenter = function(e) {
-               tip.innerHTML = tooltipText(code, res);
-        tip.classList.add('visible');
-        var r = drawer.getBoundingClientRect();
-        tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 245) + 'px';
-        tip.style.top = Math.min(e.clientY - r.top + 12, r.height - 145) + 'px';
-      };
-      shape.onpointermove = shape.onpointerenter;
-      shape.onpointerleave = function() { tip.classList.remove('visible'); };
-    });
-  }
-
-  function tryLoadSvg(urls, idx, wrap) {
-    if (idx >= urls.length) {
-      wrap.innerHTML = '<p style="padding:1em;color:#a51c30;">Failed to load U.S. SVG map.</p>';
-      return;
-    }
-    fetch(urls[idx])
-      .then(function(r) { if (!r.ok) throw new Error(r.status); return r.text(); })
-      .then(function(txt) {
-        var doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
-        var parsed = doc.querySelector('svg');
-        if (!parsed) throw new Error('Bad SVG');
-        var svg = document.importNode(parsed, true);
-        svg.removeAttribute('width');
-        svg.removeAttribute('height');
-        if (!svg.getAttribute('viewBox')) svg.setAttribute('viewBox', '0 0 959 593');
-        var dc = findStateShape(svg, 'DC', 'District of Columbia');
-        if (dc && dc.tagName.toLowerCase() === 'circle') {
-          dc.setAttribute('r', '6');
-          dc.style.stroke = '#fff';
-        }
-        wrap.textContent = '';
-        wrap.appendChild(svg);
-        mapReady = true;
-        updateMap();
-      })
-      .catch(function() { tryLoadSvg(urls, idx + 1, wrap); });
-  }
-
-  function init() {
-    var drawer = document.getElementById('polling-map-drawer');
-    if (!drawer) return;
-    if (!drawer.querySelector('.polling-map-svg-wrap')) {
-      addStyles();
-      drawer.innerHTML =
-        '<button type="button" class="polling-map-close" onclick="window.closePollingMaps();">Close ×</button>' +
-        '<h2>U.S. Electoral Map</h2><div class="polling-map-content">' +
-        '<p class="polling-map-score">Loading current state polling…</p>' +
-        '<div class="polling-map-legend">' +
-        '<span><i class="polling-map-swatch" style="background:#8b080d"></i>Republican 15+ points</span>' +
-        '<span><i class="polling-map-swatch" style="background:#bf1d29"></i>Republican 5–15</span>' +
-        '<span><i class="polling-map-swatch" style="background:#ff5865"></i>Republican 1–5</span>' +
-        '<span><i class="polling-map-swatch" style="background:#ff8b98"></i>Republican under 1</span>' +
-        '<span><i class="polling-map-swatch" style="background:#8aafff"></i>Democrat under 1</span>' +
-        '<span><i class="polling-map-swatch" style="background:#577ccc"></i>Democrat 1–5</span>' +
-        '<span><i class="polling-map-swatch" style="background:#1c408c"></i>Democrat 5–15</span>' +
-        '<span><i class="polling-map-swatch" style="background:#052163"></i>Democrat 15+ points</span></div>' +
-        '<div class="polling-map-svg-wrap"><p style="padding:1em;">Loading U.S. SVG map…</p></div>' +
-        '<p style="font-size:.75em;margin:.4em 0 0;">Hover or focus a state for exact polling results.</p></div>';
-      tryLoadSvg(svgUrls, 0, drawer.querySelector('.polling-map-svg-wrap'));
-    }
-    if (!renderTimer) renderTimer = window.setInterval(updateMap, 1500);
-    new MutationObserver(function() {
-      if (drawer.classList.contains('open')) updateMap();
-    }).observe(drawer, { attributes: true, attributeFilter: ['class'] });
-    window.renderPollingMap = updateMap;
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-}());
+tip.className = 'polling-map-tooltip';
+drawer.appendChild(tip);
+}
+states.forEach(function(pair) {
+var code = pair[0];
+var name = pair[1];
+var shape = findStateShape(svg, code, name);
+if (!shape) return;
+var isActive = (activeList === null) || (activeList.indexOf(code) !== -1);
+var res = calcRaceResult(q, polling, code, activeTab);
+if (!res) return;
+if (isActive) {
+if (activeTab === 'pres') {
+if (res.margin >= 0) demTotal += Number(res.ev);
+else repTotal += Number(res.ev);
+} else {
+if (res.margin >= 0) demTotal += 1;
+else repTotal += 1;
+}
+}
+var col = isActive ? colorForMargin(res.margin) : '#262626';
+shape.style.setProperty('fill', col, 'important');
+shape.setAttribute('fill', col);
+shape.querySelectorAll('path, circle, polygon').forEach(function(el) {
+el.style.setProperty('fill', col, 'important');
+el.setAttribute('fill', col);
+});
+shape.classList.add('polling-map-state');
+shape.onpointerenter = function(e) {
+tip.innerHTML = tooltipText(code, res, activeTab, isActive);
+tip.classList.add('visible');
+var r = drawer.getBoundingClientRect();
+tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 275) + 'px';
+tip.style.top = Math.min(e.clientY - r.top + 12, r.height - 155) + 'px';
+};
+shape.onpointermove = shape.onpointerenter;
+shape.onpointerleave = function() { tip.classList.remove('visible'); };
+});
+var score = drawer.querySelector('.polling-map-score');
+if (score) {
+var unit = activeTab === 'pres' ? 'EV' : (activeTab === 'senate' ? 'Seats' : 'Races');
+var cycleTag = activeTab === 'gov' ? ' (' + (q.year || 2021) + ' Cycle)' : '';
+score.innerHTML =
+'Democrat: ' + demTotal + ' ' + unit + '' +
+' · ' +
+'Republican: ' + repTotal + ' ' + unit + '' +
+cycleTag;
+}
+}
+function tryLoadSvg(urls, idx, wrap) {
+if (idx >= urls.length) {
+wrap.innerHTML = 'Failed to load U.S. SVG map.';
+return;
+}
+fetch(urls[idx])
+.then(function(r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+.then(function(txt) {
+var doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+var parsed = doc.querySelector('svg');
+if (!parsed) throw new Error('Bad SVG');
+var svg = document.importNode(parsed, true);
+svg.removeAttribute('width');
+svg.removeAttribute('height');
+if (!svg.getAttribute('viewBox')) svg.setAttribute('viewBox', '0 0 959 593');
+var dc = findStateShape(svg, 'DC', 'District of Columbia');
+if (dc && dc.tagName.toLowerCase() === 'circle') {
+dc.setAttribute('r', '6');
+dc.style.stroke = '#fff';
+}
+wrap.innerHTML = '';
+wrap.appendChild(svg);
+mapReady = true;
+updateMap();
+})
+.catch(function() { tryLoadSvg(urls, idx + 1, wrap); });
+}
+function buildDrawer() {
+addStyles();
+var drawer = document.getElementById('polling-map-drawer');
+if (!drawer) {
+drawer = document.createElement('div');
+drawer.id = 'polling-map-drawer';
+drawer.className = 'drawer polling-map-drawer';
+drawer.innerHTML =
+'' +
+'' +
+'U.S. Electoral Map' +
+'Close' +
+'' +
+'' +
+'Loading map...' +
+'';
+document.body.appendChild(drawer);
+drawer.querySelector('#close-polling-map').onclick = function() {
+drawer.classList.remove('open');
+};
+tryLoadSvg(svgUrls, 0, drawer.querySelector('.polling-map-svg-wrap'));
+}
+return drawer;
+}
+window.openPollingMap = function() {
+var d = buildDrawer();
+d.classList.add('open');
+updateMap();
+};
+function ensureOpenButton() {
+if (document.getElementById('open-polling-map-btn')) return;
+var btn = document.createElement('button');
+btn.id = 'open-polling-map-btn';
+btn.type = 'button';
+btn.textContent = 'Open polling maps';
+btn.style.cssText = 'position:fixed;top:10px;right:14px;z-index:35;padding:6px 12px;background:#171717;color:#fff;border:1px solid #666;cursor:pointer;';
+btn.onclick = window.openPollingMap;
+document.body.appendChild(btn);
+}
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', ensureOpenButton);
+} else {
+ensureOpenButton();
+}
+})();

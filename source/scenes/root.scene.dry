@@ -133,7 +133,42 @@ Q.state_db = {
     WI: Array.of("Wisconsin",     10,  -2, Array.of(80,6,8,6),    Array.of(33,67), Array.of(24,46,30), Array.of(17,25,34,24), Array.of(24,51,25)),
     WY: Array.of("Wyoming",        3, -25, Array.of(83,1,11,5),   Array.of(29,71), Array.of(16,34,50), Array.of(17,26,33,24), Array.of(24,51,25))
 };
+// ============================================================================
+// 4. CANDIDATE NAMES & SENATE / GOVERNOR RACE TRACKING
+// ============================================================================
+Q.senate_buffs = {}; // e.g. Q.senate_buffs.PA = 3.5;
+Q.gov_buffs = {};    // e.g. Q.gov_buffs.MI = 2.5;
 
+// 2022 Senate Class 3 + Special Elections (34 seats up; 36 D / 30 R not up)
+Q.senate_races_2022 = [
+    'AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IN','IA',
+    'KS','KY','LA','MD','MO','NV','NH','NY','NC','ND','OH','OK','OR','PA',
+    'SC','SD','UT','VT','WA','WI'
+];
+
+// Gubernatorial Cycles
+Q.gov_races = {
+    2021: ['NJ', 'VA'],
+    2022: [
+        'AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IA','KS',
+        'ME','MD','MA','MI','MN','NE','NV','NH','NM','NY','OH','OK','OR','PA',
+        'RI','SC','SD','TN','TX','VT','WI','WY'
+    ],
+    2023: ['KY', 'LA', 'MS']
+};
+
+// Candidate Names (Starts generic; update anytime in events!)
+Q.candidates = {
+    pres: { dem: 'Bernie Sanders', rep: 'Generic Republican' },
+    senate: {},
+    gov: {}
+};
+
+// Initialize all states with Generic Democrat / Generic Republican
+Object.keys(Q.state_db).forEach(function(code) {
+    Q.candidates.senate[code] = { dem: 'Generic Democrat', rep: 'Generic Republican' };
+    Q.candidates.gov[code]    = { dem: 'Generic Democrat', rep: 'Generic Republican' };
+});
 // ============================================================================
 // 3. SIMULATE POLLING FUNCTION
 // ============================================================================
