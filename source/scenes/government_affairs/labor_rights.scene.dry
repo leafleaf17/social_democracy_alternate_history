@@ -4,7 +4,7 @@ is-card: true
 tags: govt_affairs, cabinet
 on-arrival: labor_rights_timer += 6; month_actions += 1
 view-if: dems_in_government = 1 and labor_rights_timer <= 0 
-card-image: img/department_of_lahor
+card-image: img/department_of_labor
 go-to: labor_rights_menu
 #subtitle: Working hours, safety regulations, and unemployment insurance.
 
