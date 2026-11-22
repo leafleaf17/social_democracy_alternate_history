@@ -452,6 +452,7 @@ Q.state_turnout = {
 };
 
 // Run once at game start so initial polling is ready immediately
+Q.nat_flat_buff = (Q.nat_flat_buff || 0) + 4;
 window.simulate_polling();
 
 // party resources

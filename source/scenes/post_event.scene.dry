@@ -257,6 +257,15 @@ if (Q.month_actions >= 1) {
     }
 
     ///////////////////////////// change party support based on pro_republic
+    // honeymoon declines in support
+    if ((Q.year - 1) % 4 === 0 && Q.month >= 2 && Q.month <= 7) {
+    if (Q.month <= 3) {
+        Q.nat_flat_buff -= 1;
+    } else {
+        Q.nat_flat_buff -= 0.5;
+    }
+    window.simulate_polling();
+}
     // if pro_republic is less than the support of the Weimar coalition, reduce SPD support...
     if (Q.pro_republic < (Q.spd_votes + Q.ddp_votes + Q.z_votes - 3)) {
         if (Q.new_middle_spd > 0) {
