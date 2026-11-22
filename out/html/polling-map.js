@@ -51,16 +51,25 @@
   }
 
   function getActiveRaces(q, tab) {
+    var yr = Number(q.year) || 2021;
     if (tab === 'pres') return null;
+
     if (tab === 'senate') {
+      if (yr >= 2023) {
+        return q.senate_races_2024 || [
+          'AZ','CA','CT','DE','FL','HI','IN','ME','MD','MA','MI','MN','MS','MO',
+          'MT','NE','NV','NJ','NM','NY','ND','OH','PA','RI','TN','TX','UT','VT',
+          'VA','WA','WV','WI','WY'
+        ];
+      }
       return q.senate_races_2022 || [
         'AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IN','IA',
         'KS','KY','LA','MD','MO','NV','NH','NY','NC','ND','OH','OK','OR','PA',
         'SC','SD','UT','VT','WA','WI'
       ];
     }
+
     if (tab === 'gov') {
-      var yr = Number(q.year) || 2021;
       var govMap = q.gov_races || {
         2021: ['NJ', 'VA'],
         2022: ['AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IA','KS','ME','MD','MA','MI','MN','NE','NV','NH','NM','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','VT','WI','WY'],
@@ -123,6 +132,12 @@
       extra;
   }
 
+  function formatDiff(diff) {
+    if (diff > 0) return '(+' + diff + ')';
+    if (diff < 0) return '(' + diff + ')';
+    return '(±0)';
+  }
+
   function addStyles() {
     if (document.getElementById('polling-map-styles')) return;
     var s = document.createElement('style');
@@ -134,7 +149,9 @@
       '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
       '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
       '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
-      '.polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
+      '.polling-map-score{margin:0.3em 0 0.6em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
+      '.polling-map-legend{display:flex;flex-wrap:wrap;gap:0.4em 1em;margin:0.4em 0 0.75em;font-size:0.88em;color:#dddddd}' +
+      '.polling-map-swatch{display:inline-block;width:0.95em;height:0.95em;vertical-align:-0.15em;margin-right:0.3em;border:1px solid #777}' +
       '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
       '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
       '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
@@ -202,38 +219,58 @@
 
     var score = content.querySelector('.polling-map-score');
     if (!score) {
-      score = document.createElement('div');
-      score.className = 'polling-map-score';
-      content.appendChild(score);
-    }
-
-    var wrap = content.querySelector('.polling-map-svg-wrap');
-    if (!wrap) {
-      wrap = document.createElement('div');
-      wrap.className = 'polling-map-svg-wrap';
-      wrap.innerHTML = '<p style="padding:1em;">Loading map...</p>';
-      content.appendChild(wrap);
-    }
-
-    if (!mapReady && !svgLoading) {
-      svgLoading = true;
-      tryLoadSvg(svgUrls, 0, wrap);
-    }
-  }
-
-  function updateMap() {
-    var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
-    if (!drawer) return;
+score = document.createElement('div');
+score.className = 'polling-map-score';
+content.appendChild(score);
+}
+var legend = content.querySelector('.polling-map-legend');
+if (!legend) {
+legend = document.createElement('div');
+legend.className = 'polling-map-legend';
+legend.innerHTML =
+'Republican 15+' +
+'Republican 5–15' +
+'Republican 1–5' +
+'Republican <1' +
+'Democrat <1' +
+'Democrat 1–5' +
+'Democrat 5–15' +
+'Democrat 15+';
+content.appendChild(legend);
+}
+var wrap = content.querySelector('.polling-map-svg-wrap');
+if (!wrap) {
+wrap = document.createElement('div');
+wrap.className = 'polling-map-svg-wrap';
+wrap.innerHTML = 'Loading map...';
+content.appendChild(wrap);
+}
+if (!mapReady && !svgLoading) {
+svgLoading = true;
+tryLoadSvg(svgUrls, 0, wrap);
+}
+}
+function updateMap() {
+var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+if (!drawer) return;
 ensureDrawerContent(drawer);
 var q = getQ();
 var polling = getPolling();
 var svg = drawer.querySelector('.polling-map-svg-wrap svg');
 if (!q || !polling || !svg || !mapReady) return;
+var yr = Number(q.year) || 2021;
 var activeList = getActiveRaces(q, activeTab);
 var demTotal = 0, repTotal = 0;
 if (activeTab === 'senate') {
+if (yr >= 2023) {
+// 2024 Class 1 cycle: 67 seats not up (28 D / 39 R; or 28 D / 38 R if NE special included)
+demTotal = 28;
+repTotal = 39;
+} else {
+// 2022 Class 3 cycle: 66 seats not up (36 D / 30 R)
 demTotal = 36;
 repTotal = 30;
+}
 }
 var tip = drawer.querySelector('.polling-map-tooltip');
 if (!tip) {
@@ -278,13 +315,22 @@ shape.onpointerleave = function() { tip.classList.remove('visible'); };
 });
 var score = drawer.querySelector('.polling-map-score');
 if (score) {
-var unit = activeTab === 'pres' ? 'EV' : (activeTab === 'senate' ? 'Seats' : 'Races');
-var cycleTag = activeTab === 'gov' ? ' (' + (q.year || 2021) + ' Cycle)' : '';
+if (activeTab === 'senate') {
+var currentDemSenate = Number(q.dem_senate_seats) || 50;
+var currentRepSenate = 100 - currentDemSenate;
+var demDiff = formatDiff(demTotal - currentDemSenate);
+var repDiff = formatDiff(repTotal - currentRepSenate);
+score.innerHTML =
+'Democrat: ' + demTotal + ' Seats ' + demDiff + '' +
+' · ' +
+'Republican: ' + repTotal + ' Seats ' + repDiff + '';
+} else {
+var unit = activeTab === 'pres' ? 'EV' : 'Races';
 score.innerHTML =
 'Democrat: ' + demTotal + ' ' + unit + '' +
 ' · ' +
-'Republican: ' + repTotal + ' ' + unit + '' +
-cycleTag;
+'Republican: ' + repTotal + ' ' + unit + '';
+}
 }
 }
 function tryLoadSvg(urls, idx, wrap) {

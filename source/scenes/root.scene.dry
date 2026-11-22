@@ -145,7 +145,12 @@ Q.senate_races_2022 = [
     'KS','KY','LA','MD','MO','NV','NH','NY','NC','ND','OH','OK','OR','PA',
     'SC','SD','UT','VT','WA','WI'
 ];
-
+// 2024 Senate Class 1 + Nebraska Special Election (34 seats up; 28 D / 38 R not up)
+Q.senate_races_2024 = [
+    'AZ','CA','CT','DE','FL','HI','IN','ME','MD','MA','MI','MN','MS','MO',
+    'MT','NE','NV','NJ','NM','NY','ND','OH','PA','RI','TN','TX','UT','VT',
+    'VA','WA','WV','WI','WY'
+];
 // Gubernatorial Cycles
 Q.gov_races = {
     2021: ['NJ', 'VA'],
