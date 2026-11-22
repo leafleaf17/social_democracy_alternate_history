@@ -344,8 +344,8 @@ Q.state_dem_support = {
     MN: { race: { white: 6 },  edu: { noncollege: 5 }, geo: { rural: 5 } },
     IL: { race: { white: 5, hispanic: 4 }, geo: { urban: 5 } },
     OH: { race: { white: 2 }, edu: { noncollege: 2 }, geo: { rural: 2 } },
-    IA: { race: { white: 2 },  edu: { noncollege: 2 }, geo: { rural: 5 } },
-    IN: { race: { white: -1 }, geo: { rural: -1 } },
+    IA: { race: { white: 2 },  edu: { noncollege: 5 }, geo: { rural: 5 } },
+    IN: { race: { white: 2 }, geo: { rural: -1 } },
 
     // --- DEEP SOUTH (High Racial Polarization & Cautious Older Black Electorate) ---
     GA: { race: { white: -13, black: -6 }, geo: { suburban: -2 } },
