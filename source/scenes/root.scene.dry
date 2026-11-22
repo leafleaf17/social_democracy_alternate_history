@@ -1044,7 +1044,7 @@ For more information on the politics and government of the German Republic, see 
 - @1928_custom: Customize difficulty settings
 
 @1928_easy
-on-arrival: difficulty = -1; resources = 4; dues = 3; starting_rb_strength = 2500; rb_strength = 2500; socialist_dissent = 10; kpd_relation = 29; z_relation = 54; dvp_relation = 49; starting_budget = -29; budget = -29; hand_size = 4; starting_dissent = 0; starting_relations = 0;
+on-arrival: difficulty = -1; resources = 4; dues = 3; starting_rb_strength = 2500; rb_strength = 2500; socialist_dissent = 10; kpd_relation = 29; z_relation = 54; dvp_relation = 49; starting_budget = -29; budget = -29; hand_size = 10; starting_dissent = 0; starting_relations = 0;
 go-to: 1928_main
 
 @1928_hard
@@ -1084,7 +1084,7 @@ go-to: custom_difficulty
 @1928_main
 audio: shuffle music/1928_1930/FruhlingsliedMendelssohn.mp3 music/1928_1930/AUF_HOHEN_BERGEN_noise_reduced.mp3 music/1928_1930/MarekWeber.mp3 music/1928_1930/BAUERNKAPELLE.mp3 music/1928_1933/DERLINDENBAUM_normalized.mp3 music/1928_1933/ZurSonne_zurFreiheit.mp3 music/1928_1933/arbeiter_marseille.mp3 music/1928_1933/Wann_wir_schreiten_Seit_an_Seit.mp3 music/1930_1933/Internationale-de_normalized.ogg music/1928_1930/LiedDerPompadour.mp3 music/1928_1933/SozialistenMarsch.mp3
 new-page: true
-go-to: main if hand_size == 3; main.main_easy if hand_size == 4
+go-to: main if hand_size == 3; main.main_easy if hand_size == 10
 
 = 2021
 
