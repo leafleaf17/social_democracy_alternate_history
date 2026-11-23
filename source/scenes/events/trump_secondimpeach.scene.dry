@@ -4,9 +4,12 @@ view-if: year = 2021 and month = 2
 max-visits: 1
 new-page: true
 tags: event
-face-image: img/second_trump_impeachment.jpg
 
 = Trial of Donald Trump
+
+<img src="img/second_trump_impeachment.jpg" style="display:block; width:100%; max-width:500px; height:auto; margin:0 auto 1em auto; object-fit:cover; object-position:top;">
+
+<hr>
 
 President Donald Trump, who has been widely disgraced amongst the American public and even many in his party, was impeached by the House of Representatives on January 13th for inciting an insurrection, and unusually, the Senate is set to vote on whether or not to aquit Donald Trump after his departure from the White House. <span style="color: #DE0100;">Republicans</span> have mostly defered from actually defending Trump, and have instead argued that a motion for impeachment is unconsitutional and unnecessary because Trump does not hold any federal office. Supporters of the impeachment have argued that impeachment is still necessary to bar Trump from ever holding office again, no matter how unlikely it sounds. 
 
