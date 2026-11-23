@@ -285,6 +285,13 @@ p.dnvp {
 .news-box p:last-child {
   margin-bottom: 0;
 }
+.news-section:empty::after {
+    content: "There is nothing significant to report on this month.";
+    color: #888888;
+    font-style: italic;
+    display: block;
+    margin-bottom: 0.75em;
+}
 
 .overlay {
     background: rgba(0,0,0,0.7);
