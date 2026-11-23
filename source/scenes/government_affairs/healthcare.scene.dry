@@ -6,6 +6,7 @@ on-arrival: month_actions += 1; coalition_affairs_timer = 5
 view-if: dems_in_government = 1 
 card-image: img/muller_cabinet.jpg
 go-to: healthcare_menu
+
 = Expanding Healthcare
 
 @healthcare_menu
