@@ -85,8 +85,13 @@
     var base = polling[code];
     if (!base) return null;
     var buff = 0;
-    if (tab === 'senate' && q.senate_buffs && q.senate_buffs[code]) buff = Number(q.senate_buffs[code]);
-    if (tab === 'gov' && q.gov_buffs && q.gov_buffs[code]) buff = Number(q.gov_buffs[code]);
+    if (tab === 'senate') {
+      buff += Number(q.nat_senate_buff || 0);
+      if (q.senate_buffs && q.senate_buffs[code]) buff += Number(q.senate_buffs[code]);
+    }
+    if (tab === 'gov' && q.gov_buffs && q.gov_buffs[code]) {
+      buff += Number(q.gov_buffs[code]);
+    }
 
     var dem = +(Math.max(1, Math.min(99, Number(base.dem) + buff))).toFixed(2);
     var rep = +(100 - dem).toFixed(2);
