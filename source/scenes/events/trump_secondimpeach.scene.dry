@@ -4,7 +4,7 @@ view-if: year = 2021 and month = 2
 max-visits: 1
 new-page: true
 tags: event
-face-image: img/second_trump_impeachment.png
+face-image: img/second_trump_impeachment.jpg
 
 = Trial of Donald Trump
 
@@ -19,7 +19,7 @@ In a 55-45 vote, congress has given the go-ahead to continue with the trial. Wit
 @aquitted
 subtitle: A testiment to how far the party of Lincoln has fallen
 on-arrival: rural_nsdap += 3; rural_spd -= 2; rural_ddp -= 2; pro_republic -= 3
-face-image: img/trump_truman.png
+face-image: img/trump_truman.jpg
 
 The <span style="color: #DE0100;">Republican Party</span> was handed a golden opportunity to finally seperate itself from Donald Trump, who holds a favorability rating in the mid 30's, and they denied it. In a 57-43 vote, Donald Trump has been acquitted by Donald Trump. <span style="color: #DE0100;">Republican</span> senate majority leader Mitch McConnell was allegedly in support of the motion, but was unable to convince enough <span style="color: #DE0100;">Republicans</span> to support impeachment, and thus abandonded the effort. 
 
