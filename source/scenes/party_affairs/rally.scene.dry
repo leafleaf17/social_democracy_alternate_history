@@ -5,74 +5,13 @@ tags: party_affairs
 view-if: rally_timer <= 0
 on-arrival: month_actions += 1; rally_timer = 6
 card-image: img/protest.jpg
-go-to: main_rally; sa_disrupt if sa_strength > 180 and not sa_banned and not return_to_normalcy
-
-@sa_disrupt
-
-The Nazi SA has disrupted our rally! Their street troops are preventing us from meeting.
-
-- @police_protect: Call the police to protect our rally.
-- @rb_protect: Use the Reichsbanner to protect our rally.
-- @both_protect: The police and Reichsbanner should work together to protect our rally.
-- @cancel: Cancel the rally.
-
-@police_protect
-view-if: spd_prussia == 1
-on-arrival: police_protect_success = prussian_police_loyalty * prussian_police_militancy * prussian_police_strength*2 - sa_militancy*sa_strength;
-go-to: police_protect_win if police_protect_success >= 0; police_protect_lose if police_protect_success < 0
-
-@police_protect_win
 go-to: main_rally
-
-The police successfully protected our rally, so it can go ahead as usual.
-
-@police_protect_lose
-on-arrival: strife += 1; workers_nsdap += 3
-
-Unfortunately, the police were unable or unwilling to hold back the SA mob. The Nazis have won this show of strength.
-
-@rb_protect
-on-arrival: rb_success = rb_strength*rb_militancy - sa_strength*sa_militancy; strife += 1
-go-to: rb_protect_win if rb_success >= 0; rb_protect_lose if rb_success < 0
-
-@rb_protect_win
-go-to: main_rally
-
-The Reichsbanner has successfully protected our rally against the SA! Our meeting can go ahead as usual.
-
-@rb_protect_lose
-on-arrival: workers_nsdap += 3; rb_strength -= 50
-
-Unfortunately, the Reichsbanner was not able to hold back the SA mob. The Nazis have won this show of strength.
-
-@both_protect
-view-if: spd_prussia
-choose-if: prussian_police_training > 0
-unavailable-subtitle: The loyal sections of the police have never coordinated with the Reichsbanner before.
-on-arrival: rb_success = rb_strength*rb_militancy - sa_strength*sa_militancy + prussian_police_loyalty*prussian_police_militancy*prussian_police_strength*2; strife += 1
-go-to: both_protect_win if rb_success >= 0; both_protect_lose if rb_success < 0
-
-@both_protect_win
-go-to: main_rally
-
-The police and Reichsbanner have successfully protected our rally against the SA! Our meeting can go ahead as usual.
-
-@both_protect_lose
-on-arrival: workers_nsdap += 3; rb_strength -= 50
-
-Unfortunately, the police and Reichsbanner were not able to hold back the SA mob. The Nazis have won this show of strength.
-
-
-@cancel
-on-arrival: workers_nsdap += 3;
-
-The SA have won this show of strength.
 
 @main_rally
 
-Mass rallies are a common feature of social democratic life, especially in the lead-up to an election. What is the primary theme of this rally?
+Presidental rallys can be used to highlight or promote certain ideologies and ideas in the Democratic party and the public.
 
-- @class_struggle: The class struggle of the proletariat against the bourgeoisie.
+- @leftists_in_primaries: Rally For Progressives In The Democrat Party
 - @welfare: Sozialpolitik - the maintenance and expansion of social welfare programs.
 - @democracy: Expanding our nascent democracy and defending it against dictatorship and fascism.
 - @pacifism: Opposing war, nationalism, and militarism at all costs.
@@ -80,7 +19,8 @@ Mass rallies are a common feature of social democratic life, especially in the l
 - @local: A mixture of various local and national concerns that resonate most with the audience.
 - @easy_discard
 
-@class_struggle
+@leftists_in_primaries
+subtitle: This will boost the support of more left-wing canidates in the <span style="color: #3E88B3;">**Democrat Party**</span>
 on-arrival: workers_spd += 4*(1-dissent); unemployed_spd += 3*(1-dissent) if socialist_strength > blue_dog_strength; workers_spd += 4*(1-dissent) if nationalization_progress > 0; unemployed_spd += 3*(1-dissent) if nationalization_progress > 0; socialist_strength += 5; socialist_dissent -= 5; old_middle_spd -= 3; new_middle_spd -= 2;
 
 Our message of class struggle appeals to the left wing of the working class, while potentially alienating the middle class. [? if nationalization_progress > 0 : Our achievements in nationalization have assisted our messaging. ?]

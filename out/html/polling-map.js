@@ -367,6 +367,46 @@ updateMap();
 })
 .catch(function() { tryLoadSvg(urls, idx + 1, wrap); });
 }
+  function makeDraggable(drawer) {
+    if (!drawer || drawer.dataset.draggableReady) return;
+    drawer.dataset.draggableReady = '1';
+
+    var handle = drawer.querySelector('h2') ? drawer.querySelector('h2').parentElement : drawer;
+    handle.style.cursor = 'move';
+    handle.style.userSelect = 'none';
+
+    var dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+    handle.addEventListener('pointerdown', function(e) {
+      if (e.target.closest('button')) return; // Don't drag when clicking Close
+      dragging = true;
+      var rect = drawer.getBoundingClientRect();
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = rect.left;
+      startTop = rect.top;
+
+      drawer.style.setProperty('right', 'auto', 'important');
+      drawer.style.setProperty('bottom', 'auto', 'important');
+      drawer.style.setProperty('left', startLeft + 'px', 'important');
+      drawer.style.setProperty('top', startTop + 'px', 'important');
+      e.preventDefault();
+    });
+
+    window.addEventListener('pointermove', function(e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      var newLeft = Math.max(0, Math.min(window.innerWidth - 120, startLeft + dx));
+      var newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
+      drawer.style.setProperty('left', newLeft + 'px', 'important');
+      drawer.style.setProperty('top', newTop + 'px', 'important');
+    });
+
+    window.addEventListener('pointerup', function() {
+      dragging = false;
+    });
+  }
 function initObserver() {
 addStyles();
 var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
@@ -379,6 +419,24 @@ updateMap();
 obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
 if (drawer.classList.contains('open')) updateMap();
 }
+  function initObserver() {
+    addStyles();
+    var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+    if (drawer) {
+      makeDraggable(drawer);
+      var obs = new MutationObserver(function() {
+        if (drawer.classList.contains('open')) {
+          updateMap();
+        }
+      });
+      obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
+      if (drawer.classList.contains('open')) updateMap();
+    }
+
+    document.addEventListener('click', function() {
+      setTimeout(updateMap, 50);
+    });
+  }
 document.addEventListener('click', function() {
 setTimeout(updateMap, 50);
 });

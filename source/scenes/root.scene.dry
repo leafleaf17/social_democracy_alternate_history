@@ -533,7 +533,20 @@ Q.primaries = {
     va:  { prog: 1, mod: 4, dsa: 1 },
     nyc: { prog: 3, mod: 4 }
 };
+// Universal progressive primary boost (positive = helps progressives everywhere, negative = hurts them)
+Q.prog_primary_buff = 0;
 
+// Helper to calculate effective progressive strength (local + universal buff)
+window.get_prog = function(race) {
+    if (!Q.primaries || !Q.primaries[race]) return 0;
+    return Q.primaries[race].prog + (Q.prog_primary_buff || 0);
+};
+
+// Helper to check if progressives are winning a specific primary
+window.prog_winning = function(race) {
+    if (!Q.primaries || !Q.primaries[race]) return false;
+    return window.get_prog(race) > Q.primaries[race].mod;
+};
 
 // factions
 Q.factions = ['left', 'center', 'labor', 'reformist', 'neorevisionist'];
