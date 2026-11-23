@@ -137,11 +137,12 @@
       extra;
   }
 
-  function formatDiff(diff) {
-    if (diff > 0) return '(+' + diff + ')';
-    if (diff < 0) return '(' + diff + ')';
-    return '(±0)';
+    function formatDiff(diff) {
+    if (diff > 0) return '<span class="seat-diff" data-dir="gain">(+' + diff + ')</span>';
+    if (diff < 0) return '<span class="seat-diff" data-dir="loss">(' + diff + ')</span>';
+    return '<span class="seat-diff" data-dir="even">(±0)</span>';
   }
+
 
   function addStyles() {
     if (document.getElementById('polling-map-styles')) return;
@@ -303,24 +304,39 @@ shape.onpointermove = shape.onpointerenter;
 shape.onpointerleave = function() { tip.classList.remove('visible'); };
 });
 var score = drawer.querySelector('.polling-map-score');
-if (score) {
-if (activeTab === 'senate') {
-var currentDemSenate = Number(q.dem_senate_seats) || 50;
-var currentRepSenate = 100 - currentDemSenate;
-var demDiff = formatDiff(demTotal - currentDemSenate);
-var repDiff = formatDiff(repTotal - currentRepSenate);
-score.innerHTML =
-'Democrat: ' + demTotal + ' Seats ' + demDiff + '' +
-' · ' +
-'Republican: ' + repTotal + ' Seats ' + repDiff + '';
-} else {
-var unit = activeTab === 'pres' ? 'EV' : 'Races';
-score.innerHTML =
-'Democrat: ' + demTotal + ' ' + unit + '' +
-' · ' +
-'Republican: ' + repTotal + ' ' + unit + '';
-}
-}
+ var score = drawer.querySelector('.polling-map-score');
+    if (score) {
+      if (activeTab === 'senate') {
+        var currentDemSenate = Number(q.dem_senate_seats) || 50;
+        var currentRepSenate = 100 - currentDemSenate;
+        var demDiff = formatDiff(demTotal - currentDemSenate);
+        var repDiff = formatDiff(repTotal - currentRepSenate);
+
+        score.innerHTML =
+          '<span class="score-dem">Democrat: ' + demTotal + ' Seats ' + demDiff + '</span>' +
+          '<span class="score-sep" style="margin:0 0.5em;">·</span>' +
+          '<span class="score-rep">Republican: ' + repTotal + ' Seats ' + repDiff + '</span>';
+      } else {
+        var unit = activeTab === 'pres' ? 'EV' : 'Races';
+        score.innerHTML =
+          '<span class="score-dem">Democrat: ' + demTotal + ' ' + unit + '</span>' +
+          '<span class="score-sep" style="margin:0 0.5em;">·</span>' +
+          '<span class="score-rep">Republican: ' + repTotal + ' ' + unit + '</span>';
+      }
+
+      var demSpan = score.querySelector('.score-dem');
+      var sepSpan = score.querySelector('.score-sep');
+      var repSpan = score.querySelector('.score-rep');
+      if (demSpan) demSpan.style.setProperty('color', '#5c9eff', 'important');
+      if (sepSpan) sepSpan.style.setProperty('color', '#888888', 'important');
+      if (repSpan) repSpan.style.setProperty('color', '#ff5865', 'important');
+
+      score.querySelectorAll('.seat-diff').forEach(function(el) {
+        var dir = el.getAttribute('data-dir');
+        var col = dir === 'gain' ? '#4ade80' : dir === 'loss' ? '#ff5865' : '#aaaaaa';
+        el.style.setProperty('color', col, 'important');
+      });
+    }
 }
 function tryLoadSvg(urls, idx, wrap) {
 if (idx >= urls.length) {
