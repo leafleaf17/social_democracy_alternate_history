@@ -353,6 +353,10 @@ updateMap();
 }
 function initObserver() {
 addStyles();
+      '#polling-map-drawer .polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
+      '#polling-map-drawer .polling-map-score span:first-child{color:#5c9eff !important}' +
+      '#polling-map-drawer .polling-map-score span:last-child{color:#ff5865 !important}' +
+
 var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
 if (drawer) {
 var obs = new MutationObserver(function() {
@@ -366,6 +370,7 @@ if (drawer.classList.contains('open')) updateMap();
 document.addEventListener('click', function() {
 setTimeout(updateMap, 50);
 });
+
 }
 window.openPollingMap = updateMap;
 window.updatePollingMap = updateMap;
