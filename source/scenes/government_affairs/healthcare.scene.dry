@@ -51,14 +51,15 @@ By transferring campaign funds to our coalition partners, we can make our polici
 
 @healthcare_legislation
 
-- @drug_negotiation: Empower Medicare to negotiate lower drug prices
+- @public_option: Can we pass a public option?
+- @m4a: Can we pass medicare for all?
 - @healthcare_menu: Go back to executive action
 
-@drug_negotiation
+@public_option
 subtitle: Provisions in Medicaid allow us to approve of "experimental" healthcare coverage by other states. This has historically been used to help lower income mothers the most.
-choose-if: medicare_for_all = 0
-max-visits: 2
-unavailable-subtitle: Our previous healthcare reforms makes this irrelevant. 
+choose-if: filibuster_gone = 1
+max-visits: 1
+unavailable-subtitle: This would never survive the fillibuster
 on-arrival: {!
 Q.progressive_dissent -=3
 Q.socialist_dissent -=3
@@ -71,4 +72,19 @@ window.simulate_polling();
 
 Fine. By cutting welfare, we have reduced dissent within the coalition.
 
+@m4a
+subtitle: Provisions in Medicaid allow us to approve of "experimental" healthcare coverage by other states. This has historically been used to help lower income mothers the most.
+choose-if: filibuster_gone = 1
+max-visits: 1
+unavailable-subtitle: This would never survive the fillibuster
+on-arrival: {!
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
 
+Fine. By cutting welfare, we have reduced dissent within the coalition.
