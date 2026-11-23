@@ -1100,10 +1100,14 @@ on-arrival: difficulty = -1; resources = 4; dues = 3; starting_rb_strength = 250
 go-to: 1928_main
 
 @1928_hard
+choose-if: always_one = 0
+unavailable-subtitle: no
 on-arrival: difficulty = 1; resources = 0; starting_resources = 0; dues = 1; starting_rb_strength = 1000; rb_strength = 1000; blue_dog_dissent = 25; socialist_dissent = 30; new_liberal_dissent = 25; progressive_dissent = 25; z_relation = 41; kpd_relation = 16; dvp_relation = 31; starting_budget = 3; budget = 3; discard_disabled = 1; starting_dissent = 2; starting_relations = 2;
 go-to: 1928_main
 
 @1928_historical
+choose-if: always_one = 0
+unavailable-subtitle: no
 subtitle: Saving, loading, and polls will be disabled. [? if not achievement_game_completed: Not recommended for a first playthrough. ?]
 on-arrival: {!
 Q.hand_size = 3;
@@ -1131,9 +1135,13 @@ this.state.disableSaves = true;
 go-to: 1928_main
 
 @1928_custom
+choose-if: always_one = 0
+unavailable-subtitle: no
 go-to: custom_difficulty
 
 @1928_main
+choose-if: always_one = 0
+unavailable-subtitle: no
 audio: shuffle music/1928_1930/FruhlingsliedMendelssohn.mp3 music/1928_1930/AUF_HOHEN_BERGEN_noise_reduced.mp3 music/1928_1930/MarekWeber.mp3 music/1928_1930/BAUERNKAPELLE.mp3 music/1928_1933/DERLINDENBAUM_normalized.mp3 music/1928_1933/ZurSonne_zurFreiheit.mp3 music/1928_1933/arbeiter_marseille.mp3 music/1928_1933/Wann_wir_schreiten_Seit_an_Seit.mp3 music/1930_1933/Internationale-de_normalized.ogg music/1928_1930/LiedDerPompadour.mp3 music/1928_1933/SozialistenMarsch.mp3
 new-page: true
 go-to: main if hand_size == 3; main.main_easy if hand_size == 10
