@@ -309,16 +309,16 @@ var currentDemSenate = Number(q.dem_senate_seats) || 50;
 var currentRepSenate = 100 - currentDemSenate;
 var demDiff = formatDiff(demTotal - currentDemSenate);
 var repDiff = formatDiff(repTotal - currentRepSenate);
-score.innerHTML =
-'Democrat: ' + demTotal + ' Seats ' + demDiff + '' +
-' · ' +
-'Republican: ' + repTotal + ' Seats ' + repDiff + '';
-} else {
-var unit = activeTab === 'pres' ? 'EV' : 'Races';
-score.innerHTML =
-'Democrat: ' + demTotal + ' ' + unit + '' +
-' · ' +
-'Republican: ' + repTotal + ' ' + unit + '';
+ score.innerHTML =
+          '<span style="color:#5c9eff !important;">Democrat: ' + demTotal + ' Seats ' + demDiff + '</span>' +
+          ' <span style="color:#888888 !important;margin:0 0.5em;">·</span> ' +
+          '<span style="color:#ff5865 !important;">Republican: ' + repTotal + ' Seats ' + repDiff + '</span>';
+      } else {
+        var unit = activeTab === 'pres' ? 'EV' : 'Races';
+        score.innerHTML =
+          '<span style="color:#5c9eff !important;">Democrat: ' + demTotal + ' ' + unit + '</span>' +
+          ' <span style="color:#888888 !important;margin:0 0.5em;">·</span> ' +
+          '<span style="color:#ff5865 !important;">Republican: ' + repTotal + ' ' + unit + '</span>';
 }
 }
 }
