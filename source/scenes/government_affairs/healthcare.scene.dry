@@ -1,11 +1,10 @@
-title: Coalition Affairs
+title: Expanding Healthcare
 new-page: true
 is-card: true
 tags: govt_affairs
 on-arrival: month_actions += 1; coalition_affairs_timer = 5
-view-if: dems_in_government = 1 and coalition_dissent >= 1 and coalition_affairs_timer = 0 and (in_grand_coalition or in_weimar_coalition or in_popular_front)
+view-if: dems_in_government = 1 
 card-image: img/muller_cabinet.jpg
-#subtitle: There is dissent within our coalition.
 
 = Coalition Affairs
 
@@ -13,24 +12,41 @@ Our coalition is in trouble. The right-leaning members of the Center [? if in_gr
 
 How do we reduce tensions with the coalition?
 
-- @promise_cuts: Agree to the bourgeois plans to cut welfare.
-- @resources: Use our party resources to support our allies.
-- @bring_down: Instead, we will bring down the government with a no-confidence vote, and call for new elections.
-- @no_change: Take none of these actions.
+- @use_section_1115: Approve medicaid expansions
+- @crack_down_on_overpayments: Crackdown on medicare advantage fraud
+- @healthcare_legislation: Go to legislative options
 - @easy_discard
 
 
-@promise_cuts
-on-arrival: workers_spd -= 5; unemployed_spd -= 6; workers_kpd += 5; unemployed_kpd += 3; unemployed_nsdap += 3; socialist_dissent += 10; new_liberal_dissent += 5; welfare -= 1; budget += 1; coalition_dissent = 0
+@use_section_1115
+subtitle: Provisions in Medicaid allow us to approve of "experimental" healthcare coverage by other states. This has historically been used to help lower income mothers the most.
+choose-if: medicare_for_all = 0
+max-visits: 2
+unavailable=subtitle: Our previous healthcare reforms makes this irrelevant. 
+on-arrival: {!
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
 
 Fine. By cutting welfare, we have reduced dissent within the coalition.
 
-@resources
-subtitle: -2 resources
+@crack_down_on_overpayments
+subtitle: +0.40 budget. Insurers are attempting to make seniors look sicker then they actually are to reciece higher government payouts. These practices cost the government money and make healthcare more expensive for everyone
 view-if: historical_mode = 0
-unavailable-subtitle: Not enough resources (need 2).
-choose-if: resources >= 2
-on-arrival: resources -= 2; coalition_dissent -= 1
+maximum-visits: 2
+on-arrival: {!
+Q.budget +=0.4
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.senior +=3
+Q.corporate_backlash +=1
+window.simulate_polling();
+!}
 
 By transferring campaign funds to our coalition partners, we can make our policies more acceptable to them. Some would call this corruption, but perhaps it is necessary to save democracy.
 

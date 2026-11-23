@@ -43,7 +43,7 @@ WIP
 title: Target Junk Fees And Pricing Algorithms 
 subtitle: This is appreciated by all Americans, less so by corporations.
 on-arrival: {!
-Q.cost_of_living_opinion +=2;
+Q.cost_of_living_opinion +=3;
 Q.corporate_backlash +=2;
 Q.nat_flat_buff += 0.1;
 window.simulate_polling();
@@ -56,7 +56,7 @@ WIP
 title: Sue To Break Up And Prevent The Formation Of Monopolies In The Transport Industry
 subtitle: This will ideally place a downward pressure on prices in the transportation industry
 on-arrival: {!
-Q.cost_of_living_opinion += 2;
+Q.cost_of_living_opinion += 1;
 Q.corporate_backlash += 2;
 Q.nat_support.geo.urban += 2;
 window.simulate_polling();
