@@ -37,7 +37,7 @@ Fine. By cutting welfare, we have reduced dissent within the coalition.
 @crack_down_on_overpayments
 subtitle: +0.40 budget. Insurers are attempting to make seniors look sicker then they actually are to reciece higher government payouts. These practices cost the government money and make healthcare more expensive for everyone
 view-if: historical_mode = 0
-maximum-visits: 2
+max-visits: 2
 on-arrival: {!
 Q.budget +=0.4
 Q.socialist_dissent -=3
