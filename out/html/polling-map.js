@@ -149,18 +149,21 @@
     s.id = 'polling-map-styles';
     s.textContent =
       '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw) !important;height:min(86vh,900px) !important;top:7vh !important;right:3vw !important;overflow:auto !important;z-index:40 !important;padding:1.2em !important;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
+      '.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
       '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
       '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
       '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
       '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
-      '.polling-map-score{margin:0.3em 0 0.6em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
-            '.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
-      '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
-      '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
-      '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
-      '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
-      '.polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
+      '#polling-map-drawer .polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
+      '#polling-map-drawer .polling-map-score span:first-child{color:#5c9eff !important}' +
+      '#polling-map-drawer .polling-map-score span:last-child{color:#ff5865 !important}' +
       '.polling-map-legend{display:none !important}' +
+      '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
+      '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
+      '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
+      '.polling-map-state{cursor:pointer;stroke:#555555 !important;stroke-width:0.75px}.polling-map-state:hover{opacity:.85;stroke:#ffffff !important}' +
+      '.polling-map-tooltip{display:none;position:absolute;z-index:5;white-space:normal;padding:.55em .75em;max-width:265px;background:#171717 !important;color:#fff !important;border:1px solid #fff;font:14px/1.45 sans-serif;pointer-events:none}' +
+      '.polling-map-tooltip.visible{display:block}';
     document.head.appendChild(s);
   }
 
@@ -220,13 +223,12 @@
       else b.classList.remove('active');
     });
 
-    var score = content.querySelector('.polling-map-score');
-    if (!score) {
+var score = content.querySelector('.polling-map-score');
+if (!score) {
 score = document.createElement('div');
 score.className = 'polling-map-score';
 content.appendChild(score);
 }
-
 var wrap = content.querySelector('.polling-map-svg-wrap');
 if (!wrap) {
 wrap = document.createElement('div');
@@ -252,11 +254,9 @@ var activeList = getActiveRaces(q, activeTab);
 var demTotal = 0, repTotal = 0;
 if (activeTab === 'senate') {
 if (yr >= 2023) {
-// 2024 Class 1 cycle: 67 seats not up (28 D / 39 R; or 28 D / 38 R if NE special included)
 demTotal = 28;
 repTotal = 39;
 } else {
-// 2022 Class 3 cycle: 66 seats not up (36 D / 30 R)
 demTotal = 36;
 repTotal = 30;
 }
@@ -309,16 +309,16 @@ var currentDemSenate = Number(q.dem_senate_seats) || 50;
 var currentRepSenate = 100 - currentDemSenate;
 var demDiff = formatDiff(demTotal - currentDemSenate);
 var repDiff = formatDiff(repTotal - currentRepSenate);
- score.innerHTML =
-          '<span style="color:#5c9eff !important;">Democrat: ' + demTotal + ' Seats ' + demDiff + '</span>' +
-          ' <span style="color:#888888 !important;margin:0 0.5em;">·</span> ' +
-          '<span style="color:#ff5865 !important;">Republican: ' + repTotal + ' Seats ' + repDiff + '</span>';
-      } else {
-        var unit = activeTab === 'pres' ? 'EV' : 'Races';
-        score.innerHTML =
-          '<span style="color:#5c9eff !important;">Democrat: ' + demTotal + ' ' + unit + '</span>' +
-          ' <span style="color:#888888 !important;margin:0 0.5em;">·</span> ' +
-          '<span style="color:#ff5865 !important;">Republican: ' + repTotal + ' ' + unit + '</span>';
+score.innerHTML =
+'Democrat: ' + demTotal + ' Seats ' + demDiff + '' +
+' · ' +
+'Republican: ' + repTotal + ' Seats ' + repDiff + '';
+} else {
+var unit = activeTab === 'pres' ? 'EV' : 'Races';
+score.innerHTML =
+'Democrat: ' + demTotal + ' ' + unit + '' +
+' · ' +
+'Republican: ' + repTotal + ' ' + unit + '';
 }
 }
 }
@@ -353,10 +353,6 @@ updateMap();
 }
 function initObserver() {
 addStyles();
-      '#polling-map-drawer .polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
-      '#polling-map-drawer .polling-map-score span:first-child{color:#5c9eff !important}' +
-      '#polling-map-drawer .polling-map-score span:last-child{color:#ff5865 !important}' +
-
 var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
 if (drawer) {
 var obs = new MutationObserver(function() {
@@ -370,7 +366,6 @@ if (drawer.classList.contains('open')) updateMap();
 document.addEventListener('click', function() {
 setTimeout(updateMap, 50);
 });
-
 }
 window.openPollingMap = updateMap;
 window.updatePollingMap = updateMap;
