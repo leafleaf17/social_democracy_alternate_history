@@ -149,20 +149,18 @@
     s.id = 'polling-map-styles';
     s.textContent =
       '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw) !important;height:min(86vh,900px) !important;top:7vh !important;right:3vw !important;overflow:auto !important;z-index:40 !important;padding:1.2em !important;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
-      '.polling-map-content,.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
       '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
       '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
       '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
       '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
       '.polling-map-score{margin:0.3em 0 0.6em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
-      '.polling-map-legend{display:flex;flex-wrap:wrap;gap:0.4em 1em;margin:0.4em 0 0.75em;font-size:0.88em;color:#dddddd}' +
-      '.polling-map-swatch{display:inline-block;width:0.95em;height:0.95em;vertical-align:-0.15em;margin-right:0.3em;border:1px solid #777}' +
-      '.polling-map-svg-wrap{width:100%;min-height:300px;background:#000000 !important;border:1px solid #444;overflow:auto}' +
-      '.polling-map-svg-wrap svg{display:block;width:100%;max-width:960px;height:auto;margin:0 auto;background:#000000 !important}' +
-      '.polling-map-svg-wrap svg rect{fill:#000000 !important}' +
-      '.polling-map-state{cursor:pointer;stroke:#555555 !important;stroke-width:0.75px}.polling-map-state:hover{opacity:.85;stroke:#ffffff !important}' +
-      '.polling-map-tooltip{display:none;position:absolute;z-index:5;white-space:normal;padding:.55em .75em;max-width:265px;background:#171717 !important;color:#fff !important;border:1px solid #fff;font:14px/1.45 sans-serif;pointer-events:none}' +
-      '.polling-map-tooltip.visible{display:block}';
+            '.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
+      '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
+      '.polling-map-drawer button:hover{background:#333333 !important;border-color:#ffffff !important}' +
+      '.polling-map-tabs{display:flex;gap:8px;margin:0.5em 0 0.7em}' +
+      '.polling-map-tab.active{background:#1c408c !important;border-color:#5c9eff !important;color:#ffffff !important}' +
+      '.polling-map-score{margin:0.3em 0 0.75em;font-size:1.4em;font-weight:bold;letter-spacing:0.02em}' +
+      '.polling-map-legend{display:none !important}' +
     document.head.appendChild(s);
   }
 
@@ -228,21 +226,7 @@ score = document.createElement('div');
 score.className = 'polling-map-score';
 content.appendChild(score);
 }
-var legend = content.querySelector('.polling-map-legend');
-if (!legend) {
-legend = document.createElement('div');
-legend.className = 'polling-map-legend';
-legend.innerHTML =
-'Republican 15+' +
-'Republican 5–15' +
-'Republican 1–5' +
-'Republican <1' +
-'Democrat <1' +
-'Democrat 1–5' +
-'Democrat 5–15' +
-'Democrat 15+';
-content.appendChild(legend);
-}
+
 var wrap = content.querySelector('.polling-map-svg-wrap');
 if (!wrap) {
 wrap = document.createElement('div');
