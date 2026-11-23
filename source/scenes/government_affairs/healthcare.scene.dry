@@ -22,7 +22,7 @@ How do we reduce tensions with the coalition?
 subtitle: Provisions in Medicaid allow us to approve of "experimental" healthcare coverage by other states. This has historically been used to help lower income mothers the most.
 choose-if: medicare_for_all = 0
 max-visits: 2
-unavailable=subtitle: Our previous healthcare reforms makes this irrelevant. 
+unavailable-subtitle: Our previous healthcare reforms makes this irrelevant. 
 on-arrival: {!
 Q.progressive_dissent -=3
 Q.socialist_dissent -=3
