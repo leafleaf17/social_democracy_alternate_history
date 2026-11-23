@@ -5,12 +5,10 @@ tags: govt_affairs
 on-arrival: month_actions += 1; coalition_affairs_timer = 5
 view-if: dems_in_government = 1 
 card-image: img/muller_cabinet.jpg
+go-to = healthcare_menu
+= Expanding Healthcare
 
-= Coalition Affairs
-
-Our coalition is in trouble. The right-leaning members of the Center [? if in_grand_coalition: and DVP ?] are constantly criticizing us for our policies, and are threatening to call a vote of no confidence to collapse this government[? if spd_prussia :, or to do the same for our government in the state of Prussia ?].
-
-How do we reduce tensions with the coalition?
+@healthcare_menu
 
 - @use_section_1115: Approve medicaid expansions
 - @crack_down_on_overpayments: Crackdown on medicare advantage fraud
@@ -50,15 +48,26 @@ window.simulate_polling();
 
 By transferring campaign funds to our coalition partners, we can make our policies more acceptable to them. Some would call this corruption, but perhaps it is necessary to save democracy.
 
-@no_change
+@healthcare_legislation
 
-No. We will not do this.
+- @drug_negotiation: Empower Medicare to negotiate lower drug prices
+- @healthcare_menu: Go back to executive action
 
-@bring_down
-subtitle: Bring down this government before our opponents do.
-on-arrival: dems_in_government = 0; in_grand_coalition = 0; in_weimar_coalition = 0; chancellor = "Brüning"; chancellor_party = "Z"; next_election_time = time + 3 if next_election_time > time+3; next_election_month = month + 3 if next_election_time >= time+3; next_election_year = year if next_election_time >= time+3; next_election_year += 1 if next_election_month > 12; next_election_month -= 12 if next_election_month > 12; spd_toleration = 0; socialist_strength += 8; pro_republic -= 5; new_middle_spd -= 3; rural_spd -= 3; old_middle_spd -= 3; catholics_spd -= 3; blue_dog_dissent += 5
+@drug_negotiation
+subtitle: Provisions in Medicaid allow us to approve of "experimental" healthcare coverage by other states. This has historically been used to help lower income mothers the most.
+choose-if: medicare_for_all = 0
+max-visits: 2
+unavailable-subtitle: Our previous healthcare reforms makes this irrelevant. 
+on-arrival: {!
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
 
-We have called for a vote of no confidence in ourselves, and have brought down this government. Chancellor [+ chancellor +] currently rules as acting chancellor.
+Fine. By cutting welfare, we have reduced dissent within the coalition.
 
-New elections have been set for [+ next_election_month : month +] [+ next_election_year +].
 
