@@ -26,6 +26,14 @@
       button.style.backgroundColor = '#dddddd';
       
   };
+  setInterval(function() {
+    document.querySelectorAll('.news-section').forEach(function(sec) {
+        if (sec.textContent.trim() === '') {
+            sec.innerHTML = '<p style="color:#888888;font-style:italic;">There is nothing significant to report on this month.</p>';
+        }
+    });
+}, 150);
+
   window.loadEnglish = function() {
       ui.loadGame('game.json'); dendryUI.language = "en"; localStorage[game.title + '_language'] = "en";
       var text_label_map_ids = {'main_tab':"Main",'politics_tab':"Politics",'paramilitary_tab':"Wins",'poll_tab':"Polls",'stats-link':"Library",'save-link':"Save/Load",'options-link':"Options","currently_playing_text":"Currently playing:","music_header_text":"Music","next_song_text":"Next song","settings_text":"Settings","backgrounds_text":"Backgrounds:","event_images_text":"Event images:","animations_text":"Animations:","music_text":"Music:","color_scheme_text":"Color scheme:","light_mode_label":"Light mode","dark_mode_label":"Dark mode","font_size_text":"Font size:","decrease_font_button":"- decrease","increase_font_button":"+ increase","import_save_label":"Import save file:"};
