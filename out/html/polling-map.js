@@ -487,13 +487,13 @@ initObserver();
       h.labels.push(currentLabel);
       h.inflation.push(curInf);
       h.unemployment.push(curUnemp);
-      h.growth.push(curGrowth);
+      h.gdp.push(curGrowth);
       h.budget.push(curBudget);
       h.sp500.push(curSp);
     } else {
       h.inflation[lastIdx] = curInf;
       h.unemployment[lastIdx] = curUnemp;
-      h.growth[lastIdx] = curGrowth;
+      h.gdp[lastIdx] = curGrowth;
       h.budget[lastIdx] = curBudget;
       h.sp500[lastIdx] = curSp;
     }
@@ -620,7 +620,7 @@ initObserver();
 
     var inf = h.inflation[h.inflation.length - 1];
     var unemp = h.unemployment[h.unemployment.length - 1];
-    var growth = h.growth[h.growth.length - 1];
+    var growth = h.gdp[h.gdp.length - 1];
     var bud = h.budget[h.budget.length - 1];
     var sp = h.sp500[h.sp500.length - 1];
 
