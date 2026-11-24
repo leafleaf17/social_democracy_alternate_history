@@ -12,9 +12,29 @@ Müller is a former [? if chancellor = "Müller": and current ?] Chancellor, and
 
 @executive_main_menu
 
+- @labor: Labor and unions
 - @foreign_policy: Foreign Policy
 - @easy_discard
 
+@labor
+
+- @only_15_wage_contracts: Mandate that all companies holding federal contracts pay workers a minimum of $15 an hour 
+- @executive_main_menu:
+
+@only_15_wage_contracts
+subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate > 1: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?]  
+max-visits: 1
+on-arrival: {!
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
+
+WIP
 
 @foreign_policy
 
