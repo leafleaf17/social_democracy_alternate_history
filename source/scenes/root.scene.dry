@@ -1004,6 +1004,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
 Q.advisor_action_timer = 0;
 Q.executive_orders = 3;  
 Q.israel_hate = 0;
+Q.israel_embargo = 0;
 Q.eo_recharge_timer = 0;     
 // party affairs timers
 Q.confronting_nazis_timer = 0;

@@ -44,12 +44,12 @@ WIP
 - @root: Go back to other options
 
 @cut_off_israel_weapons
-subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate > 1: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?] 
+subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate = 0: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?] 
 max-visits: 1
 choose-if: executive_orders >= 1
 unavailable-subtitle: You have no executive orders available right now.
 on-arrival: {!
-Q.progressive_dissent -=3
+Q.israel_embargo +=1
 Q.socialist_dissent -=3
 Q.healthcare_cost_progress +=3
 Q.nat_support.age.mid +=2
