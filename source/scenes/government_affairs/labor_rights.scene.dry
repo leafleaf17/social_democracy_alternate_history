@@ -39,8 +39,7 @@ Q.youth_loyalty += 2;
 window.simulate_polling();
 !}
 
-Some in the labor movement argue that by reducing the maximum number of hours worked, employers would be induced to hire more workers, reducing unemployment. The argument also goes that this would be complementary to deflation, maintaining the same purchasing power for workers by cutting hours without cutting wages. Employers, however, resist this policy, arguing for more flexibility in hiring and firing.
-
+WIP
 
 @safety
 on-arrival: socialist_dissent -=3; labor_loyalty +=2; bop_econ -=0.1
