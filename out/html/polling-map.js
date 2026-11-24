@@ -592,7 +592,7 @@ initObserver();
     document.head.appendChild(s);
   }
 
-  function renderEconModal() {
+   function renderEconModal() {
     addEconStyles();
     var q = getQ();
     if (!q) return;
@@ -628,6 +628,46 @@ initObserver();
       ? '<span style="color:#a51c30;">Deficit ' + Math.abs(bud) + '</span>'
       : '<span style="color:#1e6b34;">Surplus +' + bud + '</span>';
 
+    var card1 =
+      '<div class="us-econ-card">' +
+        '<div class="us-econ-card-title">Inflation (CPI YoY)</div>' +
+        '<div class="us-econ-val">' + inf.toFixed(1) + '%' + deltaBadge(h.inflation, true, 1) + '</div>' +
+        '<div class="us-econ-sub">Fed Target: 2.0%</div>' +
+        buildClassicChartSVG(h.inflation, h.labels, '#1a237e', false) +
+      '</div>';
+
+    var card2 =
+      '<div class="us-econ-card">' +
+        '<div class="us-econ-card-title">Unemployment Rate</div>' +
+        '<div class="us-econ-val">' + unemp.toFixed(1) + '%' + deltaBadge(h.unemployment, true, 1) + '</div>' +
+        '<div class="us-econ-sub">Civilian Labor Force</div>' +
+        buildClassicChartSVG(h.unemployment, h.labels, '#b71c1c', false) +
+      '</div>';
+
+    var card3 =
+      '<div class="us-econ-card">' +
+        '<div class="us-econ-card-title">Economic Growth (GDP)</div>' +
+        '<div class="us-econ-val">' + (growth >= 0 ? '+' : '') + growth.toFixed(1) + '%' + deltaBadge(h.growth, false, 1) + '</div>' +
+        '<div class="us-econ-sub">Annualized Real Rate</div>' +
+        buildClassicChartSVG(h.growth, h.labels, '#1b5e20', true) +
+      '</div>';
+
+    var card4 =
+      '<div class="us-econ-card">' +
+        '<div class="us-econ-card-title">Federal Budget</div>' +
+        '<div class="us-econ-val">' + budStatus + deltaBadge(h.budget, false, 0) + '</div>' +
+        '<div class="us-econ-sub">Fiscal Balance Index</div>' +
+        buildClassicChartSVG(h.budget, h.labels, '#0d47a1', true) +
+      '</div>';
+
+    var card5 =
+      '<div class="us-econ-card">' +
+        '<div class="us-econ-card-title">S&amp;P 500 Index</div>' +
+        '<div class="us-econ-val">' + Math.round(sp).toLocaleString() + deltaBadge(h.sp500, false, 0) + '</div>' +
+        '<div class="us-econ-sub">Wall Street Benchmark</div>' +
+        buildClassicChartSVG(h.sp500, h.labels, '#2e7d32', false) +
+      '</div>';
+
     modal.innerHTML =
       '<div class="us-econ-header">' +
         '<span style="font-size:0.9em;color:#444;">' + h.labels[h.labels.length - 1] + '</span>' +
@@ -635,41 +675,14 @@ initObserver();
         '<button type="button" class="us-econ-close" id="close-us-econ">Close ×</button>' +
       '</div>' +
       '<div class="us-econ-grid">' +
-        '<div class="us-econ-card">' +
-          '<div class="us-econ-card-title">Inflation (CPI YoY)</div>' +
-          '<div class="us-econ-val">' + inf.toFixed(1) + '%' + deltaBadge(h.inflation, true, 1) + '</div>' +
-          '<div class="us-econ-sub">Fed Target: 2.0%</div>' +
-          buildClassicChartSVG(h.inflation, h.labels, '#1a237e', false) +
-        '</div>' +
-        '<div class="us-econ-card">' +
-          '<div class="us-econ-card-title">Unemployment Rate</div>' +
-          '<div class="us-econ-val">' + unemp.toFixed(1) + '%' + deltaBadge(h.unemployment, true, 1) + '</div>' +
-          '<div class="us-econ-sub">Civilian Labor Force</div>' +
-          buildClassicChartSVG(h.unemployment, h.labels, '#b71c1c', false) +
-        '</div>' +
-        '<div class="us-econ-card">' +
-          '<div class="us-econ-card-title">Economic Growth (GDP)</div>' +
-          '<div class="us-econ-val">' + (growth >= 0 ? '+' : '') + growth.toFixed(1) + '%' + deltaBadge(h.growth, false, 1) + '</div>' +
-          '<div class="us-econ-sub">Annualized Real Rate</div>' +
-          buildClassicChartSVG(h.growth, h.labels, '#1b5e20', true) +
-        '</div>' +
-'' +
-'Federal Budget' +
-'' + budStatus + deltaBadge(h.budget, false, 0) + '' +
-'Fiscal Balance Index' +
-buildClassicChartSVG(h.budget, h.labels, '#0d47a1', true) +
-'' +
-'' +
-'S&P 500 Index' +
-'' + Math.round(sp).toLocaleString() + deltaBadge(h.sp500, false, 0) + '' +
-'Wall Street Benchmark' +
-buildClassicChartSVG(h.sp500, h.labels, '#2e7d32', false) +
-'' +
-'';
-modal.querySelector('#close-us-econ').onclick = function() {
-modal.classList.remove('open');
-};
-}
+        card1 + card2 + card3 + card4 + card5 +
+      '</div>';
+
+    modal.querySelector('#close-us-econ').onclick = function() {
+      modal.classList.remove('open');
+    };
+  }
+
 window.openUsEconModal = function() {
 renderEconModal();
 var m = document.getElementById('us-econ-modal');
