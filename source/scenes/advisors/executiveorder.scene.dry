@@ -39,14 +39,14 @@ WIP
 
 @foreign_policy
 
-- @cut_off_israel_weapons: Cut off arm shipments to Israel
-- @cut_off_arabic_weapons: Cut off arm shipments to the Gulf statesF
 - @delay_afganistan_withdraw: Delay the withdraw from Afganistan
+- @cut_off_israel_weapons: Cut off arm shipments to Israel
+- @cut_off_arabic_weapons: Cut off arm shipments to the Gulf states
 - @root: Go back to other options
 
 @delay_afganistan_withdraw
 view-if: afgan_withdraw_month > 0
-subtitle: We are currently due to withdraw from Afganistan in [ + afgan_withdraw_month + ]. If we do not believe that we are adequately prepared for it, we can delay the operation by 4 months. [? if afgan_withdraw_month > 1: The American people, especially the left flank of our party, are getting impatient. ?] [? if afgan_withdraw_month > 2: We better have a good reason for delaying the withdraw once again, as the public pushback especially amongst our left flank will be rapid. We can only delay the withdraw one more time. ?] 
+subtitle: We are currently due to withdraw from Afganistan in [ + afgan_withdraw_month + ]. If we do not believe that we are adequately prepared for it, we can delay the operation by 4 months. [? if afgan_withdraws_delayed > 1: The American people, especially the left flank of our party, are getting impatient. ?] [? if afgan_withdraws_delayed > 2: We better have a good reason for delaying the withdraw once again, as the public pushback especially amongst our left flank will be rapid. We can only delay the withdraw one more time. ?] 
 max-visits: 3
 choose-if: executive_orders >= 1 and afgan_withdraw_month < 2
 unavailable-subtitle: [? if executive_orders = 0: You have no executive orders available right now. ?] [? if afgan_withdraw_month > 1: We can only announce a delay when the withdraw is due in 1 month. (current months: [+ afgan_withdraw_month +]) ?]
@@ -56,7 +56,9 @@ Q.afgan_withdraws_delayed +=1
 Q.progressive_dissent += 3 * Q.afgan_withdraws_delayed;
 Q.new_liberal_dissent +=2 * Q.afgan_withdraws_delayed;
 Q.blue_dog_dissent +=1.5 * Q.afgan_withdraws_delayed;
-Q.youth_loyalty -2 * Q.afgan_withdraws_delayed;
+Q.youth_loyalty -=2 * Q.afgan_withdraws_delayed;
+Q.gop_hawk_vs_dove -=1 * Q.afgan_withdraws_delayed;
+Q.nat_flat_buff -= 0.1 * Q.afgan_withdraws_delayed;
 window.simulate_polling();
 !}
 
