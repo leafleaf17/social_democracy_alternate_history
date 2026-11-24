@@ -1111,7 +1111,7 @@ For more information on the politics and government of the German Republic, see 
 - @1928_custom: Customize difficulty settings
 
 @1928_easy
-on-arrival: difficulty = -1; resources = 4; dues = 3; starting_rb_strength = 2500; rb_strength = 2500; socialist_dissent = 10; kpd_relation = 29; z_relation = 54; dvp_relation = 49; starting_budget = -29.1; budget = -29;.1 hand_size = 10; starting_dissent = 0; starting_relations = 0;
+on-arrival: difficulty = -1; resources = 4; dues = 3; starting_rb_strength = 2500; rb_strength = 2500; socialist_dissent = 10; kpd_relation = 29; z_relation = 54; dvp_relation = 49; starting_budget = -29.1; budget = -29.1; hand_size = 10; starting_dissent = 0; starting_relations = 0;
 go-to: 1928_main
 
 @1928_hard
