@@ -3,11 +3,12 @@ set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
 var eoCount = Q.executive_orders || 0;
-if (eoCount > 0) {
-    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available';
+if (eoCount >= 3) {
+    Q.pinnedCardsDescription = 'Executive orders: 3 available (maximum of 3)';
 } else {
     var monthsLeft = 3 - (Q.eo_recharge_timer || 0);
-    Q.pinnedCardsDescription = 'Executive orders: 0 available (next in ' + monthsLeft + ' mo)';
+    var moLabel = monthsLeft === 1 ? 'month' : 'months';
+    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available (maximum of 3; next gained in ' + monthsLeft + ' ' + moLabel + ')';
 }
 Q.last_time_updated = Q.time;
 if (Q.week) Q.last_week_updated = Q.week;
@@ -36,11 +37,12 @@ set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
 var eoCount = Q.executive_orders || 0;
-if (eoCount > 0) {
-    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available (maximum of 3)' ;
+if (eoCount >= 3) {
+    Q.pinnedCardsDescription = 'Executive orders: 3 available (maximum of 3)';
 } else {
     var monthsLeft = 3 - (Q.eo_recharge_timer || 0);
-    Q.pinnedCardsDescription = 'Executive orders: 0 available (next in ' + monthsLeft + ' mo)';
+    var moLabel = monthsLeft === 1 ? 'month' : 'months';
+    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available (maximum of 3; next gained in ' + monthsLeft + ' ' + moLabel + ')';
 }
 Q.last_time_updated = Q.time;
 if (Q.week) Q.last_week_updated = Q.week;
