@@ -306,9 +306,20 @@ if (Q.month_actions >= 1) {
             Q.rural_nsdap += 4/12;
         }
     }
+    //index stuff 
+var growthFactor = (Q.economic_growth - 2.0) * 0.0025;     // Strong GDP (>2%) lifts stocks; weak/negative drags them
+var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003; // Inflation above 2.5% spooks Wall Street / Fed rate fears
+var unempPenalty = Math.max(0, Q.unemployment - 5.0) * 0.002; // High unemployment (>5%) weighs on earnings
+var noise = (Math.random() - 0.5) * 0.008;
+var pctChange = 0.005 + growthFactor - infPenalty - unempPenalty + noise;
+pctChange = Math.max(-0.1, Math.min(0.1, pctChange));
+Q.sp500 = Math.max(500, Math.round(Q.sp500 * (1 + pctChange) + (Q.sp500_event_mod || 0)));
+Q.sp500_event_mod = 0;
+
 if (window.simulate_polling) {
     window.simulate_polling();
 }
+
 
     ////////////////////////// annual support changes
     if (Q.year == 1929) {
