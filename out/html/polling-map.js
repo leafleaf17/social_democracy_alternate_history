@@ -479,7 +479,7 @@ initObserver();
 
     var curInf = Number(q.inflation !== undefined ? q.inflation : 1.4);
     var curUnemp = Number(q.unemployment !== undefined ? q.unemployment : 6.3);
-    var curGrowth = Number(q.gdp !== undefined ? q.gdp : 4.0);
+    var curGrowth = Number(q.gdp !== undefined ? q.gdp : 21.8);
     var curBudget = Number(q.budget !== undefined ? q.budget : -29.1);
     var curSp = Number(q.sp500 !== undefined ? q.sp500 : 3714);
 
