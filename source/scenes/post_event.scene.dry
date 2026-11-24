@@ -315,6 +315,9 @@ var pctChange = 0.005 + growthFactor - infPenalty - unempPenalty + noise;
 pctChange = Math.max(-0.1, Math.min(0.1, pctChange));
 Q.sp500 = Math.max(500, Math.round(Q.sp500 * (1 + pctChange) + (Q.sp500_event_mod || 0)));
 Q.sp500_event_mod = 0;
+//econ growth 
+var monthlyGdpRate = (Q.economic_growth || 0) / 1200;
+Q.us_gdp = +(Q.us_gdp * (1 + monthlyGdpRate)).toFixed(2);
 
 if (window.simulate_polling) {
     window.simulate_polling();
