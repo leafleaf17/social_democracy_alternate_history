@@ -10,34 +10,31 @@ view-if: schumer_advisor = 1
 
 Müller is a former [? if chancellor = "Müller": and current ?] Chancellor, and is a long-time Social Democratic leader.
 
-- @coalition
-- @toleration
-- @snap_election
-- @root: Return to main
+@executive_main_menu
 
-@coalition
-title: Negotiating with the Coalition
-subtitle: Müller can improve our relationships with our coalition partners.
-choose-if: executive_orders >= 0 and dems_in_government = 1
-unavailable-subtitle: [? if executive_orders > 0 : [+ executive_orders +] months before next advisor action. ?][? if not dems_in_government: The SPD is not in government. ?]
-on-arrival: executive_orders = 6; coalition_dissent -= 1 if dems_in_government = 1 and coalition_dissent > 0; z_relation += 5; ddp_relation += 5; dvp_relation += 5
+- @foreign_policy: Foreign Policy
+- @easy_discard
 
-wip
 
-@toleration
-title: Defending Toleration
-subtitle: Müller supports the toleration arrangement with the bourgeois parties.
-unavailable-subtitle: [? if executive_orders > 0 : [+ executive_orders +] months before next advisor action. ?][? if not spd_toleration: The SPD is not in toleration. ?]
-choose-if: executive_orders >= 0
-on-arrival: executive_orders = 6; socialist_dissent -= 8; neorevisionist_dissent -= 8; progressive_dissent -= 5;
+@foreign_policy
 
-We have reduced dissent among the anti-toleration factions. 
+- @cut_off_israel_weapons: Cut off arm shipments to Israel
+- @executive_main_menu: Go back to other options
 
-@snap_election
-title: Snap Election
-subtitle: Call a snap election.
-unavailable-subtitle: [? if chancellor != "Müller" : Müller must be Chancellor. ?][? if executive_orders > 0 : [+ executive_orders +] months before next advisor action. ?]
-choose-if: executive_orders >= 0
-on-arrival: executive_orders = 6; next_election_time = time + 3 if next_election_time > time+3; next_election_month = month + 3 if next_election_time >= time+3; next_election_year = year if next_election_time >= time+3; next_election_year += 1 if next_election_month > 12; next_election_month -= 12 if next_election_month > 12;
+@cut_off_israel_weapons
+subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate > 1: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?]  
+max-visits: 1
+on-arrival: {!
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
 
-We have called for new elections, set for [+ next_election_month : month +] [+ next_election_year +].
+Fine. By cutting welfare, we have reduced dissent within the coalition.
+
+
+Fine. By cutting welfare, we have reduced dissent within the coalition.
