@@ -44,19 +44,15 @@ WIP
 - @delay_afganistan_withdraw
 - @root: Go back to other options
 
-@cut_off_israel_weapons
+@delay_afganistan_withdraw
 view-if: afgan_withdraw_month > 0
-subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate = 0: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?] 
-max-visits: 1
-choose-if: executive_orders >= 1
-unavailable-subtitle: You have no executive orders available right now.
+subtitle: We are currently due to withdraw from Afganistan in [ + afgan_withdraw_month + ]. If we do not believe that we are adequately prepared for it, we can delay the operation. 
+max-visits: 3
+choose-if: executive_orders >= 1 and afgan_withdraw_month < 2
+unavailable-subtitle: [? if executive_orders = 0: You have no executive orders available right now. ?] [? if afgan_withdraw_month > 1: We can only announce a delay when the withdraw is due in 1 month. ?]
 on-arrival: {!
-Q.israel_embargo +=1
-Q.socialist_dissent -=3
-Q.healthcare_cost_progress +=3
-Q.nat_support.age.mid +=2
-Q.nat_support.inc.low +=2
-Q.nat_support.inc.high -=1
+Q.afgan_withdraw_month +=4
+Q.afgan_withdraws_delayed +=1
 window.simulate_polling();
 !}
 

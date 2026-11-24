@@ -1006,6 +1006,7 @@ Q.executive_orders = 3;
 Q.israel_hate = 0;
 Q.israel_embargo = 0;
 Q.afgan_withdraw_months = 4;
+Q.afgan_withdraws_delayed = 1
 Q.eo_recharge_timer = 0;     
 // party affairs timers
 Q.confronting_nazis_timer = 0;
