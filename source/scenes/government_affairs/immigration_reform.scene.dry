@@ -5,7 +5,7 @@ view-if: immigration_reform_timer = 0
 frequency: 25
 on-arrival: month_actions += 1; immigration_reform_timer += 6
 card-image: img/portraits/RadbruchGustav.jpg
-go-to: reforms_menu
+go-to: immigration_menu
 tags: govt_affairs, cabinet
 
 = Immigration Reform
