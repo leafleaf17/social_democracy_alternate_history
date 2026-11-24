@@ -18,9 +18,9 @@ Müller is a former [? if chancellor = "Müller": and current ?] Chancellor, and
 @coalition
 title: Negotiating with the Coalition
 subtitle: Müller can improve our relationships with our coalition partners.
-choose-if: advisor_action_timer <= 0 and dems_in_government = 1
-unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?][? if not dems_in_government: The SPD is not in government. ?]
-on-arrival: advisor_action_timer = 6; coalition_dissent -= 1 if dems_in_government = 1 and coalition_dissent > 0; z_relation += 5; ddp_relation += 5; dvp_relation += 5
+choose-if: executive_orders <= 0 and dems_in_government = 1
+unavailable-subtitle: [? if executive_orders > 0 : [+ executive_orders +] months before next advisor action. ?][? if not dems_in_government: The SPD is not in government. ?]
+on-arrival: executive_orders = 6; coalition_dissent -= 1 if dems_in_government = 1 and coalition_dissent > 0; z_relation += 5; ddp_relation += 5; dvp_relation += 5
 
 We have improved our relations with the Z, [+ ddp_name +], and DVP, and reduced tensions with the coalition.
 
@@ -28,17 +28,17 @@ We have improved our relations with the Z, [+ ddp_name +], and DVP, and reduced 
 @toleration
 title: Defending Toleration
 subtitle: Müller supports the toleration arrangement with the bourgeois parties.
-unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?][? if not spd_toleration: The SPD is not in toleration. ?]
-choose-if: dems_in_government = 0 and spd_toleration = 1 and advisor_action_timer = 0
-on-arrival: advisor_action_timer = 6; socialist_dissent -= 8; neorevisionist_dissent -= 8; progressive_dissent -= 5;
+unavailable-subtitle: [? if executive_orders > 0 : [+ executive_orders +] months before next advisor action. ?][? if not spd_toleration: The SPD is not in toleration. ?]
+choose-if: dems_in_government = 0 and spd_toleration = 1 and executive_orders = 0
+on-arrival: executive_orders = 6; socialist_dissent -= 8; neorevisionist_dissent -= 8; progressive_dissent -= 5;
 
 We have reduced dissent among the anti-toleration factions. 
 
 @snap_election
 title: Snap Election
 subtitle: Call a snap election.
-unavailable-subtitle: [? if chancellor != "Müller" : Müller must be Chancellor. ?][? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-choose-if: advisor_action_timer == 0 and chancellor == "Müller"
-on-arrival: advisor_action_timer = 6; next_election_time = time + 3 if next_election_time > time+3; next_election_month = month + 3 if next_election_time >= time+3; next_election_year = year if next_election_time >= time+3; next_election_year += 1 if next_election_month > 12; next_election_month -= 12 if next_election_month > 12;
+unavailable-subtitle: [? if chancellor != "Müller" : Müller must be Chancellor. ?][? if executive_orders > 0 : [+ executive_orders +] months before next advisor action. ?]
+choose-if: executive_orders == 0 and chancellor == "Müller"
+on-arrival: executive_orders = 6; next_election_time = time + 3 if next_election_time > time+3; next_election_month = month + 3 if next_election_time >= time+3; next_election_year = year if next_election_time >= time+3; next_election_year += 1 if next_election_month > 12; next_election_month -= 12 if next_election_month > 12;
 
 We have called for new elections, set for [+ next_election_month : month +] [+ next_election_year +].
