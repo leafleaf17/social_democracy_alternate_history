@@ -694,7 +694,7 @@ Q.emergency_rule = 0;
 // minimum percentage of votes to be represented in the Reichstag
 Q.electoral_threshold = 0;
 // constitutional reform level
-Q.constitutional_reform = 0;
+Q.immigration_reform = 0;
 // constructive vote of no confidence
 Q.constructive_vonc = 0;
 // reduction in presidential powers
@@ -992,7 +992,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'homosexual_rights', 'economic_policy', 'coalition_affairs',
             'trade_policy', 'womens_rights', 'economic_democracy',
             'dealing_with_toleration',
-            'constitutional_reform', 'labor_rights',
+            'immigration_reform', 'labor_rights',
             'education_science', 'curriculum',
             // events
             'emergency_cuts', 'unemployment_insurance',
@@ -1001,9 +1001,13 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'high_inflation', 'banking_crisis', 'march_on_berlin',
             'understanding_enemy', 'schleichers_schemes',
             'hindenburg_dismissal'];
+            
 Q.advisor_action_timer = 0;
 Q.executive_orders = 3;  
 Q.israel_hate = 0;
+Q.prioritizing_ice_criminals = 0;
+Q.prioritizing_ice_labor = 0;
+Q.prioritizing_ice_everyone = 0;
 Q.israel_embargo = 0;
 Q.afgan_withdraw_month = 4;
 Q.gop_hawk_vs_dove = 1;

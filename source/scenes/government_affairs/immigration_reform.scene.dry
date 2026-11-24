@@ -1,0 +1,81 @@
+title: Constitutional Reform
+new-page: true
+is-card: true
+view-if: immigration_reform_timer = 0
+frequency: 25
+on-arrival: month_actions += 1; immigration_reform_timer += 6
+card-image: img/portraits/RadbruchGustav.jpg
+go-to: reforms_menu
+tags: govt_affairs, cabinet
+
+= Immigration Reform
+
+WIP
+
+@immigration_menu
+
+- @change_ice_targetting: Change the priority of ICE
+- @easy_discard
+- @cancel_advisor_action
+
+@change_ice_targetting
+
+- @target_criminals: Order ICE to prioritize the arrest of dangerous criminals
+- @target_coporations: Order ICE to raid corporations who are illegally employing undocumented immigrants
+- @target_everyone: The level of illegal immigration is far too high for the public. We must unfortunately order ICE to ramp up as many deportations as possible.
+
+@target_criminals
+subtitle: This is vastly popular with the public. [? if border_security >= 10 and border_security < 25: However, the American people are also angry at the currentl level of illegal immigration, and this will reduce the total number of deportations. ?][? if border_security < 10: However, the American people are also extremely angry at the currentl level of illegal immigration, and this will reduce the total number of deportations ?]
+choose-if: prioritizing_ice_criminals = 0
+unavailable-subtitle: This is already the policy of ICE.
+on-arrival: {!
+Q.prioritizing_ice_everyone = 0
+Q.prioritizing_ice_criminals = 1
+Q.prioritizing_ice_labor = 0
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
+
+WIP
+
+@target_coporations
+subtitle: This is popular with labor groups, less so with activist groups.
+choose-if: prioritizing_ice_labor = 0
+unavailable-subtitle: This is already the policy of ICE.
+on-arrival: {!
+Q.prioritizing_ice_everyone = 0
+Q.prioritizing_ice_criminals = 0
+Q.prioritizing_ice_labor = 1
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
+
+WIP
+@target_everyone
+subtitle: This is very unpopular with our core progressive base. [? if border_security < 25: However, this has the broad support of the American people ?][? if border_security < 10: and even most of the party  ?].
+choose-if: prioritizing_ice_everyone = 0
+unavailable-subtitle: This is already the policy of ICE.
+on-arrival: {!
+Q.prioritizing_ice_everyone = 1
+Q.prioritizing_ice_criminals = 0
+Q.prioritizing_ice_labor = 0
+Q.progressive_dissent -=3
+Q.socialist_dissent -=3
+Q.healthcare_cost_progress +=3
+Q.nat_support.age.mid +=2
+Q.nat_support.inc.low +=2
+Q.nat_support.inc.high -=1
+window.simulate_polling();
+!}
+
+WIP
