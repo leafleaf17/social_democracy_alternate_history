@@ -501,6 +501,18 @@ Q.gov_buffs = {
 window.simulate_polling();
 
 // party resources
+Q.sp500 = 3714;
+Q.econ_history = {
+    labels: [
+        'Feb 20','Mar 20','Apr 20','May 20','Jun 20','Jul 20',
+        'Aug 20','Sep 20','Oct 20','Nov 20','Dec 20','Jan 21'
+    ],
+    inflation:    [2.3, 1.5, 0.3, 0.1, 0.6, 1.0, 1.3, 1.4, 1.2, 1.2, 1.4, 1.4],
+    unemployment: [3.5, 4.4, 14.8, 13.3, 11.1, 10.2, 8.4, 7.9, 6.9, 6.7, 6.7, 6.3],
+    growth:       [-1.5, -5.0, -15.0, -31.4, -10.0, 12.0, 33.4, 18.0, 8.0, 5.2, 4.0, 4.0],
+    budget:       [-18, -22, -31, -34, -33, -32, -31, -31, -30, -30, -29, -29],
+    sp500:        [2954, 2585, 2912, 3044, 3100, 3271, 3500, 3363, 3270, 3622, 3756, 3714]
+};
 Q.starting_resources = 2;
 Q.resources = 2;
 // party dues - fundraising income
@@ -508,9 +520,10 @@ Q.starting_dues = 2;
 Q.dues = 2;
 Q.border_security = 50;
 // the state of the party
-Q.youth_loyalty = 30;
+Q.youth_loyalty = 41;
 Q.nato_unity = 35;
 Q.green_backlash = 0;
+Q.union_bonus = 0;
 Q.republican_radicalization = 25;
 Q.dove_loyalty = 30;
 Q.marginalized_community_loyalty = 35;
@@ -972,7 +985,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'shuffle_leadership', 'streetfighting', 'peoples_party',
             'party_disunity',
             // govt
-            'climate_policy', 'domestic_enemies', 'fiscal_policy', 'antitrust',
+            'climate_policy', 'domestic_enemies', 'union_policy', 'antitrust',
             'foreign_policy', 'judiciary', 'labor_affairs', 'military_policy',
             'police', 'shuffle_cabinet', 
             'homosexual_rights', 'economic_policy', 'coalition_affairs',
@@ -1018,7 +1031,7 @@ Q.climate_policy_timer = 0;
 Q.antitrust_timer = 0;
 Q.domestic_enemies_timer = 0;
 Q.economic_policy_timer = 0;
-Q.fiscal_policy_timer = 0;
+Q.union_policy_timer = 0;
 Q.foreign_policy_timer = 0;
 Q.judiciary_timer = 0;
 Q.labor_affairs_timer = 0;

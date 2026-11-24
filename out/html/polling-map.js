@@ -449,3 +449,239 @@ document.addEventListener('DOMContentLoaded', initObserver);
 initObserver();
 }
 })();
+(function() {
+  'use strict';
+
+  var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function getQ() {
+    var ui = window.dendryUI;
+    return (ui && ui.dendryEngine && ui.dendryEngine.state && ui.dendryEngine.state.qualities) || null;
+  }
+
+  function ensureHistory(q) {
+    if (!q.econ_history) {
+      q.econ_history = {
+        labels: ['Feb 20','Mar 20','Apr 20','May 20','Jun 20','Jul 20','Aug 20','Sep 20','Oct 20','Nov 20','Dec 20','Jan 21'],
+        inflation:    [2.3, 1.5, 0.3, 0.1, 0.6, 1.0, 1.3, 1.4, 1.2, 1.2, 1.4, Number(q.inflation || 1.4)],
+        unemployment: [3.5, 4.4, 14.8, 13.3, 11.1, 10.2, 8.4, 7.9, 6.9, 6.7, 6.7, Number(q.unemployment || 6.3)],
+        growth:       [-1.5, -5.0, -15.0, -31.4, -10.0, 12.0, 33.4, 18.0, 8.0, 5.2, 4.0, Number(q.economic_growth || 4.0)],
+        budget:       [-18, -22, -31, -34, -33, -32, -31, -31, -30, -30, -29, Number(q.budget || -29)],
+        sp500:        [2954, 2585, 2912, 3044, 3100, 3271, 3500, 3363, 3270, 3622, 3756, Number(q.sp500 || 3714)]
+      };
+    }
+
+    var yr = Number(q.year) || 2021;
+    var mo = Math.max(1, Math.min(12, Number(q.month) || 1));
+    var currentLabel = monthNames[mo - 1] + ' ' + String(yr).slice(-2);
+    var h = q.econ_history;
+    var lastIdx = h.labels.length - 1;
+
+    var curInf = Number(q.inflation !== undefined ? q.inflation : 1.4);
+    var curUnemp = Number(q.unemployment !== undefined ? q.unemployment : 6.3);
+    var curGrowth = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
+    var curBudget = Number(q.budget !== undefined ? q.budget : -29);
+    var curSp = Number(q.sp500 !== undefined ? q.sp500 : 3714);
+
+    if (h.labels[lastIdx] !== currentLabel) {
+      h.labels.push(currentLabel);
+      h.inflation.push(curInf);
+      h.unemployment.push(curUnemp);
+      h.growth.push(curGrowth);
+      h.budget.push(curBudget);
+      h.sp500.push(curSp);
+    } else {
+      // Keep current month's point live if stats changed mid-turn
+      h.inflation[lastIdx] = curInf;
+      h.unemployment[lastIdx] = curUnemp;
+      h.growth[lastIdx] = curGrowth;
+      h.budget[lastIdx] = curBudget;
+      h.sp500[lastIdx] = curSp;
+    }
+
+    return h;
+  }
+
+  function buildSparklineSVG(data, labels, strokeColor, zeroLine) {
+    var w = 260, h = 95, padL = 32, padR = 10, padT = 10, padB = 20;
+    var plotW = w - padL - padR;
+    var plotH = h - padT - padB;
+
+    var min = Math.min.apply(null, data);
+    var max = Math.max.apply(null, data);
+    if (zeroLine) {
+      min = Math.min(min, 0);
+      max = Math.max(max, 0);
+    }
+    if (max === min) { max += 1; min -= 1; }
+
+    var toX = function(i) {
+      return padL + (data.length <= 1 ? plotW / 2 : (i / (data.length - 1)) * plotW);
+    };
+    var toY = function(v) {
+      return padT + plotH - ((v - min) / (max - min)) * plotH;
+    };
+
+    var pts = data.map(function(v, i) {
+      return toX(i).toFixed(1) + ',' + toY(v).toFixed(1);
+    }).join(' ');
+
+    var areaPts = padL + ',' + (padT + plotH) + ' ' + pts + ' ' + toX(data.length - 1).toFixed(1) + ',' + (padT + plotH);
+
+    var zeroSvg = '';
+    if (zeroLine && min < 0 && max > 0) {
+      var zy = toY(0).toFixed(1);
+      zeroSvg = '<line x1="' + padL + '" y1="' + zy + '" x2="' + (w - padR) + '" y2="' + zy + '" stroke="#999" stroke-dasharray="3,3" stroke-width="1"/>';
+    }
+
+    var lastX = toX(data.length - 1).toFixed(1);
+    var lastY = toY(data[data.length - 1]).toFixed(1);
+    var startLbl = labels[0] || '';
+    var midLbl = labels[Math.floor(labels.length / 2)] || '';
+    var endLbl = labels[labels.length - 1] || '';
+
+    return (
+      '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto;display:block;margin-top:6px;">' +
+        '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT + plotH) + '" stroke="#888" stroke-width="1"/>' +
+        '<line x1="' + padL + '" y1="' + (padT + plotH) + '" x2="' + (w - padR) + '" y2="' + (padT + plotH) + '" stroke="#888" stroke-width="1"/>' +
+        zeroSvg +
+        '<polygon points="' + areaPts + '" fill="' + strokeColor + '" fill-opacity="0.12"/>' +
+        '<polyline fill="none" stroke="' + strokeColor + '" stroke-width="2" points="' + pts + '"/>' +
+        '<circle cx="' + lastX + '" cy="' + lastY + '" r="3.2" fill="' + strokeColor + '"/>' +
+        '<text x="' + (padL - 4) + '" y="' + (padT + 8) + '" font-size="9" fill="#555" text-anchor="end">' + max.toFixed(max % 1 === 0 ? 0 : 1) + '</text>' +
+        '<text x="' + (padL - 4) + '" y="' + (padT + plotH) + '" font-size="9" fill="#555" text-anchor="end">' + min.toFixed(min % 1 === 0 ? 0 : 1) + '</text>' +
+        '<text x="' + padL + '" y="' + (h - 4) + '" font-size="9" fill="#555" text-anchor="start">' + startLbl + '</text>' +
+        '<text x="' + (padL + plotW / 2) + '" y="' + (h - 4) + '" font-size="9" fill="#555" text-anchor="middle">' + midLbl + '</text>' +
+        '<text x="' + (w - padR) + '" y="' + (h - 4) + '" font-size="9" fill="#555" text-anchor="end">' + endLbl + '</text>' +
+      '</svg>'
+    );
+  }
+
+  function addEconStyles() {
+    if (document.getElementById('us-econ-styles')) return;
+    var s = document.createElement('style');
+    s.id = 'us-econ-styles';
+    s.textContent =
+      '#us-econ-modal{display:none;position:fixed;top:6vh;left:50%;transform:translateX(-50%);width:min(960px,94vw);max-height:88vh;overflow-y:auto;z-index:50;background:#f4f1ea;color:#1c1b18;border:2px solid #2c2a26;box-shadow:0 12px 35px rgba(0,0,0,0.65);padding:18px 22px;font-family:Georgia,"Times New Roman",serif}' +
+      '#us-econ-modal.open{display:block}' +
+      '.us-econ-header{display:flex;justify-content:space-between;align-items:center;border-top:2px solid #2c2a26;border-bottom:2px solid #2c2a26;padding:6px 0;margin-bottom:14px}' +
+      '.us-econ-header h2{margin:0;font-size:1.35em;letter-spacing:0.12em;text-transform:uppercase;font-weight:bold;color:#1c1b18}' +
+      '.us-econ-close{background:#e6e1d6;border:1px solid #2c2a26;color:#1c1b18;padding:4px 12px;cursor:pointer;font-family:inherit;font-weight:bold}' +
+      '.us-econ-close:hover{background:#d6cfc0}' +
+      '.us-econ-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:14px}' +
+      '.us-econ-card{background:#faf8f3;border:1.5px solid #2c2a26;padding:12px 14px;box-shadow:inset 0 0 0 1px #dcd6c8}' +
+      '.us-econ-card-title{text-align:center;font-size:0.85em;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #bfb8a8;padding-bottom:5px;margin-bottom:8px;color:#2c2a26}' +
+      '.us-econ-val{text-align:center;font-size:1.55em;font-weight:bold;margin:4px 0 2px}' +
+      '.us-econ-sub{text-align:center;font-size:0.85em;color:#555;margin-bottom:6px}' +
+      '#open-us-econ-btn{display:block;width:100%;margin-top:10px;padding:6px 10px;background:#eae6dc;color:#1c1b18;border:1px solid #555;font-family:Georgia,serif;font-size:0.92em;font-weight:bold;cursor:pointer;text-align:center}' +
+      '#open-us-econ-btn:hover{background:#dcd6c8}';
+    document.head.appendChild(s);
+  }
+
+  function renderEconModal() {
+    addEconStyles();
+    var q = getQ();
+    if (!q) return;
+    var h = ensureHistory(q);
+
+    var modal = document.getElementById('us-econ-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'us-econ-modal';
+      document.body.appendChild(modal);
+    }
+
+    var deltaBadge = function(arr, invertGood, decimals) {
+      if (arr.length < 2) return '';
+      var cur = arr[arr.length - 1];
+      var prev = arr[arr.length - 2];
+      var diff = +(cur - prev).toFixed(decimals);
+      if (diff === 0) return '<span style="color:#666;font-size:0.65em;"> —</span>';
+      var up = diff > 0;
+      var good = invertGood ? !up : up;
+      var col = good ? '#1e6b34' : '#a51c30';
+      var arrow = up ? '▲' : '▼';
+      return ' <span style="color:' + col + ';font-size:0.62em;">' + arrow + ' ' + Math.abs(diff).toFixed(decimals) + '</span>';
+    };
+
+    var inf = h.inflation[h.inflation.length - 1];
+    var unemp = h.unemployment[h.unemployment.length - 1];
+    var growth = h.growth[h.growth.length - 1];
+    var bud = h.budget[h.budget.length - 1];
+    var sp = h.sp500[h.sp500.length - 1];
+
+    var budStatus = bud < 0 ? '<span style="color:#a51c30;">Deficit ' + Math.abs(bud) + '</span>' : '<span style="color:#1e6b34;">Surplus +' + bud + '</span>';
+
+    modal.innerHTML =
+      '<div class="us-econ-header">' +
+        '<span style="font-size:0.85em;color:#555;">' + h.labels[h.labels.length - 1] + '</span>' +
+        '<h2>U.S. Economics</h2>' +
+        '<button type="button" class="us-econ-close" id="close-us-econ">Close ×</button>' +
+      '</div>' +
+      '<div class="us-econ-grid">' +
+        '<div class="us-econ-card">' +
+          '<div class="us-econ-card-title">Inflation (CPI YoY)</div>' +
+          '<div class="us-econ-val">' + inf.toFixed(1) + '%' + deltaBadge(h.inflation, true, 1) + '</div>' +
+          '<div class="us-econ-sub">Fed Target: 2.0%</div>' +
+          buildSparklineSVG(h.inflation, h.labels, '#a51c30', false) +
+        '</div>' +
+        '<div class="us-econ-card">' +
+          '<div class="us-econ-card-title">Unemployment Rate</div>' +
+          '<div class="us-econ-val">' + unemp.toFixed(1) + '%' + deltaBadge(h.unemployment, true, 1) + '</div>' +
+          '<div class="us-econ-sub">Civilian Labor Force</div>' +
+          buildSparklineSVG(h.unemployment, h.labels, '#b85d19', false) +
+        '</div>' +
+        '<div class="us-econ-card">' +
+          '<div class="us-econ-card-title">Economic Growth (GDP)</div>' +
+          '<div class="us-econ-val">' + (growth >= 0 ? '+' : '') + growth.toFixed(1) + '%' + deltaBadge(h.growth, false, 1) + '</div>' +
+          '<div class="us-econ-sub">Annualized Real Rate</div>' +
+          buildSparklineSVG(h.growth, h.labels, '#1e6b34', true) +
+        '</div>' +
+        '<div class="us-econ-card">' +
+'Federal Budget' +
+'' + budStatus + deltaBadge(h.budget, false, 0) + '' +
+'Fiscal Balance Index' +
+buildSparklineSVG(h.budget, h.labels, '#1c408c', true) +
+'' +
+'' +
+'S&P 500 Index' +
+'' + Math.round(sp).toLocaleString() + deltaBadge(h.sp500, false, 0) + '' +
+'Wall Street Benchmark' +
+buildSparklineSVG(h.sp500, h.labels, '#2c5e3b', false) +
+'' +
+'';
+modal.querySelector('#close-us-econ').onclick = function() {
+modal.classList.remove('open');
+};
+}
+window.openUsEconModal = function() {
+renderEconModal();
+var m = document.getElementById('us-econ-modal');
+if (m) m.classList.add('open');
+};
+function injectSidebarButton() {
+addEconStyles();
+if (document.getElementById('open-us-econ-btn')) return;
+// Look for the sidebar container that holds "ECONOMICS" or "Budget:"
+var candidates = document.querySelectorAll('#qualities, .qualities, #stats, .sidebar, #sidebar, div');
+for (var i = 0; i < candidates.length; i++) {
+var el = candidates[i];
+if (el.children.length > 0 && el.textContent.indexOf('ECONOMICS') !== -1 && el.textContent.indexOf('Budget:') !== -1 && el.offsetWidth > 120 && el.offsetWidth < 400) {
+var btn = document.createElement('button');
+btn.id = 'open-us-econ-btn';
+btn.type = 'button';
+btn.textContent = 'View Economic Charts';
+btn.onclick = window.openUsEconModal;
+el.appendChild(btn);
+break;
+}
+}
+}
+setInterval(function() {
+var q = getQ();
+if (q) ensureHistory(q);
+injectSidebarButton();
+var m = document.getElementById('us-econ-modal');
+if (m && m.classList.contains('open')) renderEconModal();
+}, 400);
+})();

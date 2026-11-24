@@ -1,0 +1,49 @@
+title: Union Rights
+new-page: true
+is-card: true
+tags: govt_affairs, cabinet
+on-arrival: union_policy_timer += 6; month_actions += 1
+view-if: dems_in_government = 1 and union_policy_timer = 0
+card-image: img/portraits/HilferdingRudolf.jpg
+go-to: fiscal_menu
+
+= Rights of Unions
+
+Fiscal policy involves issues of taxation and budget.
+
+
+@fiscal_menu
+
+- @encourage_unions: Encourage workers to join unions, and speed up union elections.
+- @ban_actions_stopping_forming_unions: Persecute corporations accused of union-busting activity
+- @pass_pro_act: Can we pass the PRO act?
+- @cut_rich
+- @cut_poor
+- @cut_overall: Cut overall taxes.
+- @raise_progressive: Make the tax system more progressive by raising taxes on the rich and cutting them for the poor.
+- @regressive
+- @tariffs
+- @root: Do not change the tax system.
+- @easy_discard
+- @cancel_advisor_action
+
+@encourage_unions
+subtitle: Increasing the power of organized labor will help us in elections, assuming unions mantain their support for the <span style="color: #3E88B3;">**Democrat Party**</span>
+on-arrival: socialist_strength +=2; socialist_dissent -=2; union_bonus +=1
+
+WIP
+
+@ban_actions_stopping_forming_unions
+subtitle: Corporations are attempting to stop their workers from joining unions through mandating anti-union propaganda amongst their workers, and outright firing those who attempt to start one.
+on-arrival: labor_loyalty +=5; socialist_strength +=2; socialist_dissent -=2
+
+WIP
+
+@pass_pro_act
+subtitle: +2 budget
+choose-if: filibuster_gone = 1
+max-visits: 1
+unavailable-subtitle: This would never survive the fillibuster
+on-arrival: budget += 2; workers_spd -= 4; kpd_coalition_dissent += 1; lower_tax_rates += 1; workers_spd -= 5 if lower_tax_rates >= 2; new_liberal_dissent += 3; socialist_dissent += 3
+
+We have raised taxes for the poor and working class. This hurts our support among the workers.

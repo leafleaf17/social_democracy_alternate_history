@@ -39,8 +39,8 @@ title: Fiscal Policy
 subtitle: As Finance Minister, Hilferding can enact tax policies.
 unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?] [? if dems_in_government = 0 : SPD not in government: ?] [? if finance_minister_party != "SPD" : The SPD does not control the finance ministry. ?]
 choose-if: advisor_action_timer == 0 and dems_in_government == 1 and finance_minister_party == "SPD"
-on-arrival: advisor_action_timer = 6; fiscal_policy_timer -= 6; last_advisor_action = 1
-go-to: fiscal_policy
+on-arrival: advisor_action_timer = 6; union_policy_timer -= 6; last_advisor_action = 1
+go-to: union_policy
 
 @economic_democracy_
 title: Economic Democracy
