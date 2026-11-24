@@ -39,7 +39,7 @@ Q.youth_loyalty += 2;
 window.simulate_polling();
 !}
 
-WIP
+WIP w
 
 @safety
 on-arrival: socialist_dissent -=3; labor_loyalty +=2; bop_econ -=0.1
