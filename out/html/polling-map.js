@@ -491,7 +491,6 @@ initObserver();
       h.budget.push(curBudget);
       h.sp500.push(curSp);
     } else {
-      // Keep current month's point live if stats changed mid-turn
       h.inflation[lastIdx] = curInf;
       h.unemployment[lastIdx] = curUnemp;
       h.growth[lastIdx] = curGrowth;
@@ -502,18 +501,22 @@ initObserver();
     return h;
   }
 
-  function buildSparklineSVG(data, labels, strokeColor, zeroLine) {
-    var w = 260, h = 95, padL = 32, padR = 10, padT = 10, padB = 20;
+  function buildClassicChartSVG(data, labels, strokeColor, zeroLine) {
+    var w = 270, h = 115, padL = 36, padR = 12, padT = 10, padB = 26;
     var plotW = w - padL - padR;
     var plotH = h - padT - padB;
 
-    var min = Math.min.apply(null, data);
-    var max = Math.max.apply(null, data);
+    var rawMin = Math.min.apply(null, data);
+    var rawMax = Math.max.apply(null, data);
     if (zeroLine) {
-      min = Math.min(min, 0);
-      max = Math.max(max, 0);
+      rawMin = Math.min(rawMin, 0);
+      rawMax = Math.max(rawMax, 0);
     }
-    if (max === min) { max += 1; min -= 1; }
+    if (rawMax === rawMin) { rawMax += 1; rawMin -= 1; }
+
+    var range = rawMax - rawMin;
+    var min = rawMin - range * 0.08;
+    var max = rawMax + range * 0.08;
 
     var toX = function(i) {
       return padL + (data.length <= 1 ? plotW / 2 : (i / (data.length - 1)) * plotW);
@@ -526,33 +529,44 @@ initObserver();
       return toX(i).toFixed(1) + ',' + toY(v).toFixed(1);
     }).join(' ');
 
-    var areaPts = padL + ',' + (padT + plotH) + ' ' + pts + ' ' + toX(data.length - 1).toFixed(1) + ',' + (padT + plotH);
+    // Y-axis ticks (4 clean intervals like D3)
+    var yTicks = '';
+    var tickCount = 4;
+    for (var t = 0; t <= tickCount; t++) {
+      var val = min + (t / tickCount) * (max - min);
+      var ty = toY(val).toFixed(1);
+      var lbl = Math.abs(val) >= 100 ? Math.round(val) : (Math.abs(val) >= 10 ? val.toFixed(0) : val.toFixed(1));
+      yTicks +=
+        '<line x1="' + (padL - 4) + '" y1="' + ty + '" x2="' + padL + '" y2="' + ty + '" stroke="#222" stroke-width="1"/>' +
+        '<text x="' + (padL - 6) + '" y="' + (Number(ty) + 3) + '" font-size="9" font-family="Times New Roman, serif" fill="#222" text-anchor="end">' + lbl + '</text>';
+    }
+
+    // X-axis ticks (Start, Mid, End)
+    var xTicks = '';
+    var idxs = [0, Math.floor((data.length - 1) / 2), data.length - 1];
+    idxs.forEach(function(idx) {
+      if (idx < 0 || idx >= data.length) return;
+      var tx = toX(idx).toFixed(1);
+      var xLbl = labels[idx] || '';
+      xTicks +=
+        '<line x1="' + tx + '" y1="' + (padT + plotH) + '" x2="' + tx + '" y2="' + (padT + plotH + 4) + '" stroke="#222" stroke-width="1"/>' +
+        '<text x="' + tx + '" y="' + (padT + plotH + 14) + '" font-size="9" font-family="Times New Roman, serif" fill="#222" text-anchor="middle">' + xLbl + '</text>';
+    });
 
     var zeroSvg = '';
     if (zeroLine && min < 0 && max > 0) {
       var zy = toY(0).toFixed(1);
-      zeroSvg = '<line x1="' + padL + '" y1="' + zy + '" x2="' + (w - padR) + '" y2="' + zy + '" stroke="#999" stroke-dasharray="3,3" stroke-width="1"/>';
+      zeroSvg = '<line x1="' + padL + '" y1="' + zy + '" x2="' + (w - padR) + '" y2="' + zy + '" stroke="#888" stroke-dasharray="2,2" stroke-width="1"/>';
     }
 
-    var lastX = toX(data.length - 1).toFixed(1);
-    var lastY = toY(data[data.length - 1]).toFixed(1);
-    var startLbl = labels[0] || '';
-    var midLbl = labels[Math.floor(labels.length / 2)] || '';
-    var endLbl = labels[labels.length - 1] || '';
-
     return (
-      '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto;display:block;margin-top:6px;">' +
-        '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT + plotH) + '" stroke="#888" stroke-width="1"/>' +
-        '<line x1="' + padL + '" y1="' + (padT + plotH) + '" x2="' + (w - padR) + '" y2="' + (padT + plotH) + '" stroke="#888" stroke-width="1"/>' +
+      '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto;display:block;margin-top:4px;">' +
+        '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT + plotH) + '" stroke="#222" stroke-width="1"/>' +
+        '<line x1="' + padL + '" y1="' + (padT + plotH) + '" x2="' + (w - padR) + '" y2="' + (padT + plotH) + '" stroke="#222" stroke-width="1"/>' +
         zeroSvg +
-        '<polygon points="' + areaPts + '" fill="' + strokeColor + '" fill-opacity="0.12"/>' +
-        '<polyline fill="none" stroke="' + strokeColor + '" stroke-width="2" points="' + pts + '"/>' +
-        '<circle cx="' + lastX + '" cy="' + lastY + '" r="3.2" fill="' + strokeColor + '"/>' +
-        '<text x="' + (padL - 4) + '" y="' + (padT + 8) + '" font-size="9" fill="#555" text-anchor="end">' + max.toFixed(max % 1 === 0 ? 0 : 1) + '</text>' +
-        '<text x="' + (padL - 4) + '" y="' + (padT + plotH) + '" font-size="9" fill="#555" text-anchor="end">' + min.toFixed(min % 1 === 0 ? 0 : 1) + '</text>' +
-        '<text x="' + padL + '" y="' + (h - 4) + '" font-size="9" fill="#555" text-anchor="start">' + startLbl + '</text>' +
-        '<text x="' + (padL + plotW / 2) + '" y="' + (h - 4) + '" font-size="9" fill="#555" text-anchor="middle">' + midLbl + '</text>' +
-        '<text x="' + (w - padR) + '" y="' + (h - 4) + '" font-size="9" fill="#555" text-anchor="end">' + endLbl + '</text>' +
+        yTicks +
+        xTicks +
+        '<polyline fill="none" stroke="' + strokeColor + '" stroke-width="1.8" points="' + pts + '"/>' +
       '</svg>'
     );
   }
@@ -562,18 +576,18 @@ initObserver();
     var s = document.createElement('style');
     s.id = 'us-econ-styles';
     s.textContent =
-      '#us-econ-modal{display:none;position:fixed;top:6vh;left:50%;transform:translateX(-50%);width:min(960px,94vw);max-height:88vh;overflow-y:auto;z-index:50;background:#f4f1ea;color:#1c1b18;border:2px solid #2c2a26;box-shadow:0 12px 35px rgba(0,0,0,0.65);padding:18px 22px;font-family:Georgia,"Times New Roman",serif}' +
+      '#us-econ-modal{display:none;position:fixed;top:6vh;left:50%;transform:translateX(-50%);width:min(960px,94vw);max-height:88vh;overflow-y:auto;z-index:50;background:#f4f1ea;color:#1c1b18;border:2px solid #2c2a26;box-shadow:0 10px 30px rgba(0,0,0,0.55);padding:16px 20px;font-family:"Times New Roman",Times,Georgia,serif}' +
       '#us-econ-modal.open{display:block}' +
-      '.us-econ-header{display:flex;justify-content:space-between;align-items:center;border-top:2px solid #2c2a26;border-bottom:2px solid #2c2a26;padding:6px 0;margin-bottom:14px}' +
-      '.us-econ-header h2{margin:0;font-size:1.35em;letter-spacing:0.12em;text-transform:uppercase;font-weight:bold;color:#1c1b18}' +
-      '.us-econ-close{background:#e6e1d6;border:1px solid #2c2a26;color:#1c1b18;padding:4px 12px;cursor:pointer;font-family:inherit;font-weight:bold}' +
-      '.us-econ-close:hover{background:#d6cfc0}' +
-      '.us-econ-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:14px}' +
-      '.us-econ-card{background:#faf8f3;border:1.5px solid #2c2a26;padding:12px 14px;box-shadow:inset 0 0 0 1px #dcd6c8}' +
-      '.us-econ-card-title{text-align:center;font-size:0.85em;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid #bfb8a8;padding-bottom:5px;margin-bottom:8px;color:#2c2a26}' +
-      '.us-econ-val{text-align:center;font-size:1.55em;font-weight:bold;margin:4px 0 2px}' +
-      '.us-econ-sub{text-align:center;font-size:0.85em;color:#555;margin-bottom:6px}' +
-      '#open-us-econ-btn{display:block;width:100%;margin-top:10px;padding:6px 10px;background:#eae6dc;color:#1c1b18;border:1px solid #555;font-family:Georgia,serif;font-size:0.92em;font-weight:bold;cursor:pointer;text-align:center}' +
+      '.us-econ-header{display:flex;justify-content:space-between;align-items:center;border-top:1.5px solid #2c2a26;border-bottom:1.5px solid #2c2a26;padding:6px 4px;margin-bottom:14px}' +
+      '.us-econ-header h2{margin:0;font-size:1.3em;letter-spacing:0.14em;text-transform:uppercase;font-weight:normal;color:#1c1b18}' +
+      '.us-econ-close{background:#eae6dc;border:1px solid #555;color:#1c1b18;padding:3px 10px;cursor:pointer;font-family:inherit;font-size:0.95em}' +
+      '.us-econ-close:hover{background:#dcd6c8}' +
+      '.us-econ-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}' +
+      '.us-econ-card{background:#faf8f3;border:1px solid #3c3a35;padding:10px 12px}' +
+      '.us-econ-card-title{text-align:center;font-size:0.95em;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid #bfb8a8;padding-bottom:4px;margin-bottom:6px;color:#1c1b18}' +
+      '.us-econ-val{text-align:center;font-size:1.35em;margin:3px 0}' +
+      '.us-econ-sub{text-align:center;font-size:0.85em;color:#444;margin-bottom:4px}' +
+      '#open-us-econ-btn{display:block;width:100%;margin-top:8px;padding:5px 8px;background:#eae6dc;color:#1c1b18;border:1px solid #555;font-family:"Times New Roman",Times,serif;font-size:0.95em;cursor:pointer;text-align:center}' +
       '#open-us-econ-btn:hover{background:#dcd6c8}';
     document.head.appendChild(s);
   }
@@ -596,12 +610,12 @@ initObserver();
       var cur = arr[arr.length - 1];
       var prev = arr[arr.length - 2];
       var diff = +(cur - prev).toFixed(decimals);
-      if (diff === 0) return '<span style="color:#666;font-size:0.65em;"> —</span>';
+      if (diff === 0) return '<span style="color:#666;font-size:0.75em;"> —</span>';
       var up = diff > 0;
       var good = invertGood ? !up : up;
       var col = good ? '#1e6b34' : '#a51c30';
       var arrow = up ? '▲' : '▼';
-      return ' <span style="color:' + col + ';font-size:0.62em;">' + arrow + ' ' + Math.abs(diff).toFixed(decimals) + '</span>';
+      return ' <span style="color:' + col + ';font-size:0.7em;">' + arrow + ' ' + Math.abs(diff).toFixed(decimals) + '</span>';
     };
 
     var inf = h.inflation[h.inflation.length - 1];
@@ -610,12 +624,14 @@ initObserver();
     var bud = h.budget[h.budget.length - 1];
     var sp = h.sp500[h.sp500.length - 1];
 
-    var budStatus = bud < 0 ? '<span style="color:#a51c30;">Deficit ' + Math.abs(bud) + '</span>' : '<span style="color:#1e6b34;">Surplus +' + bud + '</span>';
+    var budStatus = bud < 0
+      ? '<span style="color:#a51c30;">Deficit ' + Math.abs(bud) + '</span>'
+      : '<span style="color:#1e6b34;">Surplus +' + bud + '</span>';
 
     modal.innerHTML =
       '<div class="us-econ-header">' +
-        '<span style="font-size:0.85em;color:#555;">' + h.labels[h.labels.length - 1] + '</span>' +
-        '<h2>U.S. Economics</h2>' +
+        '<span style="font-size:0.9em;color:#444;">' + h.labels[h.labels.length - 1] + '</span>' +
+        '<h2>U.S. Economic History</h2>' +
         '<button type="button" class="us-econ-close" id="close-us-econ">Close ×</button>' +
       '</div>' +
       '<div class="us-econ-grid">' +
@@ -623,31 +639,31 @@ initObserver();
           '<div class="us-econ-card-title">Inflation (CPI YoY)</div>' +
           '<div class="us-econ-val">' + inf.toFixed(1) + '%' + deltaBadge(h.inflation, true, 1) + '</div>' +
           '<div class="us-econ-sub">Fed Target: 2.0%</div>' +
-          buildSparklineSVG(h.inflation, h.labels, '#a51c30', false) +
+          buildClassicChartSVG(h.inflation, h.labels, '#1a237e', false) +
         '</div>' +
         '<div class="us-econ-card">' +
           '<div class="us-econ-card-title">Unemployment Rate</div>' +
           '<div class="us-econ-val">' + unemp.toFixed(1) + '%' + deltaBadge(h.unemployment, true, 1) + '</div>' +
           '<div class="us-econ-sub">Civilian Labor Force</div>' +
-          buildSparklineSVG(h.unemployment, h.labels, '#b85d19', false) +
+          buildClassicChartSVG(h.unemployment, h.labels, '#b71c1c', false) +
         '</div>' +
         '<div class="us-econ-card">' +
           '<div class="us-econ-card-title">Economic Growth (GDP)</div>' +
           '<div class="us-econ-val">' + (growth >= 0 ? '+' : '') + growth.toFixed(1) + '%' + deltaBadge(h.growth, false, 1) + '</div>' +
           '<div class="us-econ-sub">Annualized Real Rate</div>' +
-          buildSparklineSVG(h.growth, h.labels, '#1e6b34', true) +
+          buildClassicChartSVG(h.growth, h.labels, '#1b5e20', true) +
         '</div>' +
-        '<div class="us-econ-card">' +
+'' +
 'Federal Budget' +
 '' + budStatus + deltaBadge(h.budget, false, 0) + '' +
 'Fiscal Balance Index' +
-buildSparklineSVG(h.budget, h.labels, '#1c408c', true) +
+buildClassicChartSVG(h.budget, h.labels, '#0d47a1', true) +
 '' +
 '' +
 'S&P 500 Index' +
 '' + Math.round(sp).toLocaleString() + deltaBadge(h.sp500, false, 0) + '' +
 'Wall Street Benchmark' +
-buildSparklineSVG(h.sp500, h.labels, '#2c5e3b', false) +
+buildClassicChartSVG(h.sp500, h.labels, '#2e7d32', false) +
 '' +
 '';
 modal.querySelector('#close-us-econ').onclick = function() {
@@ -659,25 +675,19 @@ renderEconModal();
 var m = document.getElementById('us-econ-modal');
 if (m) m.classList.add('open');
 };
-  function injectSidebarButton() {
-    addEconStyles();
-    if (document.getElementById('open-us-econ-btn')) return;
-
-    var all = document.querySelectorAll('p, div, span, li');
-    for (var i = all.length - 1; i >= 0; i--) {
-      var el = all[i];
-      if (el.children.length === 0 && el.textContent && el.textContent.indexOf('Budget:') !== -1) {
-        var btn = document.createElement('button');
-        btn.id = 'open-us-econ-btn';
-        btn.type = 'button';
-        btn.textContent = 'View Economic Charts';
-        btn.onclick = window.openUsEconModal;
-        el.parentNode.insertBefore(btn, el.nextSibling);
-        break;
-      }
-    }
-  }
-
+function injectSidebarButton() {
+addEconStyles();
+var sidebar = document.getElementById('stats_sidebar');
+if (!sidebar) return;
+if (sidebar.textContent.indexOf('ECONOMICS') === -1) return;
+if (sidebar.querySelector('#open-us-econ-btn')) return;
+var btn = document.createElement('button');
+btn.id = 'open-us-econ-btn';
+btn.type = 'button';
+btn.textContent = 'View Economic Charts';
+btn.onclick = window.openUsEconModal;
+sidebar.appendChild(btn);
+}
 setInterval(function() {
 var q = getQ();
 if (q) ensureHistory(q);
