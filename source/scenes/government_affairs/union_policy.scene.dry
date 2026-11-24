@@ -22,7 +22,7 @@ WIP
 - @cancel_advisor_action
 
 @encourage_unions
-subtitle: Increasing the power of organized labor will help us in elections, assuming unions mantain their support for the <span style="color: #3E88B3;">**Democrat Party**</span>
+subtitle: Increasing the size of organized labor will help us in elections, assuming unions mantain their support for the <span style="color: #3E88B3;">**Democrat Party**</span>
 on-arrival: socialist_strength +=2; socialist_dissent -=2; union_bonus +=1
 
 WIP
