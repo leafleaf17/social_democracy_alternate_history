@@ -57,6 +57,7 @@ window.simulate_polling();
 !}
 
 Fine. By cutting welfare, we have reduced dissent within the coalition.
+
 @cut_off_israel_weapons
 subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate = 0: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?] 
 max-visits: 1
