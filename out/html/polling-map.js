@@ -675,19 +675,25 @@ renderEconModal();
 var m = document.getElementById('us-econ-modal');
 if (m) m.classList.add('open');
 };
-function injectSidebarButton() {
-addEconStyles();
-var sidebar = document.getElementById('stats_sidebar');
-if (!sidebar) return;
-if (sidebar.textContent.indexOf('ECONOMICS') === -1) return;
-if (sidebar.querySelector('#open-us-econ-btn')) return;
-var btn = document.createElement('button');
-btn.id = 'open-us-econ-btn';
-btn.type = 'button';
-btn.textContent = 'View Economic Charts';
-btn.onclick = window.openUsEconModal;
-sidebar.appendChild(btn);
-}
+  function injectSidebarButton() {
+    addEconStyles();
+    if (document.getElementById('open-us-econ-btn')) return;
+
+    var all = document.querySelectorAll('p, div, span, li');
+    for (var i = all.length - 1; i >= 0; i--) {
+      var el = all[i];
+      if (el.children.length === 0 && el.textContent && el.textContent.indexOf('Budget:') !== -1) {
+        var btn = document.createElement('button');
+        btn.id = 'open-us-econ-btn';
+        btn.type = 'button';
+        btn.textContent = 'View Economic Charts';
+        btn.onclick = window.openUsEconModal;
+        el.parentNode.insertBefore(btn, el.nextSibling);
+        break;
+      }
+    }
+  }
+
 setInterval(function() {
 var q = getQ();
 if (q) ensureHistory(q);
