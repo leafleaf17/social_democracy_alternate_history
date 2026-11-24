@@ -37,7 +37,7 @@ is-hand: true
 on-arrival: {!
 var eoCount = Q.executive_orders || 0;
 if (eoCount > 0) {
-    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available';
+    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available' (maximum of 3);
 } else {
     var monthsLeft = 3 - (Q.eo_recharge_timer || 0);
     Q.pinnedCardsDescription = 'Executive orders: 0 available (next in ' + monthsLeft + ' mo)';
