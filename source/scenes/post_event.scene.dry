@@ -317,7 +317,9 @@ if (Q.month_actions >= 1) {
    
     Q.eo_recharge_timer = 0;
 }
-
+if (Q.afgan_withdraw_month > 0 ) {
+    Q.afgan_withdraw_month -=1
+}
     //index stuff 
 var growthFactor = (Q.economic_growth - 2.0) * 0.0025;     // Strong GDP (>2%) lifts stocks; weak/negative drags them
 var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003; // Inflation above 2.5% spooks Wall Street / Fed rate fears
