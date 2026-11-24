@@ -7,30 +7,31 @@ view-if: schumer_advisor = 1
 
 = Executive Orders
 
-
-Müller is a former [? if chancellor = "Müller": and current ?] Chancellor, and is a long-time Social Democratic leader.
-
-@executive_main_menu
+[? if executive_orders >= 3 : Executive orders: 3 available (maximum of 3). ?]
+[? if executive_orders < 3 : Executive orders: [+ executive_orders +] available (maximum of 3; next gained in [+ 3 - eo_recharge_timer +] months). ?]
 
 - @labor: Labor and unions
 - @foreign_policy: Foreign Policy
-- @easy_discard
+- @root: Do not issue an executive order right now.
 
 @labor
 
 - @only_15_wage_contracts: Mandate that all companies holding federal contracts pay workers a minimum of $15 an hour 
-- @executive_main_menu: Go back to other options
+- @root: Go back to other options
 
 @only_15_wage_contracts
-subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate > 1: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?]  
+subtitle: Mandate a $15/hour minimum wage for all federal contractors.
+choose-if: executive_orders >= 1
+unavailable-subtitle: You have no executive orders available right now.
 max-visits: 1
 on-arrival: {!
-Q.progressive_dissent -=3
-Q.socialist_dissent -=3
-Q.healthcare_cost_progress +=3
-Q.nat_support.age.mid +=2
-Q.nat_support.inc.low +=2
-Q.nat_support.inc.high -=1
+Q.executive_orders -= 1;
+Q.progressive_dissent -= 3;
+Q.socialist_dissent -= 3;
+Q.healthcare_cost_progress += 3;
+Q.nat_support.age.mid += 2;
+Q.nat_support.inc.low += 2;
+Q.nat_support.inc.high -= 1;
 window.simulate_polling();
 !}
 
@@ -40,34 +41,4 @@ WIP
 
 - @cut_off_israel_weapons: Cut off arm shipments to Israel
 - @cut_off_arabic_weapons: Cut off arm shipments to the Gulf states
-- @executive_main_menu: Go back to other options
-
-@cut_off_israel_weapons
-subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate > 1: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?]  
-max-visits: 1
-on-arrival: {!
-Q.progressive_dissent -=3
-Q.socialist_dissent -=3
-Q.healthcare_cost_progress +=3
-Q.nat_support.age.mid +=2
-Q.nat_support.inc.low +=2
-Q.nat_support.inc.high -=1
-window.simulate_polling();
-!}
-
-Fine. By cutting welfare, we have reduced dissent within the coalition.
-
-@cut_off_arabic_weapons
-subtitle: The law makes it clear that U.S arms cannot be sold to nations which will use them to commit war crimes or human rights violations. [? if israel_hate > 1: Anti-Israel sentiment in the United States is currently very low, so this policy will not have the support of the public. ?]  
-max-visits: 1
-on-arrival: {!
-Q.progressive_dissent -=3
-Q.socialist_dissent -=3
-Q.healthcare_cost_progress +=3
-Q.nat_support.age.mid +=2
-Q.nat_support.inc.low +=2
-Q.nat_support.inc.high -=1
-window.simulate_polling();
-!}
-
-Fine. By cutting welfare, we have reduced dissent within the coalition.
+- @root: Go back to other options
