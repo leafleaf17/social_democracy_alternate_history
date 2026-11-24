@@ -33,12 +33,11 @@ max-cards: 3
 set-bg: img/map_2.jpg
 is-hand: true
 on-arrival: {!
-if (Q.advisor_action_timer <= 0) {
-    Q.pinnedCardsDescription = 'Advisors - an action is available.';
-} else if (Q.advisor_action_timer == 1) {
-    Q.pinnedCardsDescription = 'Advisors - next action available in 1 month.';
+if (eoCount > 0) {
+    Q.pinnedCardsDescription = 'Executive orders: ' + eoCount + ' available' (3 max);
 } else {
-    Q.pinnedCardsDescription = 'Advisors - next action available in ' + Q.advisor_action_timer + ' months.';
+    var monthsLeft = 3 - (Q.eo_recharge_timer || 0);
+    Q.pinnedCardsDescription = 'Executive orders: 0 available (next in ' + monthsLeft + ' mo)';
 }
 Q.last_time_updated = Q.time;
 if (Q.week) Q.last_week_updated = Q.week;

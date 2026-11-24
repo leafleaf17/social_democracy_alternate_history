@@ -306,6 +306,18 @@ if (Q.month_actions >= 1) {
             Q.rural_nsdap += 4/12;
         }
     }
+    //eo 
+    if (Q.executive_orders < 3) {
+    Q.eo_recharge_timer = (Q.eo_recharge_timer || 0) + 1;
+    if (Q.eo_recharge_timer >= 3) {
+        Q.executive_orders += 1;
+        Q.eo_recharge_timer = 0;
+    }
+} else {
+   
+    Q.eo_recharge_timer = 0;
+}
+
     //index stuff 
 var growthFactor = (Q.economic_growth - 2.0) * 0.0025;     // Strong GDP (>2%) lifts stocks; weak/negative drags them
 var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003; // Inflation above 2.5% spooks Wall Street / Fed rate fears

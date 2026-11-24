@@ -1002,6 +1002,8 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'understanding_enemy', 'schleichers_schemes',
             'hindenburg_dismissal'];
 Q.advisor_action_timer = 0;
+Q.executive_orders = 3;  
+Q.eo_recharge_timer = 0;     
 // party affairs timers
 Q.confronting_nazis_timer = 0;
 Q.crisis_program_timer = 0;
