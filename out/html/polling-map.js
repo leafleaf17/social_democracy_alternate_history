@@ -466,7 +466,7 @@ initObserver();
         inflation:    [2.3, 1.5, 0.3, 0.1, 0.6, 1.0, 1.3, 1.4, 1.2, 1.2, 1.4, Number(q.inflation || 1.4)],
         unemployment: [3.5, 4.4, 14.8, 13.3, 11.1, 10.2, 8.4, 7.9, 6.9, 6.7, 6.7, Number(q.unemployment || 6.3)],
                 gdp: [21.5, 21.1, 19.6, 19.8, 20.4, 21.0, 21.4, 21.6, 21.7, 21.8, 21.8, Number(Q.us_gdp || 21.8)],
-        budget:       [-18, -22, -31, -34, -33, -32, -31, -31, -30, -30, -29, Number(q.budget || -29)],
+        budget:       [-18, -22, -31, -34, -33, -32, -31, -31, -30, -30, -29.1, Number(q.budget || -29.1)],
         sp500:        [2954, 2585, 2912, 3044, 3100, 3271, 3500, 3363, 3270, 3622, 3756, Number(q.sp500 || 3714)]
       };
     }
@@ -480,7 +480,7 @@ initObserver();
     var curInf = Number(q.inflation !== undefined ? q.inflation : 1.4);
     var curUnemp = Number(q.unemployment !== undefined ? q.unemployment : 6.3);
     var curGrowth = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
-    var curBudget = Number(q.budget !== undefined ? q.budget : -29);
+    var curBudget = Number(q.budget !== undefined ? q.budget : -29.1);
     var curSp = Number(q.sp500 !== undefined ? q.sp500 : 3714);
 
     if (h.labels[lastIdx] !== currentLabel) {
