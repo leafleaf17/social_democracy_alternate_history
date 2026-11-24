@@ -479,7 +479,7 @@ initObserver();
 
     var curInf = Number(q.inflation !== undefined ? q.inflation : 1.4);
     var curUnemp = Number(q.unemployment !== undefined ? q.unemployment : 6.3);
-    var curGrowth = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
+    var curGrowth = Number(q.gdp !== undefined ? q.gdp : 4.0);
     var curBudget = Number(q.budget !== undefined ? q.budget : -29.1);
     var curSp = Number(q.sp500 !== undefined ? q.sp500 : 3714);
 
@@ -645,7 +645,7 @@ initObserver();
       '</div>';
 
         var gdp = h.gdp[h.gdp.length - 1];
-    var growthRate = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
+    var growthRate = Number(q.gdp !== undefined ? q.gdp : 4.0);
 
     var card3 =
       '<div class="us-econ-card">' +
