@@ -114,6 +114,7 @@ if (Q.month_actions >= 1) {
             Q[timer+'_timer'] -= 1;
         }
     }
+    
     // append to historical party support records
     var party_support_results = {'date': new Date(Q.year, Q.month - 1)};
     for (var party of Q.parties) {
@@ -249,8 +250,8 @@ Q.sp500_event_mod = 0;
         Q.eo_recharge_timer = 0;
     }
 
-    if (Q.afgan_withdraw_months > 0) {
-        Q.afgan_withdraw_months -= 1;
+    if (Q.afgan_withdraw_month > 0) {
+        Q.afgan_withdraw_month -= 1;
     }
 }
 
