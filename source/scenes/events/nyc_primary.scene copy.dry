@@ -38,6 +38,8 @@ Q.budget -= 19
 Q.political_capital -=2;
 !}
 
+WIP
+
 @andrew_yang
 choose-if: andrew_yang_dw = 1
 face-image: img/w_yang.jpg
