@@ -134,10 +134,12 @@ if (Q.month_actions >= 1) {
         laborInflation = -(Q.unemployment - 5.5) * 0.04;
     }
 
-    // Mild Fiscal Impulse from Budget Deficit (Baseline = -36)
-    var deficitGap = -36 - (Q.budget !== undefined ? Q.budget : -29);
-    var fiscalGrowthImpulse    = Math.max(-0.10, Math.min(0.10, deficitGap * 0.01));
-    var fiscalInflationImpulse = Math.max(-0.05, Math.min(0.06, deficitGap * 0.006));
+   // Fiscal Impulse from Budget Deficit (Normal peacetime baseline = -20)
+// Starting budget (-29) already has +9 deficit gap -> naturally lifts inflation & growth
+var deficitGap = -20 - (Number(Q.budget) !== undefined && !isNaN(Number(Q.budget)) ? Number(Q.budget) : -29);
+var fiscalGrowthImpulse    = Math.max(-0.15, Math.min(0.25, deficitGap * 0.01));
+var fiscalInflationImpulse = Math.max(-0.10, Math.min(0.35, deficitGap * 0.012));
+
 
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
     
