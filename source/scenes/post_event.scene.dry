@@ -142,8 +142,7 @@ if (Q.month_actions >= 1) {
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
     var fomcMonths =;
     Q.fomc_met_this_month = 0;
-
-    if (fomcMonths.indexOf(Q.month) !== -1) {
+    if (Q.month === 1 || Q.month === 3 || Q.month === 5 || Q.month === 6 || Q.month === 7 || Q.month === 9 || Q.month === 11 || Q.month === 12) {
         Q.fomc_met_this_month = 1;
         var prevStance = Q.fed_stance || 0;
 
@@ -161,6 +160,7 @@ if (Q.month_actions >= 1) {
     } else {
         Q.fed_shifted = 0;
     }
+
 
     var fedDragOnGrowth = 0;
     var fedInflationCool = 0;
