@@ -58,7 +58,6 @@ for (var party of Q.parties) {
     Q[party+'_votes_display'] = Math.round(Q[party+'_normalized']*100);
 }
 
-
 // set faction strength/dissent to 0
 for (var c of Q.factions) {
     if (Q[c+'_dissent'] < 0) {
@@ -87,7 +86,6 @@ Q.neorevisionist_strength = 100*Q.neorevisionist_strength/total_strength;
 
 var total_dissent = Q.socialist_strength*Q.socialist_dissent + Q.progressive_strength*Q.progressive_dissent + Q.new_liberal_strength*Q.new_liberal_dissent + Q.blue_dog_strength*Q.blue_dog_dissent + Q.neorevisionist_strength*Q.neorevisionist_dissent;
 
-
 Q.dissent = 0.01*total_dissent/total_strength;
 Q.dissent_percent = Q.dissent*100;
 console.log('new dissent: ' + Q.dissent);
@@ -98,7 +96,7 @@ if (Q.dissent < 0) {
     Q.dissent = 0.95;
 }
 
-// 1. update dates
+// 1. update dates & monthly turn logic
 if (Q.month_actions >= 1) {
     Q.time += 1;
     Q.month_actions = 0;
@@ -111,7 +109,7 @@ if (Q.month_actions >= 1) {
         }
     }
     // decrement timers
-    for (timer of Q.timers) {
+    for (var timer of Q.timers) {
         if (Q[timer+'_timer'] && Q[timer+'_timer'] > 0) {
             Q[timer+'_timer'] -= 1;
         }
@@ -125,141 +123,123 @@ if (Q.month_actions >= 1) {
     Q.economic_records.push({'date': new Date(Q.year, Q.month - 1),
                              'inflation': Q.inflation,
                              'unemployment': Q.unemployed});
-   // ============================================================================
-// 1. BACKGROUND MACRO, FISCAL IMPULSE & FOMC MEETING LOOP
-// ============================================================================
-var laborInflation = 0;
-if (Q.unemployment < 4.2) {
-    laborInflation = (4.2 - Q.unemployment) * 0.08;
-} else if (Q.unemployment > 5.5) {
-    laborInflation = -(Q.unemployment - 5.5) * 0.04;
-}
 
-// Mild Fiscal Impulse from Budget Deficit (Baseline = -36)
-var deficitGap = -36 - (Q.budget !== undefined ? Q.budget : -29);
-var fiscalGrowthImpulse    = Math.max(-0.10, Math.min(0.10, deficitGap * 0.01));
-var fiscalInflationImpulse = Math.max(-0.05, Math.min(0.06, deficitGap * 0.006));
-
-// Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
-var fomcMonths =;
-Q.fomc_met_this_month = 0;
-
-if (fomcMonths.indexOf(Q.month) !== -1) {
-    Q.fomc_met_this_month = 1;
-    var prevStance = Q.fed_stance || 0;
-
-    if (Q.inflation >= 4.5) {
-        Q.fed_stance = 2;      // Aggressive rate hikes
-    } else if (Q.inflation >= 3.0) {
-        Q.fed_stance = 1;      // Moderate tightening
-    } else if (Q.inflation <= 1.8 && Q.unemployment > 4.8) {
-        Q.fed_stance = -1;     // Dovish / rate cuts
-    } else {
-        Q.fed_stance = 0;      // Neutral hold
+    // ============================================================================
+    // BACKGROUND MACRO, FISCAL IMPULSE & FOMC MEETING LOOP
+    // ============================================================================
+    var laborInflation = 0;
+    if (Q.unemployment < 4.2) {
+        laborInflation = (4.2 - Q.unemployment) * 0.08;
+    } else if (Q.unemployment > 5.5) {
+        laborInflation = -(Q.unemployment - 5.5) * 0.04;
     }
 
-    Q.fed_shifted = (Q.fed_stance !== prevStance) ? 1 : 0;
-} else {
-    Q.fed_shifted = 0;
-}
+    // Mild Fiscal Impulse from Budget Deficit (Baseline = -36)
+    var deficitGap = -36 - (Q.budget !== undefined ? Q.budget : -29);
+    var fiscalGrowthImpulse    = Math.max(-0.10, Math.min(0.10, deficitGap * 0.01));
+    var fiscalInflationImpulse = Math.max(-0.05, Math.min(0.06, deficitGap * 0.006));
 
-var fedDragOnGrowth = 0;
-var fedInflationCool = 0;
+    // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
+    var fomcMonths =;
+    Q.fomc_met_this_month = 0;
 
-if (Q.fed_stance === 2) {
-    fedInflationCool = -0.24;
-    fedDragOnGrowth  = -0.32;
-} else if (Q.fed_stance === 1) {
-    fedInflationCool = -0.09;
-    fedDragOnGrowth  = -0.10;
-} else if (Q.fed_stance === -1) {
-    fedInflationCool = 0.03;
-    fedDragOnGrowth  = 0.08;
-} else {
-    fedInflationCool = (2.0 - Q.inflation) * 0.03;
-    fedDragOnGrowth  = (2.5 - Q.economic_growth) * 0.04;
-}
+    if (fomcMonths.indexOf(Q.month) !== -1) {
+        Q.fomc_met_this_month = 1;
+        var prevStance = Q.fed_stance || 0;
 
-// Update GDP Growth, Inflation, and Unemployment
-Q.economic_growth = +Math.max(-6.0, Math.min(8.5, Q.economic_growth + fedDragOnGrowth + fiscalGrowthImpulse)).toFixed(2);
-Q.inflation       = +Math.max(0.2, Math.min(12.0, Q.inflation + laborInflation + fedInflationCool + fiscalInflationImpulse)).toFixed(2);
+        if (Q.inflation >= 4.5) {
+            Q.fed_stance = 2;      // Aggressive rate hikes
+        } else if (Q.inflation >= 3.0) {
+            Q.fed_stance = 1;      // Moderate tightening
+        } else if (Q.inflation <= 1.8 && Q.unemployment > 4.8) {
+            Q.fed_stance = -1;     // Dovish / rate cuts
+        } else {
+            Q.fed_stance = 0;      // Neutral hold
+        }
 
-var jobChange = (2.2 - Q.economic_growth) * 0.04;
-Q.unemployment = +Math.max(3.2, Math.min(15.0, Q.unemployment + jobChange)).toFixed(2);
-
-// Update U.S. Nominal GDP ($T)
-var monthlyGdpRate = (Q.economic_growth || 0) / 1200;
-Q.us_gdp = +(Q.us_gdp * (1 + monthlyGdpRate)).toFixed(2);
-
-// ============================================================================
-// 2. S&P 500 MONTHLY CALCULATION (WITH FED RATE DRAG & EVENT SHOCKS)
-// ============================================================================
-var growthFactor = (Q.economic_growth - 2.0) * 0.0025;
-var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003;
-var unempPenalty = Math.max(0, Q.unemployment - 5.0) * 0.002;
-var fedStockDrag = Math.max(0, Q.fed_stance || 0) * 0.004;
-
-var noise = (Math.random() - 0.5) * 0.008;
-var macroPct = Math.max(-0.06, Math.min(0.06, 0.005 + growthFactor - infPenalty - unempPenalty - fedStockDrag + noise));
-var totalPct = macroPct + ((Q.sp500_event_pct || 0) / 100);
-
-Q.sp500 = Math.max(500, Math.round(Q.sp500 * (1 + totalPct) + (Q.sp500_event_mod || 0)));
-Q.sp500_event_pct = 0;
-Q.sp500_event_mod = 0;
-
-// ============================================================================
-// 3. HONEYMOON DECAY
-// ============================================================================
-if ((Q.year - 1) % 4 === 0 && Q.month >= 2 && Q.month <= 7) {
-    if (Q.month <= 3) {
-        // Months 1 & 2: Pres drops 1% each (4 -> 3 -> 2), Senate drops 0.5% each (2 -> 1.5 -> 1)
-        Q.nat_flat_buff -= 1;
-        Q.nat_senate_buff = (Q.nat_senate_buff || 0) + 0.5;
+        Q.fed_shifted = (Q.fed_stance !== prevStance) ? 1 : 0;
     } else {
-        // Months 3–6: Pres drops 0.5% each (2 -> 1.5 -> 1 -> 0.5 -> 0), Senate drops 0.25% each (1 -> 0)
-        Q.nat_flat_buff -= 0.5;
-        Q.nat_senate_buff = (Q.nat_senate_buff || 0) + 0.25;
+        Q.fed_shifted = 0;
     }
-}
 
-    window.simulate_polling();
-}
-   
-    //eo 
+    var fedDragOnGrowth = 0;
+    var fedInflationCool = 0;
+
+    if (Q.fed_stance === 2) {
+        fedInflationCool = -0.24;
+        fedDragOnGrowth  = -0.32;
+    } else if (Q.fed_stance === 1) {
+        fedInflationCool = -0.09;
+        fedDragOnGrowth  = -0.10;
+    } else if (Q.fed_stance === -1) {
+        fedInflationCool = 0.03;
+        fedDragOnGrowth  = 0.08;
+    } else {
+        fedInflationCool = (2.0 - Q.inflation) * 0.03;
+        fedDragOnGrowth  = (2.5 - Q.economic_growth) * 0.04;
+    }
+
+    // Update GDP Growth, Inflation, and Unemployment
+    Q.economic_growth = +Math.max(-6.0, Math.min(8.5, Q.economic_growth + fedDragOnGrowth + fiscalGrowthImpulse)).toFixed(2);
+    Q.inflation       = +Math.max(0.2, Math.min(12.0, Q.inflation + laborInflation + fedInflationCool + fiscalInflationImpulse)).toFixed(2);
+
+    var jobChange = (2.2 - Q.economic_growth) * 0.04;
+    Q.unemployment = +Math.max(3.2, Math.min(15.0, Q.unemployment + jobChange)).toFixed(2);
+
+    // Update U.S. Nominal GDP ($T)
+    var monthlyGdpRate = (Q.economic_growth || 0) / 1200;
+    Q.us_gdp = +(Q.us_gdp * (1 + monthlyGdpRate)).toFixed(2);
+
+    // ============================================================================
+    // S&P 500 MONTHLY CALCULATION (WITH FED RATE DRAG & EVENT SHOCKS)
+    // ============================================================================
+    var growthFactor = (Q.economic_growth - 2.0) * 0.0025;
+    var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003;
+    var unempPenalty = Math.max(0, Q.unemployment - 5.0) * 0.002;
+    var fedStockDrag = Math.max(0, Q.fed_stance || 0) * 0.004;
+
+    var noise = (Math.random() - 0.5) * 0.008;
+    var macroPct = Math.max(-0.06, Math.min(0.06, 0.005 + growthFactor - infPenalty - unempPenalty - fedStockDrag + noise));
+    var totalPct = macroPct + ((Q.sp500_event_pct || 0) / 100);
+
+    Q.sp500 = Math.max(500, Math.round(Q.sp500 * (1 + totalPct) + (Q.sp500_event_mod || 0)));
+    Q.sp500_event_pct = 0;
+    Q.sp500_event_mod = 0;
+
+    // ============================================================================
+    // HONEYMOON DECAY
+    // ============================================================================
+    if ((Q.year - 1) % 4 === 0 && Q.month >= 2 && Q.month <= 7) {
+        if (Q.month <= 3) {
+            Q.nat_flat_buff -= 1;
+            Q.nat_senate_buff = (Q.nat_senate_buff || 0) + 0.5;
+        } else {
+            Q.nat_flat_buff -= 0.5;
+            Q.nat_senate_buff = (Q.nat_senate_buff || 0) + 0.25;
+        }
+    }
+
+    // ============================================================================
+    // EXECUTIVE ORDER RECHARGE & AFGHANISTAN COUNTDOWN
+    // ============================================================================
     if (Q.executive_orders < 3) {
-    Q.eo_recharge_timer = (Q.eo_recharge_timer || 0) + 1;
-    if (Q.eo_recharge_timer >= 3) {
-        Q.executive_orders += 1;
+        Q.eo_recharge_timer = (Q.eo_recharge_timer || 0) + 1;
+        if (Q.eo_recharge_timer >= 3) {
+            Q.executive_orders += 1;
+            Q.eo_recharge_timer = 0;
+        }
+    } else {
         Q.eo_recharge_timer = 0;
     }
-} else {
-   
-    Q.eo_recharge_timer = 0;
-}
-if (Q.afgan_withdraw_month > 0 ) {
-    Q.afgan_withdraw_month -=1
-}
-   // ============================================================================
-var growthFactor = (Q.economic_growth - 2.0) * 0.0025;
-var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003;
-var unempPenalty = Math.max(0, Q.unemployment - 5.0) * 0.002;
-var fedStockDrag = Math.max(0, Q.fed_stance || 0) * 0.004; // Tightening (-0.4%/mo) or Aggressive Hikes (-0.8%/mo) weigh on equities
 
-var noise = (Math.random() - 0.5) * 0.008;
-var macroPct = Math.max(-0.06, Math.min(0.06, 0.005 + growthFactor - infPenalty - unempPenalty - fedStockDrag + noise));
-var totalPct = macroPct + ((Q.sp500_event_pct || 0) / 100);
-
-Q.sp500 = Math.max(500, Math.round(Q.sp500 * (1 + totalPct) + (Q.sp500_event_mod || 0)));
-Q.sp500_event_pct = 0;
-Q.sp500_event_mod = 0;
-//econ growth 
-var monthlyGdpRate = (Q.economic_growth || 0) / 1200;
-Q.us_gdp = +(Q.us_gdp * (1 + monthlyGdpRate)).toFixed(2);
+    if (Q.afgan_withdraw_months > 0) {
+        Q.afgan_withdraw_months -= 1;
+    }
+}
 
 if (window.simulate_polling) {
     window.simulate_polling();
 }
-
 
 Q.has_event = 0;
 // check if there are any cards in #event, and then go to main if not.
@@ -268,7 +248,7 @@ var choices = this._compileChoices(scene);
 if (choices && choices[0].title != "Continue...") {
     Q.has_event = 1;
 } else {
-    has_event = 0;
+    Q.has_event = 0;
 }
 // pre-load all of the event images
 if (this.ui && this.ui.show_portraits) {
