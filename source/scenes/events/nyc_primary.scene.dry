@@ -23,8 +23,8 @@ Eric Adams has mostly consolidated the moderate vote, attempting to build a coal
 
 @eric_adams
 subtitle: m4
-choose-if: andrew_yang_dw = 0 and andrew_yang_dw = 0 and nyc_eff_prog =< nyc_eff_mod
-unavailable: [? if primaries.nyc.prog > primaries.nyc.mod: The mood of the party is too left-wing for someone like him. ?][? if andrew_yang_dw: Low income voters are rallying behind Andre Yang instead of Eric Adams. ?]
+choose-if: andrew_yang_dw = 0 and andrew_yang_dw = 0 and nyc_eff_prog <= nyc_eff_mod
+unavailable: [? if nyc_eff_prog > nyc_eff_mod: The mood of the party is too left-wing for someone like him. ?][? if andrew_yang_dw: Low income voters are rallying behind Andre Yang instead of Eric Adams. ?]
 on-arrival: {!
 Q.republican_radicalization -= 7;
 Q.andrew_yang_dw += 1;
@@ -35,7 +35,7 @@ WIP
 
 @kathryn_garcia
 choose-if: andrew_yang_dw = 0 and nyc_eff_prog > nyc_eff_mod
-unavailable-subtitle: [? if primaries.nyc.prog <= primaries.nyc.mod: New York City <span style="color: #3E88B3;">**Democrat**</span> prefer a moderate canidate. ?][? if andrew_yang_dw: Andrew Yang's coalition is too strong for her to win. ?]
+unavailable-subtitle: [? if nyc_eff_prog <= nyc_eff_mod: New York City <span style="color: #3E88B3;">**Democrat**</span> prefer a moderate canidate. ?][? if andrew_yang_dw: Andrew Yang's coalition is too strong for her to win. ?]
 subtitle: -2 political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers.
 on-arrival: {!
 Q.republican_radicalization += 5;
