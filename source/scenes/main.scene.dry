@@ -70,6 +70,14 @@ max-cards: 4
 {!</div>!}
 
 {!<h1>Policy news</h1><div class="news-section">!}
+[? if fomc_met_this_month == 1 and fed_stance == 2 and fed_shifted == 1 : The Federal Reserve announced an aggressive interest rate hike after its most recent meeting in an attempt to halt surging inflation. ?]
+[? if fomc_met_this_month == 1 and fed_stance == 2 and fed_shifted == 0 : The Federal Reserve has announced that it will keep interest rates the same after its most recent meeting.</p> ?]
+[? if fomc_met_this_month == 1 and fed_stance == 1 and fed_shifted == 1 : The Federal Reserve announced an interest rate hike after its most recent meeting due to worries about inflation. ?]
+[? if fomc_met_this_month == 1 and fed_stance == 1 and fed_shifted == 0 : The Federal Reserve has announced that it will keep interest rates the same after its most recent meeting. ?]
+[? if fomc_met_this_month == 1 and fed_stance == -1 and fed_shifted == 1 : The Federal Reserve has announced it will cut interest rates, seeing unemployment and economic growth as a bigger priority to inflation.< ?]
+[? if fomc_met_this_month == 1 and fed_stance == -1 and fed_shifted == 0 : The Federal Reserve has announced that it will keep interest rates the same after its most recent meeting .</p> ?]
+[? if fomc_met_this_month == 1 and fed_stance == 0 and fed_shifted == 1 : The Federal Reserve has announced that it will keep interest rates the same after its most recent meeting. ?]
+
 {!</div>!}
 
 {!<h1>Foreign news</h1><div class="news-section">!}
