@@ -23,7 +23,7 @@ subtitle: -6.5 budget. Progressives will be enraged, but perhaps this will make 
 on-arrival: {!
 Q.republican_radicalization -= 7;
 Q.andrew_yang_dw += 1;
-Q.ara_lite += 2;
+Q.ara_lite += 3;
 Q.inflation += 0.2;
 !}
 
@@ -38,7 +38,7 @@ on-arrival: {!
 Q.republican_radicalization += 5;
 Q.budget -= 19
 Q.political_capital -=2;
-Q.ara +=2;
+Q.ara +=3;
 Q.inflation += 1.2;
 !}
 

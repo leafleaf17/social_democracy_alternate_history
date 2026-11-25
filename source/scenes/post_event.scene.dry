@@ -140,8 +140,26 @@ if (Q.month_actions >= 1) {
 var deficitGap = -20 - (Number(Q.budget) !== undefined && !isNaN(Number(Q.budget)) ? Number(Q.budget) : -29);
 var fiscalGrowthImpulse    = Math.max(-0.15, Math.min(0.25, deficitGap * 0.01));
 var fiscalInflationImpulse = Math.max(-0.10, Math.min(0.35, deficitGap * 0.012));
- if (Q.)
-
+ if (Q.ara > 0) {
+    Q.inflation += 0.4
+    Q.economic_growth += 0.3
+    Q.unemployment -=0.4
+    Q.ara -=1
+ }
+ if (Q.ara_lite > 0) {
+    Q.inflation += 0.1
+    Q.unemployment -=0.15
+    Q.ara_lite -=1
+ }
+ if (Q.andrew_yang_dw = 0 and year = 2021 and month = 9 ) {
+    Q.budget +=8 
+ }
+ if (Q.andrew_yang_dw = 1 and year = 2021 and month = 9 ) {
+    Q.budget +=2.5
+ }
+ if (year <= 2021 = month < 9 ) {
+    Q.inflation += 0.2
+ }
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
     
     Q.fomc_met_this_month = 0;
