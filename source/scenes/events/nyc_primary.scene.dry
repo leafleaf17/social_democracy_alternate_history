@@ -3,13 +3,13 @@ new-page: true
 subtitle: The big apple will decide its next mayor
 tags: event
 view-if: year = 2021 and month = 6
+face-image: img/nyc_primary.jpg
 max-visits: 1
 on-arrival: {!
 Q.nyc_eff_prog = Q.primaries.nyc.prog + (Q.prog_primary_buff || 0);
 Q.nyc_eff_mod  = Q.primaries.nyc.mod;
 !}
 
-face-image: img/nyc_primary.jpg
 
 = New York City Mayoral Primary
 
