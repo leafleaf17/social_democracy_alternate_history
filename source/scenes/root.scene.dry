@@ -1039,7 +1039,7 @@ Q.no_majority_elections = 0;
 // elections are not on a timer, but rather there is an indicator for whether you're in an electoral cycle.
 Q.in_election = 1;
 Q.next_election_year = 2021;
-Q.next_election_month = 8;
+Q.next_election_month = 11;
 Q.next_election_time = 5;
 // government affairs timers
 Q.climate_policy_timer = 0;
