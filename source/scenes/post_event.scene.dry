@@ -140,7 +140,6 @@ if (Q.month_actions >= 1) {
     var fiscalInflationImpulse = Math.max(-0.05, Math.min(0.06, deficitGap * 0.006));
 
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
-    var fomcMonths =;
     
     Q.fomc_met_this_month = 0;
 
