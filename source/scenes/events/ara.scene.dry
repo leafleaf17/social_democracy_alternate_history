@@ -38,8 +38,7 @@ on-arrival: {!
 Q.republican_radicalization += 5;
 Q.budget -= 19
 Q.political_capital -=2;
-Q.build_back_better +=2;
-Q.inflation = 1.2;
+Q.ara +=2;
 !}
 
 WIP
