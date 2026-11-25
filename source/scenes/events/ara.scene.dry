@@ -28,11 +28,11 @@ WIP
 @fuck_the_republicans
 title: We must convince Manchin and Sinema that America cannot be rescued through half measures!
 choose-if: political_capital > 1
-unavailable-subtitle: -2 political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers. We lack the clout to push this through congress.
+unavailable-subtitle: -2 Political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers. We lack the clout to push this through congress.
 subtitle: -2 political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers.
 on-arrival: {!
 Q.republican_radicalization += 5;
-
+Q.budget -= 19
 !}
 
 WIP
