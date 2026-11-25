@@ -670,7 +670,7 @@ initObserver();
     modal.innerHTML =
       '<div class="us-econ-header">' +
         '<span style="font-size:0.9em;color:#444;">' + h.labels[h.labels.length - 1] + '</span>' +
-        '<h2>U.S. Economic History</h2>' +
+        '<h2>Economic History</h2>' +
         '<button type="button" class="us-econ-close" id="close-us-econ">Close ×</button>' +
       '</div>' +
       '<div class="us-econ-grid">' +
