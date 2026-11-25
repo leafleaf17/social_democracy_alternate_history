@@ -991,7 +991,7 @@ Q.timers = ['advisor_action', 'confronting_nazis', 'crisis_program',
             'foreign_policy', 'judiciary', 'labor_affairs', 'military_policy',
             'police', 'shuffle_cabinet', 
             'homosexual_rights', 'economic_policy', 'coalition_affairs',
-            'trade_policy', 'womens_rights', 'economic_democracy',
+            'trade_policy', 'womens_rights', 'middle_east_affairs',
             'dealing_with_toleration',
             'immigration_reform', 'labor_rights',
             'education_science', 'curriculum',
@@ -1056,7 +1056,7 @@ Q.shuffle_cabinet_timer = 0;
 Q.trade_policy_timer = 0;
 Q.womens_rights_timer = 0;
 Q.homosexual_rights_timer = 0;
-Q.economic_democracy_timer = 0;
+Q.middle_east_affairs_timer = 0;
 Q.coalition_affairs_timer = 0;
 // event timers
 Q.emergency_cuts_timer = 0;

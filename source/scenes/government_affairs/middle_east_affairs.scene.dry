@@ -1,0 +1,30 @@
+title:  Middle Eastern Affairs
+is-card: true
+new-page: true
+on-arrival: middle_east_affairs_timer += 10; month_actions += 1
+view-if: dems_in_government = 1
+card-image: img/portraits/HilferdingRudolf.jpg
+max-visits: 8
+tags: govt_affairs, cabinet
+#subtitle: How can we give workers more control over the means of production?
+
+= Economic Democracy
+
+WIP
+
+- @expand_councils
+- @return: Do not enact any policies for now.
+- @easy_discard
+- @cancel_advisor_action
+
+@expand_councils
+title: Support works councils.
+subtitle: Give works councils a greater influence in managing enterprises.
+view-if: works_councils == 0
+on-arrival: economic_democracy += 1; workers_spd += 7*(1-dissent); capital_strike_progress += 1; works_councils += 1; new_liberal_dissent -= 6; new_liberal_strength += 8; dvp_relation -= 5; coalition_dissent +=1 if in_grand_coalition
+max-visits: 1
+
+The works councils, elected by workers at each major business, have been in place since the German Revolution of 1918, but they have been largely powerless in the face of capital. Now, we will have worker representation on the boards of companies, giving them more influence in management decisions.
+
+
+
