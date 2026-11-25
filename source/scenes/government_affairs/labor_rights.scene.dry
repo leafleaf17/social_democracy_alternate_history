@@ -47,7 +47,7 @@ on-arrival: socialist_dissent -=3; labor_loyalty +=2; bop_econ -=0.1
 The Labor Ministry works on developing and enforcing safety regulations, in order to ensure healty working conditions for the proletariat. [? if workers_safety >= 3 : Businesses have begun to argue that our focus on safety is overbearing and unnecessary, interfering with the economy. ?]
 
 @enforce_woke_dei
-subtitle: Bring lawsuits against companies accused of discriminating against marginalized groups, most predominantly pregant women and those with disabilities.
+subtitle: Bring lawsuits against companies accused of discriminating against marginalized groups, most predominantly pregnant women and those with disabilities.
 on-arrival: marginalized_community_loyalty +=4; bop_social -= 0.75
 
 The Labor Ministry works on developing and enforcing safety regulations, in order to ensure healty working conditions for the proletariat. [? if workers_safety >= 3 : Businesses have begun to argue that our focus on safety is overbearing and unnecessary, interfering with the economy. ?]
