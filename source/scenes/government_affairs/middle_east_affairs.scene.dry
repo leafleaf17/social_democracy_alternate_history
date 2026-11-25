@@ -19,10 +19,10 @@ WIP
 
 @expand_aid_afganistan
 title: Expand aid to the Afgani army
-subtitle: This could help delay the collapse of the Afgani army
-view-if: afganistan_fall = 0 and afgan_withdraw_month > 1
-on-arrival: economic_democracy += 1; workers_spd += 7*(1-dissent); capital_strike_progress += 1; works_councils += 1; new_liberal_dissent -= 6; new_liberal_strength += 8; dvp_relation -= 5; coalition_dissent +=1 if in_grand_coalition
-max-visits: 1
+subtitle: -0.10 budget. This could help delay the collapse of the Afgani army, although there are worries the money will be lost to corruption. Progressives do not support this policy.
+view-if: afganistan_fall = 0 and afgan_withdraw_month > 0
+on-arrival: afgan_army_strength += 1; progressive_dissent +=5; socialist_dissent +=5
+max-visits: 3
 
 The works councils, elected by workers at each major business, have been in place since the German Revolution of 1918, but they have been largely powerless in the face of capital. Now, we will have worker representation on the boards of companies, giving them more influence in management decisions.
 

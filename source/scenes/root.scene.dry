@@ -785,7 +785,7 @@ Q.rural_dvp = 15;
 Q.rural_dnvp = 45;
 Q.rural_nsdap = 5;
 Q.rural_other = 10;
-
+Q.afgan_army_strength = 0;
 Q.unemployment_spd = 25;
 Q.unemployment_kpd = 55;
 Q.unemployment_z = 1;
@@ -1010,7 +1010,7 @@ Q.prioritizing_ice_criminals = 0;
 Q.prioritizing_ice_labor = 0;
 Q.prioritizing_ice_everyone = 0;
 Q.israel_embargo = 0;
-Q.afgan_withdraw_month = 4;
+Q.afgan_withdraw_month = 5;
 Q.gop_hawk_vs_dove = 1;
 Q.gop_social_stance = 1;
 Q.gop_economic_stance = 1;
