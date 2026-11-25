@@ -70,8 +70,8 @@ for (var c of Q.factions) {
     }
 }
 
-if (Q.unemployed <= 1) {
-    Q.unemployed = 1;
+if (Q.unemployment <= 1) {
+    Q.unemployment = 1;
 }
 
 // re-calculate dissent.
@@ -123,7 +123,7 @@ if (Q.month_actions >= 1) {
     Q.party_support_records.push(party_support_results);
     Q.economic_records.push({'date': new Date(Q.year, Q.month - 1),
                              'inflation': Q.inflation,
-                             'unemployment': Q.unemployed});
+                             'unemployment': Q.unemployment});
 
     // ============================================================================
     // BACKGROUND MACRO, FISCAL IMPULSE & FOMC MEETING LOOP
@@ -145,12 +145,13 @@ var fiscalInflationImpulse = Math.max(-0.10, Math.min(0.35, deficitGap * 0.012))
     Q.economic_growth += 0.3
     Q.unemployment -=0.4
     Q.ara -=1
-    Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 1.5;
+    Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 2.5;
  }
  if (Q.ara_lite > 0) {
     Q.inflation += 0.1
     Q.unemployment -=0.15
     Q.ara_lite -=1
+        Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 0.5;
  }
 if (Q.andrew_yang_dw === 0 && Q.year === 2021 && Q.month === 9) {
     Q.budget += 8;
@@ -160,6 +161,7 @@ if (Q.andrew_yang_dw === 1 && Q.year === 2021 && Q.month === 9) {
 }
 if (Q.year <= 2021 && Q.month < 9) {
     Q.inflation += 0.2;
+    Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 0.5;
 }
 
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
@@ -210,9 +212,11 @@ if (Q.year <= 2021 && Q.month < 9) {
     var jobChange = (2.2 - Q.economic_growth) * 0.04;
     Q.unemployment = +Math.max(3.2, Math.min(15.0, Q.unemployment + jobChange)).toFixed(2);
 
-    // Update U.S. Nominal GDP ($T)
-    var monthlyGdpRate = (Q.economic_growth || 0) / 1200;
-    Q.us_gdp = +(Q.us_gdp * (1 + monthlyGdpRate)).toFixed(2);
+  // Update U.S. Nominal GDP ($T)
+var gRate = Number(Q.economic_growth);
+if (isNaN(gRate)) gRate = 4.0;
+Q.us_gdp = +( (Number(Q.us_gdp) || 21.8) * (1 + gRate / 1200) ).toFixed(2);
+
 
     // ============================================================================
 // S&P 500 MONTHLY CALCULATION (NaN-PROOF)

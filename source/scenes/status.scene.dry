@@ -2,8 +2,8 @@ title: Status
 new-page: true
 is-special: true
 on-arrival: {!
-if (Q.unemployed) {
-    Q.unemployed_2 = Q.unemployed.toFixed(1);
+if (Q.unemployment) {
+    Q.unemployment_2 = Q.unemployment.toFixed(1);
 }
 if (Q.inflation) {
     Q.inflation_2 = Q.inflation.toFixed(1);
@@ -39,7 +39,7 @@ Supreme court: [+ democrat_supreme_court_seats +]/[+ supreme_court_seats +] [? i
 
 Inflation: [+ inflation_2 +]%
 
-Unemployment: [+ unemployed_2 +]% 
+Unemployment: [+ unemployment_2 +]% 
 
 Economic growth: [+ economic_growth_2 +]%
 
@@ -170,7 +170,7 @@ Old Middle Class: SPD: [+ old_middle_spd_display +]%, Z: [+ old_middle_z_display
 
 Rural: SPD: [+ rural_spd_display +]%, Z: [+ rural_z_display +]%, KPD: [+ rural_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ rural_ddp_display +]%, DVP: [+ rural_dvp_display +]%; DNVP: [+ rural_dnvp_display +]%, NSDAP: [+ rural_nsdap_display +]%, Others: [+ rural_other_display +]% [? if sapd_formed: SAPD: [+ rural_sapd_display +]% ?] [? if srpd_formed: SRPD: [+ rural_srpd_display +]% ?]
 
-Unemployed: SPD: [+ unemployed_spd_display +]%, Z: [+ unemployed_z_display +]%, KPD: [+ unemployed_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ unemployed_ddp_display +]%, DVP: [+ unemployed_dvp_display +]%; DNVP: [+ unemployed_dnvp_display +]%, NSDAP: [+ unemployed_nsdap_display +]%, Others: [+ unemployed_other_display +]% [? if sapd_formed: SAPD: [+ unemployed_sapd_display +]% ?] [? if srpd_formed: SRPD: [+ unemployed_srpd_display +]% ?]
+unemployment: SPD: [+ unemployment_spd_display +]%, Z: [+ unemployment_z_display +]%, KPD: [+ unemployment_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ unemployment_ddp_display +]%, DVP: [+ unemployment_dvp_display +]%; DNVP: [+ unemployment_dnvp_display +]%, NSDAP: [+ unemployment_nsdap_display +]%, Others: [+ unemployment_other_display +]% [? if sapd_formed: SAPD: [+ unemployment_sapd_display +]% ?] [? if srpd_formed: SRPD: [+ unemployment_srpd_display +]% ?]
 
 Catholics: SPD: [+ catholics_spd_display +]%, Z: [+ catholics_z_display +]%, KPD: [+ catholics_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ catholics_ddp_display +]%, DVP: [+ catholics_dvp_display +]%; DNVP: [+ catholics_dnvp_display +]%, NSDAP: [+ catholics_nsdap_display +]%, Others: [+ catholics_other_display +]% [? if sapd_formed: SAPD: [+ catholics_sapd_display +]% ?] [? if srpd_formed: SRPD: [+ catholics_srpd_display +]% ?]
 
