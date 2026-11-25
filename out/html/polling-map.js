@@ -632,7 +632,6 @@ initObserver();
       '<div class="us-econ-card">' +
         '<div class="us-econ-card-title">Inflation (CPI YoY)</div>' +
         '<div class="us-econ-val">' + inf.toFixed(1) + '%' + deltaBadge(h.inflation, true, 1) + '</div>' +
-        '<div class="us-econ-sub">Fed Target: 2.0%</div>' +
         buildClassicChartSVG(h.inflation, h.labels, '#1a237e', false) +
       '</div>';
 
@@ -640,7 +639,6 @@ initObserver();
       '<div class="us-econ-card">' +
         '<div class="us-econ-card-title">Unemployment Rate</div>' +
         '<div class="us-econ-val">' + unemp.toFixed(1) + '%' + deltaBadge(h.unemployment, true, 1) + '</div>' +
-        '<div class="us-econ-sub">Civilian Labor Force</div>' +
         buildClassicChartSVG(h.unemployment, h.labels, '#b71c1c', false) +
       '</div>';
 
@@ -651,7 +649,6 @@ initObserver();
       '<div class="us-econ-card">' +
         '<div class="us-econ-card-title">U.S. Nominal GDP</div>' +
         '<div class="us-econ-val">$' + gdp.toFixed(2) + 'T' + deltaBadge(h.gdp, false, 2) + '</div>' +
-        '<div class="us-econ-sub">Annualized Growth: ' + (growthRate >= 0 ? '+' : '') + growthRate.toFixed(1) + '%</div>' +
         buildClassicChartSVG(h.gdp, h.labels, '#1b5e20', false) +
       '</div>';
 
@@ -660,7 +657,6 @@ initObserver();
       '<div class="us-econ-card">' +
         '<div class="us-econ-card-title">Federal Budget</div>' +
         '<div class="us-econ-val">' + budStatus + deltaBadge(h.budget, false, 0) + '</div>' +
-        '<div class="us-econ-sub">Fiscal Balance Index</div>' +
         buildClassicChartSVG(h.budget, h.labels, '#0d47a1', true) +
       '</div>';
 
@@ -668,7 +664,6 @@ initObserver();
       '<div class="us-econ-card">' +
         '<div class="us-econ-card-title">S&amp;P 500 Index</div>' +
         '<div class="us-econ-val">' + Math.round(sp).toLocaleString() + deltaBadge(h.sp500, false, 0) + '</div>' +
-        '<div class="us-econ-sub">Wall Street Benchmark</div>' +
         buildClassicChartSVG(h.sp500, h.labels, '#2e7d32', false) +
       '</div>';
 
