@@ -192,20 +192,34 @@ if (Q.month_actions >= 1) {
     Q.us_gdp = +(Q.us_gdp * (1 + monthlyGdpRate)).toFixed(2);
 
     // ============================================================================
-    // S&P 500 MONTHLY CALCULATION (WITH FED RATE DRAG & EVENT SHOCKS)
-    // ============================================================================
-    var growthFactor = (Q.economic_growth - 2.0) * 0.0025;
-    var infPenalty   = Math.max(0, Q.inflation - 2.5) * 0.003;
-    var unempPenalty = Math.max(0, Q.unemployment - 5.0) * 0.002;
-    var fedStockDrag = Math.max(0, Q.fed_stance || 0) * 0.004;
+// S&P 500 MONTHLY CALCULATION (NaN-PROOF)
+// ============================================================================
+var gRate = Number(Q.economic_growth);
+if (isNaN(gRate)) gRate = 4.0;
 
-    var noise = (Math.random() - 0.5) * 0.008;
-    var macroPct = Math.max(-0.06, Math.min(0.06, 0.005 + growthFactor - infPenalty - unempPenalty - fedStockDrag + noise));
-    var totalPct = macroPct + ((Q.sp500_event_pct || 0) / 100);
+var iRate = Number(Q.inflation);
+if (isNaN(iRate)) iRate = 1.4;
 
-    Q.sp500 = Math.max(500, Math.round(Q.sp500 * (1 + totalPct) + (Q.sp500_event_mod || 0)));
-    Q.sp500_event_pct = 0;
-    Q.sp500_event_mod = 0;
+var uRate = Number(Q.unemployment);
+if (isNaN(uRate)) uRate = 6.3;
+
+var fedDrag = Math.max(0, Number(Q.fed_stance) || 0) * 0.004;
+var growthFactor = (gRate - 2.0) * 0.0025;
+var infPenalty   = Math.max(0, iRate - 2.5) * 0.003;
+var unempPenalty = Math.max(0, uRate - 5.0) * 0.002;
+
+var noise = (Math.random() - 0.5) * 0.008;
+var macroPct = Math.max(-0.06, Math.min(0.06, 0.005 + growthFactor - infPenalty - unempPenalty - fedDrag + noise));
+var eventPct = (Number(Q.sp500_event_pct) || 0) / 100;
+var eventMod = Number(Q.sp500_event_mod) || 0;
+
+var currentSp = Number(Q.sp500);
+if (isNaN(currentSp) || currentSp <= 0) currentSp = 3714;
+
+Q.sp500 = Math.max(500, Math.round(currentSp * (1 + macroPct + eventPct) + eventMod));
+Q.sp_500 = Q.sp500;
+Q.sp500_event_pct = 0;
+Q.sp500_event_mod = 0;
 
     // ============================================================================
     // HONEYMOON DECAY
