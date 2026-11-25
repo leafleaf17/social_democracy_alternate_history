@@ -20,15 +20,7 @@ title: Let Sinema and Manchin lead negotiations with <span style="color: #DE0100
 subtitle: -6.5 budget. Republicans will agree to a 1000 dollar stimulus check and 3 months of additional unemployment assistance. Progressives will be enraged. Some economists in the White House believe this will risk a sluggish recovery.
 on-arrival: {!
 Q.republican_radicalization -= 7;
-Q.green_backlash += 2;
-Q.climate_progress += 6;
-Q.inflation += 0.1;
-Q.blue_dog_dissent += 4;
-Q.economic_growth -= 0.1;
-Q.cost_of_living_opinion -=1; 
-Q.unemployment +=0.1;
-Q.progressive_dissent -=2; 
-Q.socialist_dissent -=2;
+Q.andrew_yang_dw += 1;
 !}
 
 WIP
@@ -40,15 +32,7 @@ unavailable-subtitle: -2 political capital. -19 budget. We will give out 1400 st
 subtitle: -2 political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers.
 on-arrival: {!
 Q.republican_radicalization += 5;
-Q.green_backlash += 2;
-Q.climate_progress += 6;
-Q.inflation += 0.1;
-Q.blue_dog_dissent += 4;
-Q.economic_growth -= 0.1;
-Q.cost_of_living_opinion -=1; 
-Q.unemployment +=0.1;
-Q.progressive_dissent -=2; 
-Q.socialist_dissent -=2;
+
 !}
 
 WIP
