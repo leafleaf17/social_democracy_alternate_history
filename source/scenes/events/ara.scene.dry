@@ -21,6 +21,7 @@ subtitle: -6.5 budget. Republicans will agree to a 1000 dollar stimulus check an
 on-arrival: {!
 Q.republican_radicalization -= 7;
 Q.andrew_yang_dw += 1;
+Q.build_back_better_lite = 2;
 !}
 
 WIP
@@ -33,6 +34,7 @@ subtitle: -2 political capital. -19 budget. We will give out 1400 stimulus check
 on-arrival: {!
 Q.republican_radicalization += 5;
 Q.budget -= 19
+Q.political_capital -=2;
 !}
 
 WIP

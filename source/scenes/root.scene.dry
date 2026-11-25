@@ -499,7 +499,8 @@ Q.gov_buffs = {
     VA: -3
 };
 window.simulate_polling();
-
+Q.build_back_better = 0;
+Q.build_back_better_lite = 0;
 // party resources
 Q.sp500 = 3714;
 Q.us_gdp = 21.8;

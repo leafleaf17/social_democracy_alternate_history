@@ -1,0 +1,51 @@
+title: New York City Mayoral Primary
+new-page: true
+subtitle: The big apple will decide its next mayor
+tags: event
+view-if: year = 2021 and month = 6
+max-visits: 1
+face-image: img/redfront.jpg
+
+= New York City Mayoral Primary
+
+Whoever wins the <span style="color: #3E88B3;">**Democrat**</span> primary today will be all but guranteed to win the general election for mayoral of New York City, which is one of the most influencial roles in the country. Andrew Yang entered the race as the initial favorite. [? if andrew_yang_dw = 1: Although is polling has slipped over the last few months, due to appearing out of touch in many interviews with the media, he has mantained his lead, as his key policy program of universal basic income has attracted New York City voters who are currently still struggling from the impact of covid, and were expecting a larger stimulus check from President Bernie Sanders.] 
+
+Eric Adams has mostly consolidated the moderate vote, attempting to build a coalition of low income New Yorkers mainly concerned with crime combined with minority voters who generally lean slightly more socially conservative. The progressive base remains divided between Kathryn Garcia and Maya Wiley, although Garcia seems have an edge, especially with AOC's endorsement. Luckily, with ranked choice voting in place, this won't cost progressives a chance at winning the primary for New York City mayor. Because the role of New York Mayor is such a powerful position, whatever faction of the span style="color: #3E88B3;">**Democrat**</span> wins here will likely increase their influence in the party.
+
+- @eric_adams: Moderate Eric Adams has won the mayoral primary
+- @kathryn_garcia: Kathryn Garcia has came up on top
+- @andrew_yang_dw: Andrew Yang has secured a victory in the primary
+
+@eric_adams
+subtitle: m4
+view-if: andrew_yang_dw = 0 and primaries.nyc.prog <= primaries.nyc.mod
+unavailable: [? if primaries.nyc.prog > primaries.nyc.mod: The mood of the party is too left-wing for someone like him. ][? if andrew_yang_dw: Low income voters are rallying behind Andre Yang instead of Eric Adams. ?]
+on-arrival: {!
+Q.republican_radicalization -= 7;
+Q.andrew_yang_dw += 1;
+Q.build_back_better_lite = 2;
+!}
+
+WIP
+
+@kathryn_garcia
+choose-if: andrew_yang_dw = 0 and primaries.nyc.prog > primaries.nyc.mod
+unavailable-subtitle: [? if primaries.nyc.prog =< primaries.nyc.mod: New York City <span style="color: #3E88B3;">**Democrat**</span> prefer a moderate canidate. ][? if andrew_yang_dw: Andrew Yang's coalition is too strong for her to win. ]
+subtitle: -2 political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers.
+on-arrival: {!
+Q.republican_radicalization += 5;
+Q.budget -= 19
+Q.political_capital -=2;
+!}
+
+@andrew_yang
+choose-if: andrew_yang_dw = 1
+unavailable-subtitle: -2 Political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers. We lack the clout to push this through congress.
+subtitle: Andrew Yang's policies are very in tune with the desires of the voters right now.
+on-arrival: {!
+Q.republican_radicalization += 5;
+Q.budget -= 19
+Q.political_capital -=2;
+!}
+
+WIP
