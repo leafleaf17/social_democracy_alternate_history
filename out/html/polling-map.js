@@ -149,7 +149,6 @@
     var s = document.createElement('style');
     s.id = 'polling-map-styles';
     s.textContent =
-          '#page, #content, .content { max-width: 92vw !important; margin-top: 1.5vh !important; margin-bottom: 1.5vh !important; box-sizing: border-box !important; }' +
       '#polling-map-drawer,.polling-map-drawer{width:min(1100px,94vw) !important;height:min(86vh,900px) !important;top:7vh !important;right:3vw !important;overflow:auto !important;z-index:40 !important;padding:1.2em !important;background:#000000 !important;background-color:#000000 !important;color:#ffffff !important;border:1px solid #444 !important}' +
       '.polling-map-content h2,.polling-map-content p,.polling-map-tooltip{color:#ffffff !important}' +
       '.polling-map-drawer button{background:#222222 !important;color:#ffffff !important;border:1px solid #666666 !important;padding:5px 12px;cursor:pointer;font-weight:bold}' +
