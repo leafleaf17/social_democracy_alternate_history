@@ -24,7 +24,7 @@ Eric Adams has mostly consolidated the moderate vote, attempting to build a coal
 @eric_adams
 subtitle: m4
 choose-if: andrew_yang_dw = 0 and andrew_yang_dw = 0 and nyc_eff_prog <= nyc_eff_mod
-unavailable: [? if nyc_eff_prog > nyc_eff_mod: The mood of the party is too left-wing for someone like him. ?][? if andrew_yang_dw: Low income voters are rallying behind Andre Yang instead of Eric Adams. ?]
+unavailable-subtitle: [? if nyc_eff_prog > nyc_eff_mod: The mood of the party is too left-wing for someone like him. ?][? if andrew_yang_dw: Low income voters are rallying behind Andre Yang instead of Eric Adams. ?]
 on-arrival: {!
 Q.republican_radicalization -= 7;
 Q.andrew_yang_dw += 1;
