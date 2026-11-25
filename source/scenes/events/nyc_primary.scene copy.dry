@@ -4,7 +4,7 @@ subtitle: The big apple will decide its next mayor
 tags: event
 view-if: year = 2021 and month = 6
 max-visits: 1
-face-image: img/redfront.jpg
+face-image: img/nyc_primary.jpg
 
 = New York City Mayoral Primary
 
@@ -40,6 +40,7 @@ Q.political_capital -=2;
 
 @andrew_yang
 choose-if: andrew_yang_dw = 1
+face-image: img/w_yang.jpg
 unavailable-subtitle: -2 Political capital. -19 budget. We will give out 1400 stimulus checks and 6 months of additional unemployment insurance. The bill will also contain generous grants to local governments, education spending, and an expansion to the child tax credit. Our economists predict the added deficit from this bill to half over the next year as the economy recovers. We lack the clout to push this through congress.
 subtitle: Andrew Yang's policies are very in tune with the desires of the voters right now.
 on-arrival: {!
@@ -48,4 +49,4 @@ Q.budget -= 19
 Q.political_capital -=2;
 !}
 
-WIP
+Andrew Yang does not fit neatly into the progressive or the moderate faction of the party, instead being a technocrat with a fusion of moderate and left wing economic and social views. His election seems to indicate dissapointment within the <span style="color: #3E88B3;">**Democratic**</span> voter base with the failure of Bernie Sanders to deliver on the full amount of promised stimulus money in the American Rescue Act Plan, as Yang's support in the polls seemed to be dramatically slipping until the acts passage. Andrew Yang's boldest policies, like universal basic income, cannot be done with assistance from governor Cuomo who likely won't be willing to lend Yang his support. No matter what happens, Yang is an attention grabber, and we will likely be hearing much about his administration. 
