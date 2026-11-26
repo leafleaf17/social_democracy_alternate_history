@@ -222,11 +222,14 @@
 '.polling-map-tooltip.visible{display:block}';
 document.head.appendChild(s);
 }
-function applyDrawerTheme(drawer) {
-if (!drawer) return;
-drawer.classList.remove('theme-light', 'theme-dark');
-drawer.classList.add(isDarkMode ? 'theme-dark' : 'theme-light');
-}
+  function applyDrawerTheme(drawer) {
+    if (!drawer) return;
+    var targetClass = isDarkMode ? 'theme-dark' : 'theme-light';
+    var otherClass = isDarkMode ? 'theme-light' : 'theme-dark';
+    if (drawer.classList.contains(otherClass)) drawer.classList.remove(otherClass);
+    if (!drawer.classList.contains(targetClass)) drawer.classList.add(targetClass);
+  }
+
 function findStateShape(svg, code, name) {
 var byId = svg.querySelector('#' + code) || svg.querySelector('#' + code.toLowerCase());
 if (byId) return byId;
@@ -569,22 +572,34 @@ updateMap();
 })
 .catch(function() { tryLoadSvg(urls, idx + 1, wrap); });
 }
-function initObserver() {
-addStyles();
-var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
-if (drawer) {
-var obs = new MutationObserver(function() {
-if (drawer.classList.contains('open')) {
-updateMap();
-}
-});
-obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
-if (drawer.classList.contains('open')) updateMap();
-}
-document.addEventListener('click', function() {
-setTimeout(updateMap, 50);
-});
-}
+  function initObserver() {
+    addStyles();
+    var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+    if (drawer) {
+      var isUpdating = false;
+      var safeUpdate = function() {
+        if (isUpdating) return;
+        isUpdating = true;
+        try {
+          updateMap();
+        } finally {
+          isUpdating = false;
+        }
+      };
+
+      var obs = new MutationObserver(function() {
+        if (drawer.classList.contains('open')) {
+          safeUpdate();
+        }
+      });
+      obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
+      if (drawer.classList.contains('open')) safeUpdate();
+    }
+
+    document.addEventListener('click', function() {
+      setTimeout(updateMap, 50);
+    });
+  }
 window.openPollingMap = updateMap;
 window.updatePollingMap = updateMap;
 if (document.readyState === 'loading') {
