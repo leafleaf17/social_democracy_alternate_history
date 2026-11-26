@@ -102,9 +102,8 @@
         2022: ['AL','AK','AZ','AR','CA','CO','CT','FL','GA','HI','ID','IL','IA','KS','ME','MD','MA','MI','MN','NE','NV','NH','NM','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','VT','WI','WY'],
         2023: ['KY', 'LA', 'MS']
       };
-           if (govMap[yr]) return govMap[yr];
+      if (govMap[yr]) return govMap[yr];
       return yr < 2022 ? govMap[2021] : govMap[2022];
-
     }
     return null;
   }
@@ -145,45 +144,71 @@
     };
   }
 
-  function tooltipText(code, res, tab, isActive, isPinned) {
-    var pinNote = isPinned
-      ? '<div style="font-size:11px;opacity:0.75;margin-top:4px;border-top:1px solid #888;padding-top:2px;">Pinned (click state again to unpin)</div>'
-      : '';
+  function renderTooltipDOM(tip, code, res, tab, isActive, isPinned) {
+    tip.textContent = '';
+
+    var title = document.createElement('strong');
+    title.textContent = res.name + ' (' + code + ')' + (isActive && tab === 'pres' ? ' · ' + res.ev + ' EV' : '');
+    tip.appendChild(title);
+    tip.appendChild(document.createElement('br'));
 
     if (!isActive) {
-      var label = tab === 'senate' ? 'Senate' : 'Gubernatorial';
-      return '<strong>' + res.name + ' (' + code + ')</strong><br>' +
-        '<span style="opacity:0.75;">No ' + label + ' election this cycle</span>' + pinNote;
+      var inactiveSpan = document.createElement('span');
+      inactiveSpan.style.opacity = '0.75';
+      inactiveSpan.textContent = 'No ' + (tab === 'senate' ? 'Senate' : 'Gubernatorial') + ' election this cycle';
+      tip.appendChild(inactiveSpan);
+    } else {
+      var m = Number(res.margin);
+      var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
+      var demCol = isDarkMode ? '#5c9eff' : '#1c408c';
+      var repCol = isDarkMode ? '#ff5865' : '#b91c1c';
+      var marginColor = m > 0 ? demCol : m < 0 ? repCol : (isDarkMode ? '#ffffff' : '#1c1b18');
+
+      var dRow = document.createElement('div');
+      var dLbl = document.createElement('span');
+      dLbl.style.color = demCol;
+      dLbl.style.fontWeight = 'bold';
+      dLbl.textContent = 'Democrats: ';
+      dRow.appendChild(dLbl);
+      dRow.appendChild(document.createTextNode(res.dem.toFixed(2) + '%' + (res.demCand && res.demCand !== 'Generic Democrat' ? ' (' + res.demCand + ')' : '')));
+      tip.appendChild(dRow);
+
+      var rRow = document.createElement('div');
+      var rLbl = document.createElement('span');
+      rLbl.style.color = repCol;
+      rLbl.style.fontWeight = 'bold';
+      rLbl.textContent = 'Republicans: ';
+      rRow.appendChild(rLbl);
+      rRow.appendChild(document.createTextNode(res.rep.toFixed(2) + '%' + (res.repCand && res.repCand !== 'Generic Republican' ? ' (' + res.repCand + ')' : '')));
+      tip.appendChild(rRow);
+
+      var mRow = document.createElement('div');
+      mRow.appendChild(document.createTextNode('Margin: '));
+      var mVal = document.createElement('span');
+      mVal.style.color = marginColor;
+      mVal.style.fontWeight = 'bold';
+      mVal.textContent = pre + Math.abs(m).toFixed(2);
+      mRow.appendChild(mVal);
+      tip.appendChild(mRow);
     }
 
-    var m = Number(res.margin);
-    var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
-    var demCol = isDarkMode ? '#5c9eff' : '#1c408c';
-    var repCol = isDarkMode ? '#ff5865' : '#b91c1c';
-    var marginColor = m > 0 ? demCol : m < 0 ? repCol : (isDarkMode ? '#ffffff' : '#1c1b18');
-    var extra = tab === 'pres' ? ' · ' + res.ev + ' EV' : '';
-
-    var showCandDem = (res.demCand && res.demCand !== 'Generic Democrat') ? ' <span style="opacity:0.8;">(' + res.demCand + ')</span>' : '';
-    var showCandRep = (res.repCand && res.repCand !== 'Generic Republican') ? ' <span style="opacity:0.8;">(' + res.repCand + ')</span>' : '';
-
-    return '<strong>' + res.name + ' (' + code + ')</strong>' + extra + '<br>' +
-      '<span style="color:' + demCol + ';font-weight:bold;">Democrats:</span> ' + res.dem.toFixed(2) + '%' + showCandDem + '<br>' +
-      '<span style="color:' + repCol + ';font-weight:bold;">Republicans:</span> ' + res.rep.toFixed(2) + '%' + showCandRep + '<br>' +
-      'Margin: <span style="color:' + marginColor + ';font-weight:bold;">' + pre + Math.abs(m).toFixed(2) + '</span>' +
-      pinNote;
-  }
-
-  function formatDiff(diff) {
-    if (diff > 0) return '<span class="seat-diff" data-dir="gain">(+' + diff + ')</span>';
-    if (diff < 0) return '<span class="seat-diff" data-dir="loss">(' + diff + ')</span>';
-    return '<span class="seat-diff" data-dir="even">(±0)</span>';
+    if (isPinned) {
+      var pinDiv = document.createElement('div');
+      pinDiv.style.fontSize = '11px';
+      pinDiv.style.opacity = '0.75';
+      pinDiv.style.marginTop = '4px';
+      pinDiv.style.borderTop = '1px solid #888';
+      pinDiv.style.paddingTop = '2px';
+      pinDiv.textContent = 'Pinned (click state again to unpin)';
+      tip.appendChild(pinDiv);
+    }
   }
 
   function addStyles() {
     if (document.getElementById('polling-map-styles')) return;
     var s = document.createElement('style');
     s.id = 'polling-map-styles';
-    s.textContent =
+    s.textContent = 
       '#polling-map-drawer,.polling-map-drawer{width:min(1080px,94vw) !important;height:min(88vh,900px) !important;top:6vh !important;right:3vw !important;overflow:auto !important;z-index:45 !important;padding:1.1em 1.4em !important;font-family:"Times New Roman",Times,Georgia,serif !important;box-shadow:0 10px 30px rgba(0,0,0,0.45) !important;transition:background-color 0.15s,color 0.15s}' +
       '#polling-map-drawer.theme-light{background:#f4f1ea !important;color:#1c1b18 !important;border:2px solid #2c2a26 !important}' +
       '#polling-map-drawer.theme-light h2,#polling-map-drawer.theme-light p{color:#1c1b18 !important}' +
@@ -196,10 +221,10 @@
       '#polling-map-drawer.theme-light .polling-map-state{stroke:#ffffff !important;stroke-width:0.8px}' +
       '#polling-map-drawer.theme-light .polling-map-tooltip{background:#faf8f3 !important;color:#1c1b18 !important;border:1.5px solid #2c2a26 !important;box-shadow:0 4px 12px rgba(0,0,0,0.2)}' +
       '#polling-map-drawer.theme-light .polling-map-meta{background:#eae6dc !important;border:1px solid #bfb8a8 !important;color:#2c2a26 !important}' +
-      '#polling-map-drawer.theme-dark{background:#111111 !important;color:#f0f0f0 !important;border:1.5px solid #555555 !important}' +
-      '#polling-map-drawer.theme-dark h2,#polling-map-drawer.theme-dark p{color:#f0f0f0 !important}' +
-      '#polling-map-drawer.theme-dark button,#polling-map-drawer.theme-dark select{background:#222222 !important;color:#f0f0f0 !important;border:1px solid #666666 !important;font-family:"Times New Roman",Times,Georgia,serif !important;padding:4px 10px;cursor:pointer;font-size:0.95em}' +
-      '#polling-map-drawer.theme-dark button:hover,#polling-map-drawer.theme-dark select:hover{background:#333333 !important;border-color:#ffffff !important}' +
+'#polling-map-drawer.theme-dark{background:#111111 !important;color:#f0f0f0 !important;border:1.5px solid #555555 !important}' +
+'#polling-map-drawer.theme-dark h2,#polling-map-drawer.theme-dark p{color:#f0f0f0 !important}' +
+'#polling-map-drawer.theme-dark button,#polling-map-drawer.theme-dark select{background:#222222 !important;color:#f0f0f0 !important;border:1px solid #666666 !important;font-family:"Times New Roman",Times,Georgia,serif !important;padding:4px 10px;cursor:pointer;font-size:0.95em}' +
+'#polling-map-drawer.theme-dark button:hover,#polling-map-drawer.theme-dark select:hover{background:#333333 !important;border-color:#ffffff !important}' +
 '#polling-map-drawer.theme-dark .polling-map-tab.active{background:#1c408c !important;color:#ffffff !important;border-color:#5c9eff !important;font-weight:bold}' +
 '#polling-map-drawer.theme-dark .polling-map-svg-wrap{background:#0a0a0a !important;border:1px solid #444444 !important}' +
 '#polling-map-drawer.theme-dark .polling-map-svg-wrap svg{background:#0a0a0a !important}' +
@@ -222,14 +247,13 @@
 '.polling-map-tooltip.visible{display:block}';
 document.head.appendChild(s);
 }
-  function applyDrawerTheme(drawer) {
-    if (!drawer) return;
-    var targetClass = isDarkMode ? 'theme-dark' : 'theme-light';
-    var otherClass = isDarkMode ? 'theme-light' : 'theme-dark';
-    if (drawer.classList.contains(otherClass)) drawer.classList.remove(otherClass);
-    if (!drawer.classList.contains(targetClass)) drawer.classList.add(targetClass);
-  }
-
+function applyDrawerTheme(drawer) {
+if (!drawer) return;
+var targetClass = isDarkMode ? 'theme-dark' : 'theme-light';
+var otherClass = isDarkMode ? 'theme-light' : 'theme-dark';
+if (drawer.classList.contains(otherClass)) drawer.classList.remove(otherClass);
+if (!drawer.classList.contains(targetClass)) drawer.classList.add(targetClass);
+}
 function findStateShape(svg, code, name) {
 var byId = svg.querySelector('#' + code) || svg.querySelector('#' + code.toLowerCase());
 if (byId) return byId;
@@ -240,56 +264,49 @@ for (var i = 0; i < candidates.length; i++) {
 var el = candidates[i];
 var id = (el.getAttribute('id') || '').toLowerCase();
 var label = (el.getAttribute('inkscape:label') || el.getAttribute('data-name') || '').toLowerCase();
-if (id === targetCode || id === targetName || label === targetCode || label === targetName) {
+var cls = (el.getAttribute('class') || '').toLowerCase().split(/\s+/);
+if (id === targetCode || id === targetName || label === targetCode || label === targetName || cls.indexOf(targetCode) !== -1) {
 return el;
 }
 }
 return null;
 }
-  function makeDraggable(drawer) {
-    if (!drawer || drawer.dataset.draggableReady) return;
-    drawer.dataset.draggableReady = '1';
-
-    var h2 = drawer.querySelector('h2');
-    var handle = (h2 && h2.parentElement && h2.parentElement !== drawer) ? h2.parentElement : (h2 || drawer);
-    handle.style.cursor = 'move';
-    handle.style.userSelect = 'none';
-
-    var dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
-
-    handle.addEventListener('pointerdown', function(e) {
-      if (e.target.closest('button, select, svg, .polling-map-svg-wrap')) return;
-      var rect = drawer.getBoundingClientRect();
-      // Only allow dragging from the top 55px title bar area
-      if (e.clientY - rect.top > 55) return;
-
-      dragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      startLeft = rect.left;
-      startTop = rect.top;
-
-      drawer.style.setProperty('right', 'auto', 'important');
-      drawer.style.setProperty('bottom', 'auto', 'important');
-      drawer.style.setProperty('left', startLeft + 'px', 'important');
-      drawer.style.setProperty('top', startTop + 'px', 'important');
-      e.preventDefault();
-    });
-
-    window.addEventListener('pointermove', function(e) {
-      if (!dragging) return;
-      var dx = e.clientX - startX;
-      var dy = e.clientY - startY;
-      var newLeft = Math.max(0, Math.min(window.innerWidth - 140, startLeft + dx));
-      var newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
-      drawer.style.setProperty('left', newLeft + 'px', 'important');
-      drawer.style.setProperty('top', newTop + 'px', 'important');
-    });
-
-    window.addEventListener('pointerup', function() {
-      dragging = false;
-    });
-  }
+function makeDraggable(drawer) {
+if (!drawer || drawer.dataset.draggableReady) return;
+drawer.dataset.draggableReady = '1';
+var h2 = drawer.querySelector('h2');
+var handle = (h2 && h2.parentElement && h2.parentElement !== drawer) ? h2.parentElement : (h2 || drawer);
+handle.style.cursor = 'move';
+handle.style.userSelect = 'none';
+var dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+handle.addEventListener('pointerdown', function(e) {
+if (e.target.closest('button, select, svg, .polling-map-svg-wrap')) return;
+var rect = drawer.getBoundingClientRect();
+if (e.clientY - rect.top > 55) return;
+dragging = true;
+startX = e.clientX;
+startY = e.clientY;
+startLeft = rect.left;
+startTop = rect.top;
+drawer.style.setProperty('right', 'auto', 'important');
+drawer.style.setProperty('bottom', 'auto', 'important');
+drawer.style.setProperty('left', startLeft + 'px', 'important');
+drawer.style.setProperty('top', startTop + 'px', 'important');
+e.preventDefault();
+});
+window.addEventListener('pointermove', function(e) {
+if (!dragging) return;
+var dx = e.clientX - startX;
+var dy = e.clientY - startY;
+var newLeft = Math.max(0, Math.min(window.innerWidth - 140, startLeft + dx));
+var newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
+drawer.style.setProperty('left', newLeft + 'px', 'important');
+drawer.style.setProperty('top', newTop + 'px', 'important');
+});
+window.addEventListener('pointerup', function() {
+dragging = false;
+});
+}
 function ensureDrawerContent(drawer) {
 addStyles();
 applyDrawerTheme(drawer);
@@ -376,7 +393,7 @@ var wrap = content.querySelector('.polling-map-svg-wrap');
 if (!wrap) {
 wrap = document.createElement('div');
 wrap.className = 'polling-map-svg-wrap';
-wrap.innerHTML = 'Loading map...';
+wrap.textContent = 'Loading map...';
 content.appendChild(wrap);
 }
 if (!mapReady && !svgLoading) {
@@ -416,11 +433,9 @@ if (!pinnedCode) tip.classList.remove('visible');
 states.forEach(function(pair) {
 var code = pair.at(0);
 var name = pair.at(1);
-var shape = findStateShape(svg, code, name);
-if (!shape) return;
-var isActive = (activeList === null) || (activeList.indexOf(code) !== -1);
 var res = calcRaceResult(q, polling, code, activeTab);
 if (!res) return;
+var isActive = (activeList === null) || (activeList.indexOf(code) !== -1);
 if (isActive) {
 activeResults.push({ code: code, name: res.name, margin: res.margin, ev: Number(res.ev) || 1 });
 if (Math.abs(res.margin) < 2.0) tossupCount += 1;
@@ -432,6 +447,8 @@ if (res.margin >= 0) demTotal += 1;
 else repTotal += 1;
 }
 }
+var shape = findStateShape(svg, code, name);
+if (!shape) return;
 var inactiveFill = isDarkMode ? '#222222' : '#ded9ce';
 var col = isActive ? colorForMargin(res.margin) : inactiveFill;
 shape.style.setProperty('fill', col, 'important');
@@ -443,7 +460,7 @@ el.setAttribute('fill', col);
 shape.classList.add('polling-map-state');
 if (pinnedCode === code) {
 shape.classList.add('pinned');
-tip.innerHTML = tooltipText(code, res, activeTab, isActive, true);
+renderTooltipDOM(tip, code, res, activeTab, isActive, true);
 tip.classList.add('visible');
 } else {
 shape.classList.remove('pinned');
@@ -452,7 +469,7 @@ shape.onclick = function(e) {
 e.stopPropagation();
 pinnedCode = (pinnedCode === code) ? null : code;
 if (pinnedCode) {
-tip.innerHTML = tooltipText(code, res, activeTab, isActive, true);
+renderTooltipDOM(tip, code, res, activeTab, isActive, true);
 tip.classList.add('visible');
 var r = drawer.getBoundingClientRect();
 tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 280) + 'px';
@@ -464,7 +481,7 @@ updateMap();
 };
 shape.onpointerenter = function(e) {
 if (pinnedCode && pinnedCode !== code) return;
-tip.innerHTML = tooltipText(code, res, activeTab, isActive, pinnedCode === code);
+renderTooltipDOM(tip, code, res, activeTab, isActive, pinnedCode === code);
 tip.classList.add('visible');
 var r = drawer.getBoundingClientRect();
 tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 280) + 'px';
@@ -493,106 +510,108 @@ break;
 }
 }
 }
- var meta = drawer.querySelector('.polling-map-meta');
-    if (meta) {
-      meta.textContent = '';
-      var pal = palettes[activePalette] || palettes.yapms;
-
-      var keyDiv = document.createElement('div');
-      keyDiv.className = 'polling-map-key';
-
-      var dLbl = document.createElement('strong');
-      dLbl.textContent = 'D: ';
-      keyDiv.appendChild(dLbl);
-
-      [
-        { col: pal.dem.at(3), title: 'D 15+' },
-        { col: pal.dem.at(2), title: 'D 5-15' },
-        { col: pal.dem.at(1), title: 'D 1-5' },
-        { col: pal.dem.at(0), title: 'D <1' }
-      ].forEach(function(item) {
-        var sw = document.createElement('span');
-        sw.className = 'polling-map-swatch';
-        sw.style.backgroundColor = item.col;
-        sw.title = item.title;
-        keyDiv.appendChild(sw);
-      });
-
-      var sep = document.createElement('span');
-      sep.textContent = ' | ';
-      sep.style.opacity = '0.6';
-      sep.style.margin = '0 4px';
-      keyDiv.appendChild(sep);
-
-      [
-        { col: pal.rep.at(0), title: 'R <1' },
-        { col: pal.rep.at(1), title: 'R 1-5' },
-        { col: pal.rep.at(2), title: 'R 5-15' },
-        { col: pal.rep.at(3), title: 'R 15+' }
-      ].forEach(function(item) {
-        var sw = document.createElement('span');
-        sw.className = 'polling-map-swatch';
-        sw.style.backgroundColor = item.col;
-        sw.title = item.title;
-        keyDiv.appendChild(sw);
-      });
-
-      var rLbl = document.createElement('strong');
-      rLbl.textContent = ' :R';
-      keyDiv.appendChild(rLbl);
-
-      var rangeNote = document.createElement('span');
-      rangeNote.textContent = ' (15+ / 5-15 / 1-5 / <1)';
-      rangeNote.style.opacity = '0.75';
-      rangeNote.style.marginLeft = '6px';
-      keyDiv.appendChild(rangeNote);
-
-      var statsDiv = document.createElement('div');
-      statsDiv.textContent = tippingText.replace(/<[^>]*>/g, '') + 'Tossups (<2%): ' + tossupCount;
-
-      meta.appendChild(keyDiv);
-      meta.appendChild(statsDiv);
-    }
+var meta = drawer.querySelector('.polling-map-meta');
+if (meta) {
+meta.textContent = '';
+var pal = palettes[activePalette] || palettes.yapms;
+var keyDiv = document.createElement('div');
+keyDiv.className = 'polling-map-key';
+var dLbl = document.createElement('strong');
+dLbl.textContent = 'D: ';
+keyDiv.appendChild(dLbl);
+[
+{ col: pal.dem.at(3), title: 'D 15+' },
+{ col: pal.dem.at(2), title: 'D 5-15' },
+{ col: pal.dem.at(1), title: 'D 1-5' },
+{ col: pal.dem.at(0), title: 'D <1' }
+].forEach(function(item) {
+var sw = document.createElement('span');
+sw.className = 'polling-map-swatch';
+sw.style.backgroundColor = item.col;
+sw.title = item.title;
+keyDiv.appendChild(sw);
+});
+var sep = document.createElement('span');
+sep.textContent = ' | ';
+sep.style.opacity = '0.6';
+sep.style.margin = '0 4px';
+keyDiv.appendChild(sep);
+[
+{ col: pal.rep.at(0), title: 'R <1' },
+{ col: pal.rep.at(1), title: 'R 1-5' },
+{ col: pal.rep.at(2), title: 'R 5-15' },
+{ col: pal.rep.at(3), title: 'R 15+' }
+].forEach(function(item) {
+var sw = document.createElement('span');
+sw.className = 'polling-map-swatch';
+sw.style.backgroundColor = item.col;
+sw.title = item.title;
+keyDiv.appendChild(sw);
+});
+var rLbl = document.createElement('strong');
+rLbl.textContent = ' :R';
+keyDiv.appendChild(rLbl);
+var rangeNote = document.createElement('span');
+rangeNote.textContent = ' (15+ / 5-15 / 1-5 / <1)';
+rangeNote.style.opacity = '0.75';
+rangeNote.style.marginLeft = '6px';
+keyDiv.appendChild(rangeNote);
+var statsDiv = document.createElement('div');
+statsDiv.textContent = tippingText + 'Tossups (<2%): ' + tossupCount;
+meta.appendChild(keyDiv);
+meta.appendChild(statsDiv);
+}
 var score = drawer.querySelector('.polling-map-score');
 if (score) {
+score.textContent = '';
 var demScoreCol = isDarkMode ? '#5c9eff' : '#1c408c';
 var repScoreCol = isDarkMode ? '#ff5865' : '#b91c1c';
-if (activeTab === 'senate') {
-var currentDemSenate = Number(q.dem_senate_seats) || 50;
-var currentRepSenate = 100 - currentDemSenate;
-var demDiff = formatDiff(demTotal - currentDemSenate);
-var repDiff = formatDiff(repTotal - currentRepSenate);
-score.innerHTML =
-'Democrat: ' + demTotal + ' Seats ' + demDiff + '' +
-'·' +
-'Republican: ' + repTotal + ' Seats ' + repDiff + '';
-} else {
-var unit = activeTab === 'pres' ? 'EV' : 'Races';
-score.innerHTML =
-'Democrat: ' + demTotal + ' ' + unit + '' +
-'·' +
-'Republican: ' + repTotal + ' ' + unit + '';
-}
-var demSpan = score.querySelector('.score-dem');
-var sepSpan = score.querySelector('.score-sep');
-var repSpan = score.querySelector('.score-rep');
-if (demSpan) demSpan.style.setProperty('color', demScoreCol, 'important');
-if (sepSpan) sepSpan.style.setProperty('color', isDarkMode ? '#777777' : '#666666', 'important');
-if (repSpan) repSpan.style.setProperty('color', repScoreCol, 'important');
 var gainCol = isDarkMode ? '#22c55e' : '#15803d';
 var lossCol = isDarkMode ? '#b91c1c' : '#7f1d1d';
 var evenCol = isDarkMode ? '#999999' : '#666666';
-score.querySelectorAll('.seat-diff').forEach(function(el) {
-var dir = el.getAttribute('data-dir');
-var col = dir === 'gain' ? gainCol : dir === 'loss' ? lossCol : evenCol;
-el.style.setProperty('color', col, 'important');
-});
+var makeDiffSpan = function(diff) {
+var sp = document.createElement('span');
+sp.style.marginLeft = '5px';
+if (diff > 0) {
+sp.textContent = '(+' + diff + ')';
+sp.style.color = gainCol;
+} else if (diff < 0) {
+sp.textContent = '(' + diff + ')';
+sp.style.color = lossCol;
+} else {
+sp.textContent = '(±0)';
+sp.style.color = evenCol;
+}
+return sp;
+};
+var demSpan = document.createElement('span');
+demSpan.style.color = demScoreCol;
+var repSpan = document.createElement('span');
+repSpan.style.color = repScoreCol;
+var sepSpan = document.createElement('span');
+sepSpan.textContent = ' · ';
+sepSpan.style.color = isDarkMode ? '#777777' : '#666666';
+if (activeTab === 'senate') {
+var currentDemSenate = Number(q.dem_senate_seats) || 50;
+var currentRepSenate = 100 - currentDemSenate;
+demSpan.textContent = 'Democrat: ' + demTotal + ' Seats';
+demSpan.appendChild(makeDiffSpan(demTotal - currentDemSenate));
+repSpan.textContent = 'Republican: ' + repTotal + ' Seats';
+repSpan.appendChild(makeDiffSpan(repTotal - currentRepSenate));
+} else {
+var unit = activeTab === 'pres' ? 'EV' : 'Races';
+demSpan.textContent = 'Democrat: ' + demTotal + ' ' + unit;
+repSpan.textContent = 'Republican: ' + repTotal + ' ' + unit;
+}
+score.appendChild(demSpan);
+score.appendChild(sepSpan);
+score.appendChild(repSpan);
 }
 }
 function tryLoadSvg(urls, idx, wrap) {
 if (idx >= urls.length) {
 svgLoading = false;
-wrap.innerHTML = 'Failed to load U.S. SVG map.';
+wrap.textContent = 'Failed to load U.S. SVG map.';
 return;
 }
 fetch(urls[idx])
@@ -610,7 +629,7 @@ var dc = findStateShape(svg, 'DC', 'District of Columbia');
 if (dc && dc.tagName.toLowerCase() === 'circle') {
 dc.setAttribute('r', '6');
 }
-wrap.innerHTML = '';
+wrap.textContent = '';
 wrap.appendChild(svg);
 mapReady = true;
 svgLoading = false;
@@ -618,34 +637,32 @@ updateMap();
 })
 .catch(function() { tryLoadSvg(urls, idx + 1, wrap); });
 }
-  function initObserver() {
-    addStyles();
-    var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
-    if (drawer) {
-      var isUpdating = false;
-      var safeUpdate = function() {
-        if (isUpdating) return;
-        isUpdating = true;
-        try {
-          updateMap();
-        } finally {
-          isUpdating = false;
-        }
-      };
-
-      var obs = new MutationObserver(function() {
-        if (drawer.classList.contains('open')) {
-          safeUpdate();
-        }
-      });
-      obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
-      if (drawer.classList.contains('open')) safeUpdate();
-    }
-
-    document.addEventListener('click', function() {
-      setTimeout(updateMap, 50);
-    });
-  }
+function initObserver() {
+addStyles();
+var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+if (drawer) {
+var isUpdating = false;
+var safeUpdate = function() {
+if (isUpdating) return;
+isUpdating = true;
+try {
+updateMap();
+} finally {
+isUpdating = false;
+}
+};
+var obs = new MutationObserver(function() {
+if (drawer.classList.contains('open')) {
+safeUpdate();
+}
+});
+obs.observe(drawer, { attributes: true, attributeFilter: ['class', 'style'] });
+if (drawer.classList.contains('open')) safeUpdate();
+}
+document.addEventListener('click', function() {
+setTimeout(updateMap, 50);
+});
+}
 window.openPollingMap = updateMap;
 window.updatePollingMap = updateMap;
 if (document.readyState === 'loading') {
@@ -654,7 +671,7 @@ document.addEventListener('DOMContentLoaded', initObserver);
 initObserver();
 }
 // ============================================================================
-// U.S. ECONOMIC HISTORY DASHBOARD MODAL
+// U.S. ECONOMIC HISTORY DASHBOARD MODAL (100% DOM / SVG SAFE)
 // ============================================================================
 var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function ensureHistory(q) {
@@ -706,9 +723,10 @@ h.sp500[lastIdx] = curSp;
 }
 return h;
 }
-function buildClassicChartSVG(data, labels, strokeColor, zeroLine) {
+function buildClassicChartNode(data, labels, strokeColor, zeroLine) {
 data = data.slice(-15);
 labels = labels.slice(-15);
+var ns = 'w3.org';
 var w = 270, h = 115, padL = 38, padR = 12, padT = 10, padB = 26;
 var plotW = w - padL - padR;
 var plotH = h - padT - padB;
@@ -728,44 +746,66 @@ return padL + (data.length <= 1 ? plotW / 2 : (i / (data.length - 1)) * plotW);
 var toY = function(v) {
 return padT + plotH - ((v - min) / (max - min)) * plotH;
 };
-var pts = data.map(function(v, i) {
-return toX(i).toFixed(1) + ',' + toY(v).toFixed(1);
-}).join(' ');
-var yTicks = '';
+var svg = document.createElementNS(ns, 'svg');
+svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+svg.style.width = '100%';
+svg.style.height = 'auto';
+svg.style.display = 'block';
+svg.style.marginTop = '4px';
+var makeLine = function(x1, y1, x2, y2, stroke, width, dash) {
+var l = document.createElementNS(ns, 'line');
+l.setAttribute('x1', x1);
+l.setAttribute('y1', y1);
+l.setAttribute('x2', x2);
+l.setAttribute('y2', y2);
+l.setAttribute('stroke', stroke);
+l.setAttribute('stroke-width', width);
+if (dash) l.setAttribute('stroke-dasharray', dash);
+return l;
+};
+var makeText = function(x, y, text, anchor) {
+var tx = document.createElementNS(ns, 'text');
+tx.setAttribute('x', x);
+tx.setAttribute('y', y);
+tx.setAttribute('font-size', '9');
+tx.setAttribute('font-family', 'Times New Roman, serif');
+tx.setAttribute('fill', '#222');
+tx.setAttribute('text-anchor', anchor);
+tx.textContent = text;
+return tx;
+};
+svg.appendChild(makeLine(padL, padT, padL, padT + plotH, '#222', '1'));
+svg.appendChild(makeLine(padL, padT + plotH, w - padR, padT + plotH, '#222', '1'));
+if (zeroLine && min < 0 && max > 0) {
+var zy = toY(0).toFixed(1);
+svg.appendChild(makeLine(padL, zy, w - padR, zy, '#888', '1', '2,2'));
+}
 var tickCount = 4;
 for (var t = 0; t <= tickCount; t++) {
 var val = min + (t / tickCount) * (max - min);
 var ty = toY(val).toFixed(1);
-var lbl = Math.abs(val) >= 100 ? Math.round(val) : (Math.abs(val) >= 10 ? val.toFixed(1) : val.toFixed(1));
-yTicks +=
-'' +
-'' + lbl + '';
+var lbl = Math.abs(val) >= 100 ? String(Math.round(val)) : val.toFixed(1);
+svg.appendChild(makeLine(padL - 4, ty, padL, ty, '#222', '1'));
+svg.appendChild(makeText(padL - 6, Number(ty) + 3, lbl, 'end'));
 }
-var xTicks = '';
 var idxs = [0, Math.floor((data.length - 1) / 2), data.length - 1];
 idxs.forEach(function(idx) {
 if (idx < 0 || idx >= data.length) return;
 var tx = toX(idx).toFixed(1);
 var xLbl = labels[idx] || '';
-xTicks +=
-'' +
-'' + xLbl + '';
+svg.appendChild(makeLine(tx, padT + plotH, tx, padT + plotH + 4, '#222', '1'));
+svg.appendChild(makeText(tx, padT + plotH + 14, xLbl, 'middle'));
 });
-var zeroSvg = '';
-if (zeroLine && min < 0 && max > 0) {
-var zy = toY(0).toFixed(1);
-zeroSvg = '';
-}
-return (
-'' +
-'' +
-'' +
-zeroSvg +
-yTicks +
-xTicks +
-'' +
-''
-);
+var pts = data.map(function(v, i) {
+return toX(i).toFixed(1) + ',' + toY(v).toFixed(1);
+}).join(' ');
+var poly = document.createElementNS(ns, 'polyline');
+poly.setAttribute('fill', 'none');
+poly.setAttribute('stroke', strokeColor);
+poly.setAttribute('stroke-width', '1.8');
+poly.setAttribute('points', pts);
+svg.appendChild(poly);
+return svg;
 }
 function addEconStyles() {
 if (document.getElementById('us-econ-styles')) return;
@@ -787,120 +827,98 @@ s.textContent =
 '#open-us-econ-btn:hover{background:#dcd6c8}';
 document.head.appendChild(s);
 }
-  function buildCardDOM(titleText, valText, deltaArr, invertGood, decimals, subText, chartData, labels, strokeColor, zeroLine, isBudget) {
-    var card = document.createElement('div');
-    card.className = 'us-econ-card';
-
-    var title = document.createElement('div');
-    title.className = 'us-econ-card-title';
-    title.textContent = titleText;
-    card.appendChild(title);
-
-    var valDiv = document.createElement('div');
-    valDiv.className = 'us-econ-val';
-
-    var mainSpan = document.createElement('span');
-    mainSpan.textContent = valText;
-    if (isBudget) {
-      mainSpan.style.color = chartData.at(-1) < 0 ? '#7f1d1d' : '#15803d';
-    }
-    valDiv.appendChild(mainSpan);
-
-    if (deltaArr && deltaArr.length >= 2) {
-      var cur = deltaArr.at(-1);
-      var prev = deltaArr.at(-2);
-      var diff = +(cur - prev).toFixed(decimals);
-      var badge = document.createElement('span');
-      badge.style.fontSize = '0.7em';
-      badge.style.marginLeft = '5px';
-      if (diff === 0) {
-        badge.style.color = '#666';
-        badge.textContent = '—';
-      } else {
-        var up = diff > 0;
-        var good = invertGood ? !up : up;
-        badge.style.color = good ? '#15803d' : '#7f1d1d';
-        badge.textContent = (up ? '▲ ' : '▼ ') + Math.abs(diff).toFixed(decimals);
-      }
-      valDiv.appendChild(badge);
-    }
-    card.appendChild(valDiv);
-
-    var sub = document.createElement('div');
-    sub.className = 'us-econ-sub';
-    sub.textContent = subText;
-    card.appendChild(sub);
-
-    var chartWrap = document.createElement('div');
-    chartWrap.innerHTML = buildClassicChartSVG(chartData, labels, strokeColor, zeroLine);
-    card.appendChild(chartWrap);
-
-    return card;
-  }
-
-  function renderEconModal() {
-    addEconStyles();
-    var q = getQ();
-    if (!q) return;
-    var h = ensureHistory(q);
-
-    var modal = document.getElementById('us-econ-modal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'us-econ-modal';
-      document.body.appendChild(modal);
-    }
-    modal.textContent = '';
-
-    var header = document.createElement('div');
-    header.className = 'us-econ-header';
-
-    var dateSpan = document.createElement('span');
-    dateSpan.style.fontSize = '0.9em';
-    dateSpan.style.color = '#444';
-    dateSpan.textContent = h.labels.at(-1);
-
-    var h2 = document.createElement('h2');
-    h2.textContent = 'U.S. Economic History';
-
-    var closeBtn = document.createElement('button');
-    closeBtn.type = 'button';
-    closeBtn.className = 'us-econ-close';
-    closeBtn.textContent = 'Close ×';
-    closeBtn.onclick = function() {
-      modal.classList.remove('open');
-    };
-
-    header.appendChild(dateSpan);
-    header.appendChild(h2);
-    header.appendChild(closeBtn);
-    modal.appendChild(header);
-
-    var grid = document.createElement('div');
-    grid.className = 'us-econ-grid';
-
-    var inf = h.inflation.at(-1);
-    var unemp = h.unemployment.at(-1);
-    var gdp = h.gdp.at(-1);
-    var bud = h.budget.at(-1);
-    var sp = h.sp500.at(-1);
-    var growthRate = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
-
-    var budBillions = Math.round(bud * 100);
-    var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 100); });
-    var budText = budBillions < 0
-      ? 'Deficit $' + Math.abs(budBillions).toLocaleString() + 'B'
-      : 'Surplus +$' + budBillions.toLocaleString() + 'B';
-
-    grid.appendChild(buildCardDOM('Inflation (CPI YoY)', inf.toFixed(1) + '%', h.inflation, true, 1, 'Fed Target: 2.0%', h.inflation, h.labels, '#1a237e', false, false));
-    grid.appendChild(buildCardDOM('Unemployment Rate', unemp.toFixed(1) + '%', h.unemployment, true, 1, 'Civilian Labor Force', h.unemployment, h.labels, '#b71c1c', false, false));
-    grid.appendChild(buildCardDOM('U.S. Nominal GDP', '$' + gdp.toFixed(2) + 'T', h.gdp, false, 2, 'Annualized Growth: ' + (growthRate >= 0 ? '+' : '') + growthRate.toFixed(1) + '%', h.gdp, h.labels, '#1b5e20', false, false));
-    grid.appendChild(buildCardDOM('Federal Budget', budText, budSeriesBillions, false, 0, 'Annualized Balance ($ Billions)', budSeriesBillions, h.labels, '#0d47a1', true, true));
-    grid.appendChild(buildCardDOM('S&P 500 Index', Math.round(sp).toLocaleString(), h.sp500, false, 0, 'Wall Street Benchmark', h.sp500, h.labels, '#2e7d32', false, false));
-
-    modal.appendChild(grid);
-  }
-
+function buildCardDOM(titleText, valText, deltaArr, invertGood, decimals, subText, chartData, labels, strokeColor, zeroLine, isBudget) {
+var card = document.createElement('div');
+card.className = 'us-econ-card';
+var title = document.createElement('div');
+title.className = 'us-econ-card-title';
+title.textContent = titleText;
+card.appendChild(title);
+var valDiv = document.createElement('div');
+valDiv.className = 'us-econ-val';
+var mainSpan = document.createElement('span');
+mainSpan.textContent = valText;
+if (isBudget) {
+mainSpan.style.color = chartData.at(-1) < 0 ? '#7f1d1d' : '#15803d';
+}
+valDiv.appendChild(mainSpan);
+if (deltaArr && deltaArr.length >= 2) {
+var cur = deltaArr.at(-1);
+var prev = deltaArr.at(-2);
+var diff = +(cur - prev).toFixed(decimals);
+var badge = document.createElement('span');
+badge.style.fontSize = '0.7em';
+badge.style.marginLeft = '5px';
+if (diff === 0) {
+badge.style.color = '#666';
+badge.textContent = '—';
+} else {
+var up = diff > 0;
+var good = invertGood ? !up : up;
+badge.style.color = good ? '#15803d' : '#7f1d1d';
+badge.textContent = (up ? '▲ ' : '▼ ') + Math.abs(diff).toFixed(decimals);
+}
+valDiv.appendChild(badge);
+}
+card.appendChild(valDiv);
+var sub = document.createElement('div');
+sub.className = 'us-econ-sub';
+sub.textContent = subText;
+card.appendChild(sub);
+card.appendChild(buildClassicChartNode(chartData, labels, strokeColor, zeroLine));
+return card;
+}
+function renderEconModal() {
+addEconStyles();
+var q = getQ();
+if (!q) return;
+var h = ensureHistory(q);
+var modal = document.getElementById('us-econ-modal');
+if (!modal) {
+modal = document.createElement('div');
+modal.id = 'us-econ-modal';
+document.body.appendChild(modal);
+}
+modal.textContent = '';
+var header = document.createElement('div');
+header.className = 'us-econ-header';
+var dateSpan = document.createElement('span');
+dateSpan.style.fontSize = '0.9em';
+dateSpan.style.color = '#444';
+dateSpan.textContent = h.labels.at(-1);
+var h2 = document.createElement('h2');
+h2.textContent = 'U.S. Economic History';
+var closeBtn = document.createElement('button');
+closeBtn.type = 'button';
+closeBtn.className = 'us-econ-close';
+closeBtn.textContent = 'Close ×';
+closeBtn.onclick = function() {
+modal.classList.remove('open');
+};
+header.appendChild(dateSpan);
+header.appendChild(h2);
+header.appendChild(closeBtn);
+modal.appendChild(header);
+var grid = document.createElement('div');
+grid.className = 'us-econ-grid';
+var inf = h.inflation.at(-1);
+var unemp = h.unemployment.at(-1);
+var gdp = h.gdp.at(-1);
+var bud = h.budget.at(-1);
+var sp = h.sp500.at(-1);
+var growthRate = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
+var budBillions = Math.round(bud * 100);
+var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 100); });
+var budText = budBillions < 0
+? 'Deficit $' + Math.abs(budBillions).toLocaleString() + 'B'
+: 'Surplus +$' + budBillions.toLocaleString() + 'B';
+grid.appendChild(buildCardDOM('Inflation (CPI YoY)', inf.toFixed(1) + '%', h.inflation, true, 1, 'Fed Target: 2.0%', h.inflation, h.labels, '#1a237e', false, false));
+grid.appendChild(buildCardDOM('Unemployment Rate', unemp.toFixed(1) + '%', h.unemployment, true, 1, 'Civilian Labor Force', h.unemployment, h.labels, '#b71c1c', false, false));
+grid.appendChild(buildCardDOM('U.S. Nominal GDP', '$' + gdp.toFixed(2) + 'T', h.gdp, false, 2, 'Annualized Growth: ' + (growthRate >= 0 ? '+' : '') + growthRate.toFixed(1) + '%', h.gdp, h.labels, '#1b5e20', false, false));
+grid.appendChild(buildCardDOM('Federal Budget', budText, budSeriesBillions, false, 0, 'Annualized Balance ($ Billions)', budSeriesBillions, h.labels, '#0d47a1', true, true));
+grid.appendChild(buildCardDOM('S&P 500 Index', Math.round(sp).toLocaleString(), h.sp500, false, 0, 'Wall Street Benchmark', h.sp500, h.labels, '#2e7d32', false, false));
+modal.appendChild(grid);
+}
 window.openUsEconModal = function() {
 renderEconModal();
 var m = document.getElementById('us-econ-modal');
