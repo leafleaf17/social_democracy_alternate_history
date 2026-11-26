@@ -246,40 +246,50 @@ return el;
 }
 return null;
 }
-function makeDraggable(drawer) {
-if (!drawer || drawer.dataset.draggableReady) return;
-drawer.dataset.draggableReady = '1';
-var handle = drawer.querySelector('h2') ? drawer.querySelector('h2').parentElement : drawer;
-handle.style.cursor = 'move';
-handle.style.userSelect = 'none';
-var dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
-handle.addEventListener('pointerdown', function(e) {
-if (e.target.closest('button') || e.target.closest('select')) return;
-dragging = true;
-var rect = drawer.getBoundingClientRect();
-startX = e.clientX;
-startY = e.clientY;
-startLeft = rect.left;
-startTop = rect.top;
-drawer.style.setProperty('right', 'auto', 'important');
-drawer.style.setProperty('bottom', 'auto', 'important');
-drawer.style.setProperty('left', startLeft + 'px', 'important');
-drawer.style.setProperty('top', startTop + 'px', 'important');
-e.preventDefault();
-});
-window.addEventListener('pointermove', function(e) {
-if (!dragging) return;
-var dx = e.clientX - startX;
-var dy = e.clientY - startY;
-var newLeft = Math.max(0, Math.min(window.innerWidth - 140, startLeft + dx));
-var newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
-drawer.style.setProperty('left', newLeft + 'px', 'important');
-drawer.style.setProperty('top', newTop + 'px', 'important');
-});
-window.addEventListener('pointerup', function() {
-dragging = false;
-});
-}
+  function makeDraggable(drawer) {
+    if (!drawer || drawer.dataset.draggableReady) return;
+    drawer.dataset.draggableReady = '1';
+
+    var h2 = drawer.querySelector('h2');
+    var handle = (h2 && h2.parentElement && h2.parentElement !== drawer) ? h2.parentElement : (h2 || drawer);
+    handle.style.cursor = 'move';
+    handle.style.userSelect = 'none';
+
+    var dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+    handle.addEventListener('pointerdown', function(e) {
+      if (e.target.closest('button, select, svg, .polling-map-svg-wrap')) return;
+      var rect = drawer.getBoundingClientRect();
+      // Only allow dragging from the top 55px title bar area
+      if (e.clientY - rect.top > 55) return;
+
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = rect.left;
+      startTop = rect.top;
+
+      drawer.style.setProperty('right', 'auto', 'important');
+      drawer.style.setProperty('bottom', 'auto', 'important');
+      drawer.style.setProperty('left', startLeft + 'px', 'important');
+      drawer.style.setProperty('top', startTop + 'px', 'important');
+      e.preventDefault();
+    });
+
+    window.addEventListener('pointermove', function(e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      var newLeft = Math.max(0, Math.min(window.innerWidth - 140, startLeft + dx));
+      var newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
+      drawer.style.setProperty('left', newLeft + 'px', 'important');
+      drawer.style.setProperty('top', newTop + 'px', 'important');
+    });
+
+    window.addEventListener('pointerup', function() {
+      dragging = false;
+    });
+  }
 function ensureDrawerContent(drawer) {
 addStyles();
 applyDrawerTheme(drawer);
@@ -483,30 +493,66 @@ break;
 }
 }
 }
-var meta = drawer.querySelector('.polling-map-meta');
-if (meta) {
-var pal = palettes[activePalette] || palettes.yapms;
-var d3 = pal.dem.at(3), d2 = pal.dem.at(2), d1 = pal.dem.at(1), d0 = pal.dem.at(0);
-var r0 = pal.rep.at(0), r1 = pal.rep.at(1), r2 = pal.rep.at(2), r3 = pal.rep.at(3);
-var keyHtml =
-'' +
-'D:' +
-'' +
-'' +
-'' +
-'' +
-'|' +
-'' +
-'' +
-'' +
-'' +
-':R' +
-'(15+ / 5–15 / 1–5 / <1)' +
-'';
-var statsHtml =
-'' + tippingText + 'Tossups (<2%): ' + tossupCount + '';
-meta.innerHTML = keyHtml + statsHtml;
-}
+ var meta = drawer.querySelector('.polling-map-meta');
+    if (meta) {
+      meta.textContent = '';
+      var pal = palettes[activePalette] || palettes.yapms;
+
+      var keyDiv = document.createElement('div');
+      keyDiv.className = 'polling-map-key';
+
+      var dLbl = document.createElement('strong');
+      dLbl.textContent = 'D: ';
+      keyDiv.appendChild(dLbl);
+
+      [
+        { col: pal.dem.at(3), title: 'D 15+' },
+        { col: pal.dem.at(2), title: 'D 5-15' },
+        { col: pal.dem.at(1), title: 'D 1-5' },
+        { col: pal.dem.at(0), title: 'D <1' }
+      ].forEach(function(item) {
+        var sw = document.createElement('span');
+        sw.className = 'polling-map-swatch';
+        sw.style.backgroundColor = item.col;
+        sw.title = item.title;
+        keyDiv.appendChild(sw);
+      });
+
+      var sep = document.createElement('span');
+      sep.textContent = ' | ';
+      sep.style.opacity = '0.6';
+      sep.style.margin = '0 4px';
+      keyDiv.appendChild(sep);
+
+      [
+        { col: pal.rep.at(0), title: 'R <1' },
+        { col: pal.rep.at(1), title: 'R 1-5' },
+        { col: pal.rep.at(2), title: 'R 5-15' },
+        { col: pal.rep.at(3), title: 'R 15+' }
+      ].forEach(function(item) {
+        var sw = document.createElement('span');
+        sw.className = 'polling-map-swatch';
+        sw.style.backgroundColor = item.col;
+        sw.title = item.title;
+        keyDiv.appendChild(sw);
+      });
+
+      var rLbl = document.createElement('strong');
+      rLbl.textContent = ' :R';
+      keyDiv.appendChild(rLbl);
+
+      var rangeNote = document.createElement('span');
+      rangeNote.textContent = ' (15+ / 5-15 / 1-5 / <1)';
+      rangeNote.style.opacity = '0.75';
+      rangeNote.style.marginLeft = '6px';
+      keyDiv.appendChild(rangeNote);
+
+      var statsDiv = document.createElement('div');
+      statsDiv.textContent = tippingText.replace(/<[^>]*>/g, '') + 'Tossups (<2%): ' + tossupCount;
+
+      meta.appendChild(keyDiv);
+      meta.appendChild(statsDiv);
+    }
 var score = drawer.querySelector('.polling-map-score');
 if (score) {
 var demScoreCol = isDarkMode ? '#5c9eff' : '#1c408c';
