@@ -30,7 +30,7 @@ The works councils, elected by workers at each major business, have been in plac
 @negotiate_jcpoa
 title: Can we negotiate a return of the JCPOA?
 subtitle: The JCPOA with Iran was ripped up by Donald Trump, but maybe we can bring it back.
-view-if: hamas_attacked = 0;
+view-if: hamas_attacked = 0
 on-arrival: afgan_army_strength += 1; progressive_dissent +=5; socialist_dissent +=5; bop_foreign += 3
 max-visits: 3
 
