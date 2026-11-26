@@ -504,6 +504,10 @@ if (isNaN(curGdp) || curGdp <= 0) curGdp = 21.8;
   }
 
   function buildClassicChartSVG(data, labels, strokeColor, zeroLine) {
+      function buildClassicChartSVG(data, labels, strokeColor, zeroLine) {
+    data = data.slice(-15);
+    labels = labels.slice(-15);
+
     var w = 270, h = 115, padL = 36, padR = 12, padT = 10, padB = 26;
     var plotW = w - padL - padR;
     var plotH = h - padT - padB;
@@ -571,6 +575,7 @@ if (isNaN(curGdp) || curGdp <= 0) curGdp = 21.8;
         '<polyline fill="none" stroke="' + strokeColor + '" stroke-width="1.8" points="' + pts + '"/>' +
       '</svg>'
     );
+    
   }
 
   function addEconStyles() {
