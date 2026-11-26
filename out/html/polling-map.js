@@ -144,11 +144,11 @@
     };
   }
 
-  function renderTooltipDOM(tip, code, res, tab, isActive, isPinned) {
+   function renderTooltipDOM(tip, code, res, tab, isActive, isPinned) {
     tip.textContent = '';
 
     var title = document.createElement('strong');
-    title.textContent = res.name + ' (' + code + ')' + (isActive && tab === 'pres' ? ' · ' + res.ev + ' EV' : '');
+    title.textContent = res.name + (isActive && tab === 'pres' ? ' · ' + res.ev + ' EV' : '');
     tip.appendChild(title);
     tip.appendChild(document.createElement('br'));
 
@@ -164,22 +164,25 @@
       var repCol = isDarkMode ? '#ff5865' : '#b91c1c';
       var marginColor = m > 0 ? demCol : m < 0 ? repCol : (isDarkMode ? '#ffffff' : '#1c1b18');
 
+      var demName = (res.demCand && res.demCand !== 'Generic Democrat' && res.demCand !== 'Democrats') ? res.demCand : 'Democrat';
+      var repName = (res.repCand && res.repCand !== 'Generic Republican' && res.repCand !== 'Republicans') ? res.repCand : 'Republican';
+
       var dRow = document.createElement('div');
       var dLbl = document.createElement('span');
       dLbl.style.color = demCol;
       dLbl.style.fontWeight = 'bold';
-      dLbl.textContent = 'Democrats: ';
+      dLbl.textContent = demName + ': ';
       dRow.appendChild(dLbl);
-      dRow.appendChild(document.createTextNode(res.dem.toFixed(2) + '%' + (res.demCand && res.demCand !== 'Generic Democrat' ? ' (' + res.demCand + ')' : '')));
+      dRow.appendChild(document.createTextNode(res.dem.toFixed(2) + '%'));
       tip.appendChild(dRow);
 
       var rRow = document.createElement('div');
       var rLbl = document.createElement('span');
       rLbl.style.color = repCol;
       rLbl.style.fontWeight = 'bold';
-      rLbl.textContent = 'Republicans: ';
+      rLbl.textContent = repName + ': ';
       rRow.appendChild(rLbl);
-      rRow.appendChild(document.createTextNode(res.rep.toFixed(2) + '%' + (res.repCand && res.repCand !== 'Generic Republican' ? ' (' + res.repCand + ')' : '')));
+      rRow.appendChild(document.createTextNode(res.rep.toFixed(2) + '%'));
       tip.appendChild(rRow);
 
       var mRow = document.createElement('div');
@@ -203,6 +206,7 @@
       tip.appendChild(pinDiv);
     }
   }
+
 
   function addStyles() {
     if (document.getElementById('polling-map-styles')) return;
