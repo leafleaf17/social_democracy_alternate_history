@@ -623,8 +623,8 @@ initObserver();
     var growth = h.gdp[h.gdp.length - 1];
     var bud = h.budget[h.budget.length - 1];
     var sp = h.sp500[h.sp500.length - 1];
-var budBillions = Math.round(bud * 10);
-    var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 10); });
+var budBillions = Math.round(bud * 100);
+    var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 100); });
      var budStatus = budBillions < 0
       ? '<span style="color:#a51c30;">Deficit $' + Math.abs(budBillions).toLocaleString() + 'B</span>'
       : '<span style="color:#1e6b34;">Surplus +$' + budBillions.toLocaleString() + 'B</span>';
