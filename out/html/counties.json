@@ -1,0 +1,40 @@
+import csv
+import io
+import json
+import os
+import urllib.request
+
+ELECTION_URL = "https://githubusercontent.com"
+
+def fetch_text(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return resp.read().decode("utf-8")
+
+print("Downloading 2020 county election data...")
+elec_csv = fetch_text(ELECTION_URL)
+reader = csv.DictReader(io.StringIO(elec_csv))
+
+counties = {}
+
+for row in reader:
+    fips = row.get("county_fips", "").zfill(5)
+    name = row.get("county_name", "").strip()
+    if not fips or len(fips) != 5 or fips.endswith("000"):
+        continue
+
+    dem_votes = float(row.get("votes_dem", 0) or 0)
+    rep_votes = float(row.get("votes_gop", 0) or 0)
+    total = dem_votes + rep_votes
+    if total <= 0:
+        continue
+
+    dem_pct = round((dem_votes / total) * 100, 2)
+    weight = max(1, round(total / 1000))
+    counties[fips] = [name, dem_pct, weight]
+
+out_path = "out/html/counties.json" if os.path.isdir("out/html") else "counties.json"
+with open(out_path, "w", encoding="utf-8") as f:
+    json.dump(counties, f, separators=(",", ":"))
+
+print(f"Saved {len(counties)} counties to {out_path}!")
