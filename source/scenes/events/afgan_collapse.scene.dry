@@ -22,7 +22,8 @@ on-arrival: {!
 Q.republican_radicalization += 7;
 Q.gop_hawk_vs_dove +=15;
 Q.nat_flat_buff -= 2;
-Q.afgan_failure_massive +=1;
+Q.afgan_failure_mod +=1;
+Q.afgan_failure_mod_poll_rebound +=10
 Q.blue_dog_dissent +=5;
 Q.new_liberal_dissent +=10;
 window.simulate_polling();

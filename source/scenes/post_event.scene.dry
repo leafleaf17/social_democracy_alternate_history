@@ -297,6 +297,10 @@ if (Q.afgan_failure_massive_poll_rebound > 0 ) {
     Q.afgan_failure_massive_poll_rebound -= 1
     Q.nat_flat_buff += 0.15;
 }
+if (Q.afgan_failure_mod_poll_rebound > 0 ) {
+    Q.afgan_failure_mod_poll_rebound -= 1
+    Q.nat_flat_buff += 0.1;
+}
   // ============================================================================
     // ECONOMIC TO DEMOGRAPHIC POLLING (RECOVERABLE OFFSET + LINGERING TRAUMA)
     // ============================================================================

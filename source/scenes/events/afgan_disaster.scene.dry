@@ -24,6 +24,7 @@ Q.gop_hawk_vs_dove +=15;
 Q.nat_flat_buff -= 3;
 Q.afgan_failure_massive +=1;
 Q.blue_dog_dissent +=10;
+Q.afgan_failure_massive_poll_rebound = 10;
 Q.new_liberal_dissent +=10;
 window.simulate_polling();
 !}
