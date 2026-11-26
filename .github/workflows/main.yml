@@ -34,6 +34,13 @@ jobs:
         run: tar -cvf artifact.tar -C out/html .
       - name: Upload artifact
         uses: actions/upload-artifact@v4
+      - name: Copy game.json to output
+        run: cp out/game.json out/html/
+      - name: Generate county data
+        run: python3 build_counties.py
+      - name: Package Pages artifact
+        run: tar -cvf artifact.tar -C out/html .
+
         with:
           name: github-pages
           path: artifact.tar
