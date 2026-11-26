@@ -143,13 +143,13 @@ var fiscalInflationImpulse = Math.max(-0.10, Math.min(0.35, deficitGap * 0.012))
  if (Q.ara > 0) {
     Q.inflation += 0.4
     Q.economic_growth += 0.3
-    Q.unemployment -=0.4
+    Q.unemployment -=0.5
     Q.ara -=1
     Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 2.5;
  }
  if (Q.ara_lite > 0) {
     Q.inflation += 0.1
-    Q.unemployment -=0.15
+    Q.unemployment -=0.1
     Q.ara_lite -=1
         Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 0.5;
  }
@@ -159,10 +159,16 @@ if (Q.andrew_yang_dw === 0 && Q.year === 2021 && Q.month === 9) {
 if (Q.andrew_yang_dw === 1 && Q.year === 2021 && Q.month === 9) {
     Q.budget += 2.5;
 }
-if (Q.year <= 2021 && Q.month < 9) {
+if (Q.year <= 2021 && Q.month < 11) {
     Q.inflation += 0.2;
+    
     Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 0.5;
 }
+if (Q.year <= 2021 && Q.month < 11 && Q.unemployment > 3) {
+     Q.unemployment -= 0.2;
+    Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 0.5;
+}
+
 
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
     
