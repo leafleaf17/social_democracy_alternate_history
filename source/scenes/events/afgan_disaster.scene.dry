@@ -12,17 +12,19 @@ The Doha accords negotiated by former President Trump, was meant to bring an end
 
 As the date of the withdrawal came closer and closer, national security advisors to Sanders requested he extends the withdrawal deadline, stating that America could not effectively evacuate its equipment and men in Afghanistan in an orderly fashion by the May deadline, yet we chose to ignore them and not extend the deadline. The Taliban launched a massive offensive in April, and the morale of the Afghan army seemingly collapsed at the realization that America would not be there to help them. Despite Pentagon experts' predictions that the Afghan national army could last a few months minimum during the withdrawal process, it seems the Afghan army was plagued with more corruption and morale issues than we previously thought.
 
+Kabul was rapidly surrounded before we could even get our troops out, and we, combined with our NATO allies, had to rush in additional troops to secure the chaotic environment that inevitably hit Kabul. We rapidly evacuated many of our men and our allies, but did not have time to get our equipment out. We also failed to disable the tech of the equipment, leading to the Taliban army to be able to steal billions of dollars of our equipment. Perhaps most disastrously, the chaotic environment of Kabul allowed a terrorist plot to go undiscovered, eventually leading to a suicide bombing killing 11 troops.
+
 - @fuck_our_lifes
 
 @fuck_our_lifes
 title: What is the reaction of the American public?
 on-arrival: {!
 Q.republican_radicalization += 7;
-Q.gop_hawk_vs_dove +=15
+Q.gop_hawk_vs_dove +=15;
 Q.nat_flat_buff -= 3;
-Q.afgan_failure_massive +=1
-Q.blue_dog_dissent +=10
-Q.new_liberal_dissent +=10
+Q.afgan_failure_massive +=1;
+Q.blue_dog_dissent +=10;
+Q.new_liberal_dissent +=10;
 window.simulate_polling();
 !}
 

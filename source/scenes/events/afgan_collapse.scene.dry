@@ -1,0 +1,31 @@
+title: The Afgan Debacle
+new-page: true
+subtitle: The withdrawal from Afganistan has not gone as planned...
+tags: event
+view-if: year = 2021 and month > 5 and afgan_withdraw_month = 0 and afgan_army_strength = 0
+max-visits: 1
+face-image: img/afgan_disaster.jpg
+
+= Breaking News From Afganistan
+
+The Doha accords negotiated by former President Trump, was meant to bring an end to America's longest war. May 2021 was agreed upon as the date for American forces to leave Afghanistan, in exchange for confirmation by the Taliban that they would not allow terrorist operations in Afghanistan and that they would, in good faith, continue negotiations towards a power-sharing agreement with the Afghan government.
+
+As the date of the withdrawal came closer and closer, national security advisors to Sanders requested he extends the withdrawal deadline, which was eventually approved. Despite the argument that the delay would allow America to effectively evacuate its equipment and men in Afghanistan in an orderly fashion, it seems we did not calculate just how fast the Afghan army would collapse. Yet, we chose to ignore them and not extend the deadline. The Taliban launched a massive offensive, and the morale of the Afghan army seemingly collapsed at the realization that America would not be there to help them. Despite Pentagon experts' predictions that the Afghan national army could last a few months minimum during the withdrawal process, it seems the Afghan army was plagued with more corruption and morale issues than we previously thought.
+
+Kabul was rapidly surrounded before we could even get our troops out, and we, combined with our NATO allies, had to rush in additional troops to secure the chaotic environment that inevitably hit Kabul. We rapidly evacuated many of our men and our allies, but did not have time to get our equipment out. Luckily, we managed to disable the tech of the equipment, so the Taliban army cannot actually use it, although it's still a PR disaster as the Taliban poses with our weapons as well as a waste of money. Perhaps most disastrously, the chaotic environment of Kabul allowed a terrorist plot to go undiscovered, eventually leading to a suicide bombing killing 11 troops.
+
+- @fuck_our_lifes
+
+@fuck_our_lifes
+title: What is the reaction of the American public?
+on-arrival: {!
+Q.republican_radicalization += 7;
+Q.gop_hawk_vs_dove +=15;
+Q.nat_flat_buff -= 3;
+Q.afgan_failure_massive +=1;
+Q.blue_dog_dissent +=5;
+Q.new_liberal_dissent +=10;
+window.simulate_polling();
+!}
+
+Immediately, the affair becomes a massive scandal. The <span style="color: #DE0100;">Republicans</span> grill us on multiple fronts; we've lost billions of dollars of US military equipment, 11 soldiers have lost their lives, and we've been completely humilated on the world stage. Our polling numbers have suffered a massive hit. For now, our response has been to claim the withdrawal was always going to be messy, and to hope that a sucessful domestic agenda will lead to Americans putting this affair behind them by the time important elections come up.
