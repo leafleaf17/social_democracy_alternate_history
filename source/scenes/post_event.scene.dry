@@ -218,35 +218,53 @@ if (isNaN(gRate)) gRate = 4.0;
 Q.us_gdp = +( (Number(Q.us_gdp) || 21.8) * (1 + gRate / 1200) ).toFixed(2);
 
 
+       // ============================================================================
+    // UPDATE U.S. NOMINAL GDP ($ TRILLIONS)
     // ============================================================================
-// S&P 500 MONTHLY CALCULATION (NaN-PROOF)
-// ============================================================================
-var gRate = Number(Q.economic_growth);
-if (isNaN(gRate)) gRate = 4.0;
+    var gRate = Number(Q.economic_growth);
+    if (isNaN(gRate)) gRate = 4.0;
 
-var iRate = Number(Q.inflation);
-if (isNaN(iRate)) iRate = 1.4;
+    var curGdp = Number(Q.us_gdp);
+    if (isNaN(curGdp) || curGdp <= 0) curGdp = 21.8;
 
-var uRate = Number(Q.unemployment);
-if (isNaN(uRate)) uRate = 6.3;
+    // Converts annualized GDP growth % into monthly % change (e.g., 4.0% -> +0.33%/mo)
+    Q.us_gdp = +(curGdp * (1 + gRate / 1200)).toFixed(2);
 
-var fedDrag = Math.max(0, Number(Q.fed_stance) || 0) * 0.004;
-var growthFactor = (gRate - 2.0) * 0.0025;
-var infPenalty   = Math.max(0, iRate - 2.5) * 0.003;
-var unempPenalty = Math.max(0, uRate - 5.0) * 0.002;
+    // ============================================================================
+    // S&P 500 MONTHLY CALCULATION (WITH REALISTIC MARKET SWINGS)
+    // ============================================================================
+    var iRate = Number(Q.inflation);
+    if (isNaN(iRate)) iRate = 1.4;
 
-var noise = (Math.random() - 0.5) * 0.008;
-var macroPct = Math.max(-0.06, Math.min(0.06, 0.005 + growthFactor - infPenalty - unempPenalty - fedDrag + noise));
-var eventPct = (Number(Q.sp500_event_pct) || 0) / 100;
-var eventMod = Number(Q.sp500_event_mod) || 0;
+    var uRate = Number(Q.unemployment);
+    if (isNaN(uRate)) uRate = 6.3;
 
-var currentSp = Number(Q.sp500);
-if (isNaN(currentSp) || currentSp <= 0) currentSp = 3714;
+    var fedDrag      = Math.max(0, Number(Q.fed_stance) || 0) * 0.005;
+    var growthFactor = (gRate - 2.0) * 0.0025;
+    var infPenalty   = Math.max(0, iRate - 2.5) * 0.003;
+    var unempPenalty = Math.max(0, uRate - 5.0) * 0.002;
 
-Q.sp500 = Math.max(500, Math.round(currentSp * (1 + macroPct + eventPct) + eventMod));
-Q.sp_500 = Q.sp500;
-Q.sp500_event_pct = 0;
-Q.sp500_event_mod = 0;
+    // Realistic monthly Wall Street volatility (-2.8% to +3.0% swings + occasional pullback/rally)
+    var noise = (Math.random() - 0.48) * 0.058;
+    var roll = Math.random();
+    if (roll < 0.12) {
+        noise -= 0.025; // 12% chance of a sudden market pullback (-2.5%)
+    } else if (roll > 0.88) {
+        noise += 0.025; // 12% chance of a strong earnings rally (+2.5%)
+    }
+
+    var macroPct = Math.max(-0.08, Math.min(0.08, 0.004 + growthFactor - infPenalty - unempPenalty - fedDrag + noise));
+    var eventPct = (Number(Q.sp500_event_pct) || 0) / 100;
+    var eventMod = Number(Q.sp500_event_mod) || 0;
+
+    var currentSp = Number(Q.sp500);
+    if (isNaN(currentSp) || currentSp <= 0) currentSp = 3714;
+
+    Q.sp500 = Math.max(500, Math.round(currentSp * (1 + macroPct + eventPct) + eventMod));
+    Q.sp_500 = Q.sp500;
+    Q.sp500_event_pct = 0;
+    Q.sp500_event_mod = 0;
+
 
     // ============================================================================
     // HONEYMOON DECAY
@@ -282,6 +300,85 @@ if (Q.afgan_failure_massive_poll_rebound > 0 ) {
     Q.afgan_failure_massive_poll_rebound -= 1
     Q.nat_flat_buff += 0.15;
 }
+  // ============================================================================
+    // ECONOMIC TO DEMOGRAPHIC POLLING (RECOVERABLE OFFSET + LINGERING TRAUMA)
+    // ============================================================================
+    if (Q.nat_support && Q.nat_support.inc && Q.nat_support.age) {
+        if (!Q.econ_applied_offset) {
+            Q.econ_applied_offset = { inc_low: 0, inc_mid: 0, inc_high: 0, age_youth: 0, age_mid: 0, age_old: 0, geo_suburban: 0, edu_noncollege: 0 };
+        }
+        if (!Q.econ_trauma) {
+            Q.econ_trauma = { inc_low: 0, inc_mid: 0, inc_high: 0, age_youth: 0, age_mid: 0, age_old: 0, geo_suburban: 0, edu_noncollege: 0 };
+        }
+
+        var infNow   = Number(Q.inflation) || 1.4;
+        var unempNow = Number(Q.unemployment) || 6.3;
+        var gdpNow   = Number(Q.economic_growth) || 4.0;
+        var spNow    = Number(Q.sp500) || 3714;
+
+        // 1. Calculate current instantaneous mood for each metric (works both ways, capped)
+        // Inflation: neutral at 2.3% (hurts/helps descending by income: low > mid > high)
+        var infDiff = Math.max(-2.0, Math.min(4.5, 2.3 - infNow)); // Positive when inf < 2.3%, negative when > 2.3%
+
+        // Unemployment: neutral at 5.0% (lower = positive boost, higher = negative hit)
+        var unempDiff = Math.max(-4.0, Math.min(2.0, 5.0 - unempNow));
+
+        // GDP Growth: neutral at 2.5%
+        var gdpDiff = Math.max(-4.5, Math.min(2.5, gdpNow - 2.5));
+
+        // S&P 500: neutral vs 3,714 baseline (+10% rally = +1.0, -15% drop = -1.5)
+        var spPctFromStart = (spNow - 3714) / 3714;
+        var spMood = Math.max(-2.5, Math.min(2.0, spPctFromStart * 8.0));
+
+        // 2. Map metrics to target demographic offsets (clamped so bad economy hurts without nuking)
+        var targets = {
+            inc_low:        Math.max(-4.5, Math.min(3.0, infDiff * 0.95 + unempDiff * 0.65)),
+            inc_mid:        Math.max(-3.8, Math.min(2.8, infDiff * 0.65 + unempDiff * 0.45 + gdpDiff * 0.25)),
+            inc_high:       Math.max(-3.0, Math.min(2.5, infDiff * 0.25 + spMood * 0.75 + gdpDiff * 0.20)),
+            age_youth:      Math.max(-3.5, Math.min(2.5, unempDiff * 0.70 + infDiff * 0.40)),
+            age_mid:        Math.max(-3.5, Math.min(2.5, gdpDiff * 0.45 + infDiff * 0.50)),
+            age_old:        Math.max(-3.8, Math.min(2.5, spMood * 0.85 + infDiff * 0.35)),
+            geo_suburban:   Math.max(-3.5, Math.min(2.5, gdpDiff * 0.45 + infDiff * 0.45 + spMood * 0.25)),
+            edu_noncollege: Math.max(-4.0, Math.min(2.8, infDiff * 0.70 + unempDiff * 0.50))
+        };
+
+        // 3. Update trauma memory & apply only the net delta to Q.nat_support
+        var mapToSupport = function(key, obj, prop) {
+            var target = targets[key];
+            var trauma = Q.econ_trauma[key] || 0;
+
+            if (target < 0) {
+                // Bad economy builds lingering trauma up to 35% of the current pain (capped at -1.5)
+                var targetTrauma = Math.max(-1.5, target * 0.35);
+                if (targetTrauma < trauma) {
+                    trauma = +(trauma + (targetTrauma - trauma) * 0.25).toFixed(3); // Builds gradually
+                } else {
+                    trauma = +(trauma * 0.90).toFixed(3); // Slowly eases if pain lessens
+                }
+            } else {
+                // Good/recovered economy heals lingering trauma by 15% per month
+                trauma = +(trauma * 0.85).toFixed(3);
+                if (Math.abs(trauma) < 0.02) trauma = 0;
+            }
+
+            Q.econ_trauma[key] = trauma;
+            var newEffective = +(target + trauma).toFixed(3);
+            var oldApplied = Q.econ_applied_offset[key] || 0;
+            var delta = +(newEffective - oldApplied).toFixed(3);
+
+            obj[prop] = +(obj[prop] + delta).toFixed(3);
+            Q.econ_applied_offset[key] = newEffective;
+        };
+
+        mapToSupport('inc_low', Q.nat_support.inc, 'low');
+        mapToSupport('inc_mid', Q.nat_support.inc, 'mid');
+        mapToSupport('inc_high', Q.nat_support.inc, 'high');
+        mapToSupport('age_youth', Q.nat_support.age, 'youth');
+        mapToSupport('age_mid', Q.nat_support.age, 'mid');
+        mapToSupport('age_old', Q.nat_support.age, 'old');
+        if (Q.nat_support.geo) mapToSupport('geo_suburban', Q.nat_support.geo, 'suburban');
+        if (Q.nat_support.edu) mapToSupport('edu_noncollege', Q.nat_support.edu, 'noncollege');
+    }
 if (window.simulate_polling) {
     window.simulate_polling();
 }
