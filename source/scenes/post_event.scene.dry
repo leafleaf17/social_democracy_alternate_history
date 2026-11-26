@@ -295,7 +295,7 @@ if (Q.year <= 2021 && Q.month < 9) {
 }
 if (Q.afgan_failure_massive_poll_rebound > 0 ) {
     Q.afgan_failure_massive_poll_rebound -= 1
-    Q.nat_flat_buff += 0.15;
+    Q.nat_flat_buff += 0.1;
 }
 if (Q.afgan_failure_mod_poll_rebound > 0 ) {
     Q.afgan_failure_mod_poll_rebound -= 1
