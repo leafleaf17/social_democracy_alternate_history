@@ -504,7 +504,6 @@ if (isNaN(curGdp) || curGdp <= 0) curGdp = 21.8;
   }
 
   function buildClassicChartSVG(data, labels, strokeColor, zeroLine) {
-      function buildClassicChartSVG(data, labels, strokeColor, zeroLine) {
     data = data.slice(-15);
     labels = labels.slice(-15);
 
