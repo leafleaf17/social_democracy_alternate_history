@@ -785,7 +785,9 @@ initObserver();
     return list;
   }
 
+
   window.openStateCountyView = function(stCode) {
+    
     var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
     if (!drawer) return;
     var wrap = drawer.querySelector('.polling-map-svg-wrap');
