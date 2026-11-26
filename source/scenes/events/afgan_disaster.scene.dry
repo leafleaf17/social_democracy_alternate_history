@@ -21,7 +21,7 @@ title: What is the reaction of the American public?
 on-arrival: {!
 Q.republican_radicalization += 7;
 Q.gop_hawk_vs_dove +=15
-Q.nat_flat_buff -= 2.5;
+Q.nat_flat_buff -= 3;
 Q.afgan_failure_massive +=1
 Q.blue_dog_dissent +=10
 Q.new_liberal_dissent +=10

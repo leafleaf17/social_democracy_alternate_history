@@ -280,7 +280,7 @@ Q.sp500_event_mod = 0;
 }
 if (Q.afgan_failure_massive_poll_rebound > 0 ) {
     Q.afgan_failure_massive_poll_rebound -= 1
-    Q.nat_flat_buff += 0.1;
+    Q.nat_flat_buff += 0.15;
 }
 if (window.simulate_polling) {
     window.simulate_polling();
