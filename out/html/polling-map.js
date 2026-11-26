@@ -535,23 +535,28 @@ sw.style.backgroundColor = item.col;
 sw.title = item.title;
 keyDiv.appendChild(sw);
 });
-var sep = document.createElement('span');
-sep.textContent = ' | ';
-sep.style.opacity = '0.6';
-sep.style.margin = '0 4px';
-keyDiv.appendChild(sep);
-[
-{ col: pal.rep.at(0), title: 'R <1' },
-{ col: pal.rep.at(1), title: 'R 1-5' },
-{ col: pal.rep.at(2), title: 'R 5-15' },
-{ col: pal.rep.at(3), title: 'R 15+' }
-].forEach(function(item) {
-var sw = document.createElement('span');
-sw.className = 'polling-map-swatch';
-sw.style.backgroundColor = item.col;
-sw.title = item.title;
-keyDiv.appendChild(sw);
-});
+  var sep = document.createElement('span');
+      sep.textContent = ' | ';
+      sep.style.opacity = '0.6';
+      sep.style.margin = '0 6px';
+      keyDiv.appendChild(sep);
+
+      var rLbl = document.createElement('strong');
+      rLbl.textContent = 'R: ';
+      keyDiv.appendChild(rLbl);
+
+      [
+        { col: pal.rep.at(3), title: 'R 15+' },
+        { col: pal.rep.at(2), title: 'R 5-15' },
+        { col: pal.rep.at(1), title: 'R 1-5' },
+        { col: pal.rep.at(0), title: 'R <1' }
+      ].forEach(function(item) {
+        var sw = document.createElement('span');
+        sw.className = 'polling-map-swatch';
+        sw.style.backgroundColor = item.col;
+        sw.title = item.title;
+        keyDiv.appendChild(sw);
+      });
 var rLbl = document.createElement('strong');
 rLbl.textContent = ' :R';
 keyDiv.appendChild(rLbl);
