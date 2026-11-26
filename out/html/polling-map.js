@@ -312,6 +312,8 @@ dragging = false;
 });
 }
 function ensureDrawerContent(drawer) {
+
+
 addStyles();
 applyDrawerTheme(drawer);
 makeDraggable(drawer);
@@ -372,6 +374,25 @@ rightTools.appendChild(themeBtn);
 controls.appendChild(tabBar);
 controls.appendChild(rightTools);
 content.appendChild(controls);
+var tabBar = controls.querySelector('.polling-map-tabs');
+var backBtn = controls.querySelector('.polling-map-back-btn');
+if (!backBtn && tabBar) {
+  backBtn = document.createElement('button');
+  backBtn.type = 'button';
+  backBtn.className = 'polling-map-back-btn';
+  backBtn.textContent = '← Back to U.S. Map';
+  backBtn.onclick = function() {
+    zoomedState = null;
+    mapReady = false;
+    svgLoading = false;
+    var w = drawer.querySelector('.polling-map-svg-wrap');
+    if (w) w.textContent = 'Loading map...';
+    updateMap();
+  };
+  tabBar.insertBefore(backBtn, tabBar.firstChild);
+}
+if (backBtn) backBtn.style.display = zoomedState ? 'inline-block' : 'none';
+
 }
 controls.querySelectorAll('.polling-map-tab').forEach(function(b) {
 if (b.dataset.tab === activeTab) b.classList.add('active');
@@ -406,6 +427,11 @@ tryLoadSvg(svgUrls, 0, wrap);
 }
 }
 function updateMap() {
+  if (zoomedState) {
+  window.openStateCountyView(zoomedState);
+  return;
+}
+
 var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
 if (!drawer) return;
 ensureDrawerContent(drawer);
