@@ -59,6 +59,7 @@ Q.blue_dog_dissent +=1.5 * Q.afgan_withdraws_delayed;
 Q.youth_loyalty -=2 * Q.afgan_withdraws_delayed;
 Q.gop_hawk_vs_dove -=1 * Q.afgan_withdraws_delayed;
 Q.nat_flat_buff -= 0.1 * Q.afgan_withdraws_delayed;
+Q.bop_foreign += 2 * Q.afgan_withdraws_delayed;
 window.simulate_polling();
 !}
 

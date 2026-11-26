@@ -21,7 +21,7 @@ WIP
 title: Expand aid to the Afgani army
 subtitle: -0.10 budget. This could help delay the collapse of the Afgani army, although there are worries the money will be lost to corruption. Progressives do not support this policy.
 view-if: afganistan_fall = 0 and afgan_withdraw_month > 0
-on-arrival: afgan_army_strength += 1; progressive_dissent +=5; socialist_dissent +=5
+on-arrival: afgan_army_strength += 1; progressive_dissent +=5; socialist_dissent +=5; bop_foreign += 3
 max-visits: 3
 
 The works councils, elected by workers at each major business, have been in place since the German Revolution of 1918, but they have been largely powerless in the face of capital. Now, we will have worker representation on the boards of companies, giving them more influence in management decisions.
