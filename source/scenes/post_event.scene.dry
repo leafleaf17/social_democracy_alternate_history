@@ -212,10 +212,7 @@ if (Q.year <= 2021 && Q.month < 9) {
     var jobChange = (2.2 - Q.economic_growth) * 0.04;
     Q.unemployment = +Math.max(3.2, Math.min(15.0, Q.unemployment + jobChange)).toFixed(2);
 
-  // Update U.S. Nominal GDP ($T)
-var gRate = Number(Q.economic_growth);
-if (isNaN(gRate)) gRate = 4.0;
-Q.us_gdp = +( (Number(Q.us_gdp) || 21.8) * (1 + gRate / 1200) ).toFixed(2);
+  
 
 
        // ============================================================================
