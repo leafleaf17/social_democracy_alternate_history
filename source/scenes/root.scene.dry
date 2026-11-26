@@ -429,7 +429,7 @@ Q.state_dem_support = {
     OK: { race: { white: 4 }, geo: { rural: -2 } },
     MO: { race: { white: 6 },  geo: { rural: -2 } }
 };
-
+Q.hamas_attacked = 0;
 // ============================================================================
 // FULL 50-STATE + DC DEMOGRAPHIC TURNOUT MULTIPLIERS (1.0 = BASELINE)
 // ============================================================================

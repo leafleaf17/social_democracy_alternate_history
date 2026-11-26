@@ -13,6 +13,7 @@ tags: govt_affairs, cabinet
 WIP
 
 - @expand_aid_afganistan
+- @negotiate_jcpoa
 - @return: Do not enact any policies for now.
 - @easy_discard
 - @cancel_advisor_action
@@ -25,6 +26,16 @@ on-arrival: afgan_army_strength += 1; progressive_dissent +=5; socialist_dissent
 max-visits: 3
 
 The works councils, elected by workers at each major business, have been in place since the German Revolution of 1918, but they have been largely powerless in the face of capital. Now, we will have worker representation on the boards of companies, giving them more influence in management decisions.
+
+@negotiate_jcpoa
+title: Can we negotiate a return of the JCPOA?
+subtitle: The JCPOA with Iran was ripped up by Donald Trump, but maybe we can bring it back.
+view-if: hamas_attacked = 0;
+on-arrival: afgan_army_strength += 1; progressive_dissent +=5; socialist_dissent +=5; bop_foreign += 3
+max-visits: 3
+
+The works councils, elected by workers at each major business, have been in place since the German Revolution of 1918, but they have been largely powerless in the face of capital. Now, we will have worker representation on the boards of companies, giving them more influence in management decisions.
+
 
 
 
