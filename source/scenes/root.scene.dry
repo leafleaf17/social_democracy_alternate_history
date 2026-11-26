@@ -407,8 +407,8 @@ Q.state_dem_support = {
     // --- SOUTHWEST / SUN BELT (Strong Latino & Youth Appeal) ---
     AZ: { race: { hispanic: -4, white: -2 }, age: { senior: -4 } },
     NV: { race: { hispanic: 2 }, inc: { low: 4 }, geo: { urban: 3 } },
-    NM: { race: { hispanic: 4, white: 3 } },
-    CO: { race: { white: 2, hispanic: 4 }, edu: { college: 5 }, age: { youth: 4 } },
+    NM: { race: { hispanic: 4, white: 3 }, geo: { urban: -10 } },
+    CO: { race: { white: 2, hispanic: 4 }, edu: { college: 5 }, age: { youth: 4 }, geo: { urban: -10 } },
 
     // --- WEST COAST & PACIFIC (Progressive Base) ---
     CA: { race: { white: 1, hispanic: 1, asian: 1 }, age: { youth: 1 } },
