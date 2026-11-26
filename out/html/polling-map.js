@@ -787,88 +787,120 @@ s.textContent =
 '#open-us-econ-btn:hover{background:#dcd6c8}';
 document.head.appendChild(s);
 }
-function renderEconModal() {
-addEconStyles();
-var q = getQ();
-if (!q) return;
-var h = ensureHistory(q);
-var modal = document.getElementById('us-econ-modal');
-if (!modal) {
-modal = document.createElement('div');
-modal.id = 'us-econ-modal';
-document.body.appendChild(modal);
-}
-var deltaBadge = function(arr, invertGood, decimals) {
-if (arr.length < 2) return '';
-var cur = arr.at(-1);
-var prev = arr.at(-2);
-var diff = +(cur - prev).toFixed(decimals);
-if (diff === 0) return ' —';
-var up = diff > 0;
-var good = invertGood ? !up : up;
-var col = good ? '#15803d' : '#7f1d1d';
-var arrow = up ? '▲' : '▼';
-return ' ' + arrow + ' ' + Math.abs(diff).toFixed(decimals) + '';
-};
-var inf = h.inflation.at(-1);
-var unemp = h.unemployment.at(-1);
-var gdp = h.gdp.at(-1);
-var bud = h.budget.at(-1);
-var sp = h.sp500.at(-1);
-var growthRate = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
-var budBillions = Math.round(bud * 100);
-var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 100); });
-var budStatus = budBillions < 0
-? 'Deficit $' + Math.abs(budBillions).toLocaleString() + 'B'
-: 'Surplus +$' + budBillions.toLocaleString() + 'B';
-var card1 =
-'' +
-'Inflation (CPI YoY)' +
-'' + inf.toFixed(1) + '%' + deltaBadge(h.inflation, true, 1) + '' +
-'Fed Target: 2.0%' +
-buildClassicChartSVG(h.inflation, h.labels, '#1a237e', false) +
-'';
-var card2 =
-'' +
-'Unemployment Rate' +
-'' + unemp.toFixed(1) + '%' + deltaBadge(h.unemployment, true, 1) + '' +
-'Civilian Labor Force' +
-buildClassicChartSVG(h.unemployment, h.labels, '#b71c1c', false) +
-'';
-var card3 =
-'' +
-'U.S. Nominal GDP' +
-'$' + gdp.toFixed(2) + 'T' + deltaBadge(h.gdp, false, 2) + '' +
-'Annualized Growth: ' + (growthRate >= 0 ? '+' : '') + growthRate.toFixed(1) + '%' +
-buildClassicChartSVG(h.gdp, h.labels, '#1b5e20', false) +
-'';
-var card4 =
-'' +
-'Federal Budget' +
-'' + budStatus + deltaBadge(budSeriesBillions, false, 0) + '' +
-'Annualized Balance ($ Billions)' +
-buildClassicChartSVG(budSeriesBillions, h.labels, '#0d47a1', true) +
-'';
-var card5 =
-'' +
-'S&P 500 Index' +
-'' + Math.round(sp).toLocaleString() + deltaBadge(h.sp500, false, 0) + '' +
-'Wall Street Benchmark' +
-buildClassicChartSVG(h.sp500, h.labels, '#2e7d32', false) +
-'';
-modal.innerHTML =
-'' +
-'' + h.labels.at(-1) + '' +
-'U.S. Economic History' +
-'Close ×' +
-'' +
-'' +
-card1 + card2 + card3 + card4 + card5 +
-'';
-modal.querySelector('#close-us-econ').onclick = function() {
-modal.classList.remove('open');
-};
-}
+  function buildCardDOM(titleText, valText, deltaArr, invertGood, decimals, subText, chartData, labels, strokeColor, zeroLine, isBudget) {
+    var card = document.createElement('div');
+    card.className = 'us-econ-card';
+
+    var title = document.createElement('div');
+    title.className = 'us-econ-card-title';
+    title.textContent = titleText;
+    card.appendChild(title);
+
+    var valDiv = document.createElement('div');
+    valDiv.className = 'us-econ-val';
+
+    var mainSpan = document.createElement('span');
+    mainSpan.textContent = valText;
+    if (isBudget) {
+      mainSpan.style.color = chartData.at(-1) < 0 ? '#7f1d1d' : '#15803d';
+    }
+    valDiv.appendChild(mainSpan);
+
+    if (deltaArr && deltaArr.length >= 2) {
+      var cur = deltaArr.at(-1);
+      var prev = deltaArr.at(-2);
+      var diff = +(cur - prev).toFixed(decimals);
+      var badge = document.createElement('span');
+      badge.style.fontSize = '0.7em';
+      badge.style.marginLeft = '5px';
+      if (diff === 0) {
+        badge.style.color = '#666';
+        badge.textContent = '—';
+      } else {
+        var up = diff > 0;
+        var good = invertGood ? !up : up;
+        badge.style.color = good ? '#15803d' : '#7f1d1d';
+        badge.textContent = (up ? '▲ ' : '▼ ') + Math.abs(diff).toFixed(decimals);
+      }
+      valDiv.appendChild(badge);
+    }
+    card.appendChild(valDiv);
+
+    var sub = document.createElement('div');
+    sub.className = 'us-econ-sub';
+    sub.textContent = subText;
+    card.appendChild(sub);
+
+    var chartWrap = document.createElement('div');
+    chartWrap.innerHTML = buildClassicChartSVG(chartData, labels, strokeColor, zeroLine);
+    card.appendChild(chartWrap);
+
+    return card;
+  }
+
+  function renderEconModal() {
+    addEconStyles();
+    var q = getQ();
+    if (!q) return;
+    var h = ensureHistory(q);
+
+    var modal = document.getElementById('us-econ-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'us-econ-modal';
+      document.body.appendChild(modal);
+    }
+    modal.textContent = '';
+
+    var header = document.createElement('div');
+    header.className = 'us-econ-header';
+
+    var dateSpan = document.createElement('span');
+    dateSpan.style.fontSize = '0.9em';
+    dateSpan.style.color = '#444';
+    dateSpan.textContent = h.labels.at(-1);
+
+    var h2 = document.createElement('h2');
+    h2.textContent = 'U.S. Economic History';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'us-econ-close';
+    closeBtn.textContent = 'Close ×';
+    closeBtn.onclick = function() {
+      modal.classList.remove('open');
+    };
+
+    header.appendChild(dateSpan);
+    header.appendChild(h2);
+    header.appendChild(closeBtn);
+    modal.appendChild(header);
+
+    var grid = document.createElement('div');
+    grid.className = 'us-econ-grid';
+
+    var inf = h.inflation.at(-1);
+    var unemp = h.unemployment.at(-1);
+    var gdp = h.gdp.at(-1);
+    var bud = h.budget.at(-1);
+    var sp = h.sp500.at(-1);
+    var growthRate = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
+
+    var budBillions = Math.round(bud * 100);
+    var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 100); });
+    var budText = budBillions < 0
+      ? 'Deficit $' + Math.abs(budBillions).toLocaleString() + 'B'
+      : 'Surplus +$' + budBillions.toLocaleString() + 'B';
+
+    grid.appendChild(buildCardDOM('Inflation (CPI YoY)', inf.toFixed(1) + '%', h.inflation, true, 1, 'Fed Target: 2.0%', h.inflation, h.labels, '#1a237e', false, false));
+    grid.appendChild(buildCardDOM('Unemployment Rate', unemp.toFixed(1) + '%', h.unemployment, true, 1, 'Civilian Labor Force', h.unemployment, h.labels, '#b71c1c', false, false));
+    grid.appendChild(buildCardDOM('U.S. Nominal GDP', '$' + gdp.toFixed(2) + 'T', h.gdp, false, 2, 'Annualized Growth: ' + (growthRate >= 0 ? '+' : '') + growthRate.toFixed(1) + '%', h.gdp, h.labels, '#1b5e20', false, false));
+    grid.appendChild(buildCardDOM('Federal Budget', budText, budSeriesBillions, false, 0, 'Annualized Balance ($ Billions)', budSeriesBillions, h.labels, '#0d47a1', true, true));
+    grid.appendChild(buildCardDOM('S&P 500 Index', Math.round(sp).toLocaleString(), h.sp500, false, 0, 'Wall Street Benchmark', h.sp500, h.labels, '#2e7d32', false, false));
+
+    modal.appendChild(grid);
+  }
+
 window.openUsEconModal = function() {
 renderEconModal();
 var m = document.getElementById('us-econ-modal');
