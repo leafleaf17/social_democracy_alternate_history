@@ -469,20 +469,11 @@ tip.classList.add('visible');
 } else {
 shape.classList.remove('pinned');
 }
-shape.onclick = function(e) {
-e.stopPropagation();
-pinnedCode = (pinnedCode === code) ? null : code;
-if (pinnedCode) {
-renderTooltipDOM(tip, code, res, activeTab, isActive, true);
-tip.classList.add('visible');
-var r = drawer.getBoundingClientRect();
-tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 280) + 'px';
-tip.style.top = Math.min(e.clientY - r.top + 12, r.height - 155) + 'px';
-} else {
-tip.classList.remove('visible');
-}
-updateMap();
-};
+    shape.onclick = function(e) {
+      e.stopPropagation();
+      window.openStateCountyView(code);
+    };
+
 shape.onpointerenter = function(e) {
 if (pinnedCode && pinnedCode !== code) return;
 renderTooltipDOM(tip, code, res, activeTab, isActive, pinnedCode === code);
@@ -679,6 +670,190 @@ document.addEventListener('DOMContentLoaded', initObserver);
 } else {
 initObserver();
 }
+  // ============================================================================
+  // TPP-STYLE STATE -> COUNTY ZOOM & DEMOGRAPHIC SIMULATOR
+  // ============================================================================
+  var stateFips = {
+    AL:'01',AK:'02',AZ:'04',AR:'05',CA:'06',CO:'08',CT:'09',DE:'10',DC:'11',
+    FL:'12',GA:'13',HI:'15',ID:'16',IL:'17',IN:'18',IA:'19',KS:'20',KY:'21',
+    LA:'22',ME:'23',MD:'24',MA:'25',MI:'26',MN:'27',MS:'28',MO:'29',MT:'30',
+    NE:'31',NV:'32',NH:'33',NJ:'34',NM:'35',NY:'36',NC:'37',ND:'38',OH:'39',
+    OK:'40',OR:'41',PA:'42',RI:'44',SC:'45',SD:'46',TN:'47',TX:'48',UT:'49',
+    VT:'50',VA:'51',WA:'53',WV:'54',WI:'55',WY:'56'
+  };
+
+  var countyData = null;
+  var countySvgDoc = null;
+  var zoomedState = null; // e.g., 'PA' when zoomed into Pennsylvania
+
+  function loadCountyAssets(callback) {
+    if (countyData && countySvgDoc) {
+      callback();
+      return;
+    }
+    var p1 = countyData
+      ? Promise.resolve(countyData)
+      : fetch('counties.json').then(function(r) { return r.json(); }).then(function(d) { countyData = d; });
+
+    var p2 = countySvgDoc
+      ? Promise.resolve(countySvgDoc)
+      : fetch('https://wikimedia.org')
+          .then(function(r) { return r.text(); })
+          .then(function(txt) {
+            countySvgDoc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+          });
+
+    Promise.all([p1, p2]).then(function() {
+      callback();
+    }).catch(function(err) {
+      console.warn('County map assets not loaded yet:', err);
+    });
+  }
+
+  function simulateStateCounties(q, polling, stCode, tab) {
+    var stRes = calcRaceResult(q, polling, stCode, tab);
+    if (!stRes || !countyData) return [];
+
+    var prefix = stateFips[stCode];
+    if (!prefix) return [];
+
+    // Calculate demographic tilt relative to 2020 baseline
+    var nat = q.nat_support || {};
+    var urbanShift = ((nat.geo && nat.geo.urban) || 0) - ((nat.geo && nat.geo.rural) || 0);
+    var collegeShift = ((nat.edu && nat.edu.college) || 0) - ((nat.edu && nat.edu.noncollege) || 0);
+    var demoTilt = (urbanShift * 0.35) + (collegeShift * 0.30);
+
+    var list = [];
+    var weightedSum = 0;
+    var totalWeight = 0;
+
+    Object.keys(countyData).forEach(function(fips) {
+      if (fips.slice(0, 2) !== prefix) return;
+      var entry = countyData[fips]; // [name, baseDemPct, weight]
+      var cName = entry.at(0);
+      var baseDem = Number(entry.at(1));
+      var weight = Number(entry.at(2)) || 1;
+
+      // Counties with higher baseline Dem % respond stronger to urban/college shifts;
+      // rural/GOP counties respond stronger to non-college/rural shifts
+      var urbanFactor = (baseDem - 50) / 25; // -1.5 (deep rural) to +1.5 (urban core)
+      var rawDem = baseDem + (urbanFactor * demoTilt);
+
+      list.push({ fips: fips, name: cName, dem: rawDem, weight: weight });
+      weightedSum += rawDem * weight;
+      totalWeight += weight;
+    });
+
+    if (list.length === 0 || totalWeight === 0) return [];
+
+    // Reconcile weighted county average so it matches the exact live state Dem %
+    var currentAvg = weightedSum / totalWeight;
+    var adjust = stRes.dem - currentAvg;
+
+    list.forEach(function(c) {
+      c.dem = +(Math.max(1, Math.min(99, c.dem + adjust))).toFixed(2);
+      c.rep = +(100 - c.dem).toFixed(2);
+      c.margin = +(c.dem - c.rep).toFixed(2);
+    });
+
+    return list;
+  }
+
+  window.openStateCountyView = function(stCode) {
+    var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
+    if (!drawer) return;
+    var wrap = drawer.querySelector('.polling-map-svg-wrap');
+    if (!wrap) return;
+
+    zoomedState = stCode;
+    pinnedCode = null;
+    wrap.textContent = 'Loading ' + stCode + ' county map...';
+
+    loadCountyAssets(function() {
+      var q = getQ();
+      var polling = getPolling();
+      if (!q || !polling || !countySvgDoc) return;
+
+      var counties = simulateStateCounties(q, polling, stCode, activeTab);
+      var prefix = stateFips[stCode];
+
+      // Build standalone zoomed SVG containing only this state's counties
+      var ns = 'http://w3.org';
+      var stSvg = document.createElementNS(ns, 'svg');
+      stSvg.style.width = '100%';
+      stSvg.style.maxHeight = '62vh';
+      stSvg.style.display = 'block';
+      stSvg.style.margin = '0 auto';
+
+      var g = document.createElementNS(ns, 'g');
+      var demCounties = 0, repCounties = 0;
+
+      var tip = drawer.querySelector('.polling-map-tooltip');
+      if (tip) tip.classList.remove('visible');
+
+      counties.forEach(function(c) {
+        if (c.margin >= 0) demCounties += 1;
+        else repCounties += 1;
+
+        var origPath = countySvgDoc.getElementById('c' + c.fips) || countySvgDoc.getElementById(c.fips);
+        if (!origPath) return;
+
+        var clone = document.importNode(origPath, true);
+        var col = colorForMargin(c.margin);
+        clone.style.setProperty('fill', col, 'important');
+        clone.style.setProperty('stroke', isDarkMode ? '#222' : '#ffffff', 'important');
+        clone.style.setProperty('stroke-width', '0.6px', 'important');
+        clone.style.cursor = 'pointer';
+
+        clone.onpointerenter = function(e) {
+          if (!tip) return;
+          renderTooltipDOM(tip, c.fips, {
+            name: c.name,
+            ev: 0,
+            dem: c.dem,
+            rep: c.rep,
+            margin: c.margin,
+            demCand: 'Democrat',
+            repCand: 'Republican'
+          }, 'county', true, false);
+          tip.classList.add('visible');
+          var r = drawer.getBoundingClientRect();
+          tip.style.left = Math.min(e.clientX - r.left + 12, r.width - 280) + 'px';
+          tip.style.top = Math.min(e.clientY - r.top + 12, r.height - 155) + 'px';
+        };
+        clone.onpointermove = clone.onpointerenter;
+        clone.onpointerleave = function() {
+          if (tip) tip.classList.remove('visible');
+        };
+
+        g.appendChild(clone);
+      });
+
+      stSvg.appendChild(g);
+      wrap.textContent = '';
+      wrap.appendChild(stSvg);
+
+      // Auto-zoom viewBox to exact state county bounding box (TPP style!)
+      var bbox = g.getBBox();
+      if (bbox && bbox.width > 0 && bbox.height > 0) {
+        var pad = Math.max(bbox.width, bbox.height) * 0.06;
+        stSvg.setAttribute('viewBox', (bbox.x - pad) + ' ' + (bbox.y - pad) + ' ' + (bbox.width + pad * 2) + ' ' + (bbox.height + pad * 2));
+      }
+
+      // Update Scoreboard for County View
+      var score = drawer.querySelector('.polling-map-score');
+      var stRes = calcRaceResult(q, polling, stCode, activeTab);
+      if (score && stRes) {
+        score.textContent = '';
+        var m = stRes.margin;
+        var pre = m > 0 ? 'D+' : m < 0 ? 'R+' : 'Even ';
+        var titleSpan = document.createElement('span');
+        titleSpan.textContent = stRes.name + ' (' + pre + Math.abs(m).toFixed(2) + ') — Counties: ' + demCounties + ' D · ' + repCounties + ' R';
+        score.appendChild(titleSpan);
+      }
+    });
+  };
+
 // ============================================================================
 // U.S. ECONOMIC HISTORY DASHBOARD MODAL (100% DOM / SVG SAFE)
 // ============================================================================
