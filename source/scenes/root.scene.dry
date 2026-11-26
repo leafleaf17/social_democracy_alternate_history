@@ -1015,6 +1015,8 @@ Q.gop_hawk_vs_dove = 1;
 Q.gop_social_stance = 1;
 Q.gop_economic_stance = 1;
 Q.afgan_withdraws_delayed = 1
+Q.afgan_failure_massive = 0;
+Q.afgan_failure_massive_poll_rebound = 10
 Q.eo_recharge_timer = 0;     
 // party affairs timers
 Q.confronting_nazis_timer = 0;
