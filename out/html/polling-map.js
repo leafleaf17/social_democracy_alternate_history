@@ -53,10 +53,10 @@
 
   var mapReady = false;
   var svgLoading = false;
-  var activeTab = 'pres';      // 'pres', 'senate', or 'gov'
-  var activePalette = 'yapms'; // 'yapms', 'nyt', 'wiki', 'twoseventy', 'colorblind'
-  var isDarkMode = false;      // Defaults to light parchment theme matching the game
-  var pinnedCode = null;       // Tracks clicked state tooltip pin
+  var activeTab = 'pres';
+  var activePalette = 'yapms';
+  var isDarkMode = false;
+  var pinnedCode = null;
 
   function getQ() {
     var ui = window.dendryUI;
@@ -74,7 +74,7 @@
     var pal = palettes[activePalette] || palettes.yapms;
     var abs = Math.abs(margin);
     var band = abs >= 15 ? 3 : abs >= 5 ? 2 : abs >= 1 ? 1 : 0;
-    return (margin >= 0 ? pal.dem : pal.rep)[band];
+    return (margin >= 0 ? pal.dem : pal.rep).at(band);
   }
 
   function getActiveRaces(q, tab) {
@@ -103,7 +103,7 @@
         2023: ['KY', 'LA', 'MS']
       };
       if (govMap[yr]) return govMap[yr];
-      return yr < 2022 ? govMap : govMap;
+      return yr < 2022 ? govMap[2021] : govMap[2022];
     }
     return null;
   }
@@ -184,7 +184,6 @@
     s.id = 'polling-map-styles';
     s.textContent =
       '#polling-map-drawer,.polling-map-drawer{width:min(1080px,94vw) !important;height:min(88vh,900px) !important;top:6vh !important;right:3vw !important;overflow:auto !important;z-index:45 !important;padding:1.1em 1.4em !important;font-family:"Times New Roman",Times,Georgia,serif !important;box-shadow:0 10px 30px rgba(0,0,0,0.45) !important;transition:background-color 0.15s,color 0.15s}' +
-      /* Light Mode (Default matching game parchment) */
       '#polling-map-drawer.theme-light{background:#f4f1ea !important;color:#1c1b18 !important;border:2px solid #2c2a26 !important}' +
       '#polling-map-drawer.theme-light h2,#polling-map-drawer.theme-light p{color:#1c1b18 !important}' +
       '#polling-map-drawer.theme-light button,#polling-map-drawer.theme-light select{background:#eae6dc !important;color:#1c1b18 !important;border:1px solid #555555 !important;font-family:"Times New Roman",Times,Georgia,serif !important;padding:4px 10px;cursor:pointer;font-size:0.95em}' +
@@ -196,11 +195,10 @@
       '#polling-map-drawer.theme-light .polling-map-state{stroke:#ffffff !important;stroke-width:0.8px}' +
       '#polling-map-drawer.theme-light .polling-map-tooltip{background:#faf8f3 !important;color:#1c1b18 !important;border:1.5px solid #2c2a26 !important;box-shadow:0 4px 12px rgba(0,0,0,0.2)}' +
       '#polling-map-drawer.theme-light .polling-map-meta{background:#eae6dc !important;border:1px solid #bfb8a8 !important;color:#2c2a26 !important}' +
-      /* Dark Mode */
       '#polling-map-drawer.theme-dark{background:#111111 !important;color:#f0f0f0 !important;border:1.5px solid #555555 !important}' +
       '#polling-map-drawer.theme-dark h2,#polling-map-drawer.theme-dark p{color:#f0f0f0 !important}' +
-'#polling-map-drawer.theme-dark button,#polling-map-drawer.theme-dark select{background:#222222 !important;color:#f0f0f0 !important;border:1px solid #666666 !important;font-family:"Times New Roman",Times,Georgia,serif !important;padding:4px 10px;cursor:pointer;font-size:0.95em}' +
-'#polling-map-drawer.theme-dark button:hover,#polling-map-drawer.theme-dark select:hover{background:#333333 !important;border-color:#ffffff !important}' +
+      '#polling-map-drawer.theme-dark button,#polling-map-drawer.theme-dark select{background:#222222 !important;color:#f0f0f0 !important;border:1px solid #666666 !important;font-family:"Times New Roman",Times,Georgia,serif !important;padding:4px 10px;cursor:pointer;font-size:0.95em}' +
+      '#polling-map-drawer.theme-dark button:hover,#polling-map-drawer.theme-dark select:hover{background:#333333 !important;border-color:#ffffff !important}' +
 '#polling-map-drawer.theme-dark .polling-map-tab.active{background:#1c408c !important;color:#ffffff !important;border-color:#5c9eff !important;font-weight:bold}' +
 '#polling-map-drawer.theme-dark .polling-map-svg-wrap{background:#0a0a0a !important;border:1px solid #444444 !important}' +
 '#polling-map-drawer.theme-dark .polling-map-svg-wrap svg{background:#0a0a0a !important}' +
@@ -208,7 +206,6 @@
 '#polling-map-drawer.theme-dark .polling-map-state{stroke:#333333 !important;stroke-width:0.8px}' +
 '#polling-map-drawer.theme-dark .polling-map-tooltip{background:#1a1a1a !important;color:#f0f0f0 !important;border:1px solid #888888 !important;box-shadow:0 4px 14px rgba(0,0,0,0.6)}' +
 '#polling-map-drawer.theme-dark .polling-map-meta{background:#1b1b1b !important;border:1px solid #3a3a3a !important;color:#cccccc !important}' +
-/* Shared Layout */
 '.polling-map-controls{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin:0.4em 0 0.6em;padding-bottom:0.5em;border-bottom:1px solid rgba(128,128,128,0.35)}' +
 '.polling-map-tabs{display:flex;gap:6px;flex-wrap:wrap}' +
 '.polling-map-right-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}' +
@@ -403,8 +400,8 @@ drawer.appendChild(tip);
 }
 if (!pinnedCode) tip.classList.remove('visible');
 states.forEach(function(pair) {
-var code = pair;
-var name = pair;
+var code = pair.at(0);
+var name = pair.at(1);
 var shape = findStateShape(svg, code, name);
 if (!shape) return;
 var isActive = (activeList === null) || (activeList.indexOf(code) !== -1);
@@ -467,7 +464,6 @@ shape.onpointerleave = function() {
 if (!pinnedCode) tip.classList.remove('visible');
 };
 });
-// Calculate Tipping-Point State (Presidential EVs or Senate 51st Seat)
 var tippingText = '';
 if (activeTab === 'pres' || activeTab === 'senate') {
 var sorted = activeResults.slice().sort(function(a, b) { return b.margin - a.margin; });
@@ -483,10 +479,11 @@ break;
 }
 }
 }
-// Update Compact Color Key + Meta Strip
 var meta = drawer.querySelector('.polling-map-meta');
 if (meta) {
 var pal = palettes[activePalette] || palettes.yapms;
+var d3 = pal.dem.at(3), d2 = pal.dem.at(2), d1 = pal.dem.at(1), d0 = pal.dem.at(0);
+var r0 = pal.rep.at(0), r1 = pal.rep.at(1), r2 = pal.rep.at(2), r3 = pal.rep.at(3);
 var keyHtml =
 '' +
 'D:' +
@@ -506,7 +503,6 @@ var statsHtml =
 '' + tippingText + 'Tossups (<2%): ' + tossupCount + '';
 meta.innerHTML = keyHtml + statsHtml;
 }
-// Update Scoreboard with Darker +/- Colors
 var score = drawer.querySelector('.polling-map-score');
 if (score) {
 var demScoreCol = isDarkMode ? '#5c9eff' : '#1c408c';
@@ -533,7 +529,6 @@ var repSpan = score.querySelector('.score-rep');
 if (demSpan) demSpan.style.setProperty('color', demScoreCol, 'important');
 if (sepSpan) sepSpan.style.setProperty('color', isDarkMode ? '#777777' : '#666666', 'important');
 if (repSpan) repSpan.style.setProperty('color', repScoreCol, 'important');
-// Darker, distinct gain/loss colors so loss red isn't identical to Republican red
 var gainCol = isDarkMode ? '#22c55e' : '#15803d';
 var lossCol = isDarkMode ? '#b91c1c' : '#7f1d1d';
 var evenCol = isDarkMode ? '#999999' : '#666666';
@@ -560,7 +555,6 @@ var svg = document.importNode(parsed, true);
 svg.removeAttribute('width');
 svg.removeAttribute('height');
 if (!svg.getAttribute('viewBox')) svg.setAttribute('viewBox', '0 0 959 593');
-// Strip all SVG  elements so the browser's default white "*State" box never pops up
 svg.querySelectorAll('title').forEach(function(t) { t.remove(); });
 var dc = findStateShape(svg, 'DC', 'District of Columbia');
 if (dc && dc.tagName.toLowerCase() === 'circle') {
@@ -624,15 +618,15 @@ sp500:        [2954, 2585, 2912, 3044, 3100, 3271, 3500, 3363, 3270, 3622, 3756,
 }
 var h = q.econ_history;
 if (!h.gdp) h.gdp = [21.5, 21.1, 19.6, 19.8, 20.4, 21.0, 21.4, 21.6, 21.7, 21.8, 21.8, curGdp];
-if (!h.unemployment || isNaN(h.unemployment[h.unemployment.length - 1])) {
+if (!h.unemployment || isNaN(h.unemployment.at(-1))) {
 h.unemployment = [3.5, 4.4, 14.8, 13.3, 11.1, 10.2, 8.4, 7.9, 6.9, 6.7, 6.7, curUnemp];
 }
-if (!h.sp500 || isNaN(h.sp500[h.sp500.length - 1])) {
+if (!h.sp500 || isNaN(h.sp500.at(-1))) {
 h.sp500 = [2954, 2585, 2912, 3044, 3100, 3271, 3500, 3363, 3270, 3622, 3756, curSp];
 }
 var yr = Number(q.year) || 2021;
 var mo = Math.max(1, Math.min(12, Number(q.month) || 1));
-var currentLabel = monthNames[mo - 1] + ' ' + String(yr).slice(-2);
+var currentLabel = monthNames.at(mo - 1) + ' ' + String(yr).slice(-2);
 var lastIdx = h.labels.length - 1;
 if (h.labels[lastIdx] !== currentLabel) {
 h.labels.push(currentLabel);
@@ -744,8 +738,8 @@ document.body.appendChild(modal);
 }
 var deltaBadge = function(arr, invertGood, decimals) {
 if (arr.length < 2) return '';
-var cur = arr[arr.length - 1];
-var prev = arr[arr.length - 2];
+var cur = arr.at(-1);
+var prev = arr.at(-2);
 var diff = +(cur - prev).toFixed(decimals);
 if (diff === 0) return ' —';
 var up = diff > 0;
@@ -754,11 +748,11 @@ var col = good ? '#15803d' : '#7f1d1d';
 var arrow = up ? '▲' : '▼';
 return ' ' + arrow + ' ' + Math.abs(diff).toFixed(decimals) + '';
 };
-var inf = h.inflation[h.inflation.length - 1];
-var unemp = h.unemployment[h.unemployment.length - 1];
-var gdp = h.gdp[h.gdp.length - 1];
-var bud = h.budget[h.budget.length - 1];
-var sp = h.sp500[h.sp500.length - 1];
+var inf = h.inflation.at(-1);
+var unemp = h.unemployment.at(-1);
+var gdp = h.gdp.at(-1);
+var bud = h.budget.at(-1);
+var sp = h.sp500.at(-1);
 var growthRate = Number(q.economic_growth !== undefined ? q.economic_growth : 4.0);
 var budBillions = Math.round(bud * 100);
 var budSeriesBillions = h.budget.map(function(v) { return Math.round(v * 100); });
@@ -802,7 +796,7 @@ buildClassicChartSVG(h.sp500, h.labels, '#2e7d32', false) +
 '';
 modal.innerHTML =
 '' +
-'' + h.labels[h.labels.length - 1] + '' +
+'' + h.labels.at(-1) + '' +
 'U.S. Economic History' +
 'Close ×' +
 '' +
