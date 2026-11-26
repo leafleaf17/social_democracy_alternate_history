@@ -470,6 +470,8 @@ initObserver();
         sp500:        [2954, 2585, 2912, 3044, 3100, 3271, 3500, 3363, 3270, 3622, 3756, Number(q.sp500 || 3714)]
       };
     }
+var curGdp = Number(q.us_gdp !== undefined ? q.us_gdp : (q.gdp !== undefined ? q.gdp : 21.8));
+if (isNaN(curGdp) || curGdp <= 0) curGdp = 21.8;
 
     var yr = Number(q.year) || 2021;
     var mo = Math.max(1, Math.min(12, Number(q.month) || 1));
