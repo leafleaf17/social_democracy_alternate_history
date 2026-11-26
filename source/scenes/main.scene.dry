@@ -15,7 +15,7 @@ if (Q.week) Q.last_week_updated = Q.week;
 if (!window.pollingMapScriptLoaded) {
     window.pollingMapScriptLoaded = true;
     var pollingMapScript = document.createElement('script');
-    pollingMapScript.src = 'polling-map.js?v=wiki-svg-5';
+    pollingMapScript.src = 'polling-map.js?v=wiki-svg-6';
     document.head.appendChild(pollingMapScript);
 }
 !}
