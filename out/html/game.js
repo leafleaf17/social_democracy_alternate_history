@@ -72,8 +72,8 @@
   window.enableAudio = function() { window.dendryUI.toggle_audio(true); window.dendryUI.saveSettings(); };
   window.enableImages = function() { window.dendryUI.show_portraits = true; window.dendryUI.saveSettings(); };
   window.disableImages = function() { window.dendryUI.show_portraits = false; window.dendryUI.saveSettings(); };
-  window.enableLightMode = function() { window.dendryUI.dark_mode = false; document.body.classList.remove('dark-mode'); window.dendryUI.saveSettings(); };
-  window.enableDarkMode = function() { window.dendryUI.dark_mode = true; document.body.classList.add('dark-mode'); window.dendryUI.saveSettings(); };
+  window.enableLightMode = function() { window.dendryUI.dark_mode = true; document.body.classList.remove('dark-mode'); window.dendryUI.saveSettings(); };
+  window.enableDarkMode = function() { window.dendryUI.dark_mode = false; document.body.classList.add('dark-mode'); window.dendryUI.saveSettings(); };
   window.populateOptions = function() {
     var disable_bg = window.dendryUI.disable_bg, animate = window.dendryUI.animate, disable_audio = window.dendryUI.disable_audio, show_portraits = window.dendryUI.show_portraits;
     $('#backgrounds_no')[0].checked = disable_bg; $('#backgrounds_yes')[0].checked = !disable_bg;
