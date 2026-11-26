@@ -14,18 +14,19 @@ As the date of the withdrawal came closer and closer, national security advisors
 
 Kabul was rapidly surrounded before we could even get our troops out, and we, combined with our NATO allies, had to rush in additional troops to secure the chaotic environment that inevitably hit Kabul. We rapidly evacuated many of our men and our allies, but did not have time to get our equipment out. Luckily, we managed to disable the tech of the equipment, so the Taliban army cannot actually use it, although it's still a PR disaster as the Taliban poses with our weapons as well as a waste of money. Perhaps most disastrously, the chaotic environment of Kabul allowed a terrorist plot to go undiscovered, eventually leading to a suicide bombing killing 11 troops.
 
-- @fuck_our_lifes
+- @fuck_our_lifes2
 
-@fuck_our_lifes
+@fuck_our_lifes2
 title: What is the reaction of the American public?
 on-arrival: {!
-Q.republican_radicalization += 7;
-Q.gop_hawk_vs_dove +=15;
+Q.republican_radicalization += 2;
+Q.gop_hawk_vs_dove +=10;
 Q.nat_flat_buff -= 2;
 Q.afgan_failure_mod +=1;
 Q.afgan_failure_mod_poll_rebound +=10
 Q.blue_dog_dissent +=5;
 Q.new_liberal_dissent +=10;
+Q.moderates_loyalty -=5;
 window.simulate_polling();
 !}
 

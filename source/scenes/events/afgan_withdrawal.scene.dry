@@ -1,0 +1,25 @@
+title: The Afgan Withdrawal
+new-page: true
+subtitle: America's longest war comes to an end.
+tags: event
+view-if: year = 2021 and month > 5 and afgan_withdraw_month = 0 and afgan_army_strength > 0
+max-visits: 1
+face-image: img/afgan_disaster.jpg
+
+= Withdrawal From Afganistan
+
+The Doha accords negotiated by former President Trump, was meant to bring an end to America's longest war. May 2021 was agreed upon as the date for American forces to leave Afghanistan, in exchange for confirmation by the Taliban that they would not allow terrorist operations in Afghanistan and that they would, in good faith, continue negotiations towards a power-sharing agreement with the Afghan government.
+
+As the date of the withdrawal came closer and closer, national security advisors to Sanders requested he extends the withdrawal deadline, which was eventually approved. The mission has gone relatively successfully, with us effectively evacuating our equipment and men in Afghanistan in an orderly fashion. It does seems we did not calculate just how fast the Afghan army would collapse, however, as upon our full departure a Taliban lead offensive has captured most of the country, even nearing Kabul before our exit. Our expanded military aid seems to have helped turn the tide a little bit, but analysists are still predicting the Afgan national government will collapse within a few months. 
+
+- @love_our_lifes
+
+@love_our_lifes
+title: What is the reaction of the American public?
+on-arrival: {!
+Q.blue_dog_dissent +=5;
+Q.new_liberal_dissent +=10;
+window.simulate_polling();
+!}
+
+The withdrawal seems to be a sucess. The <span style="color: #DE0100;">Republicans</span> are attempting to spin this outcome in 2 ways. They are attempting to give Trump the credit for negotiating the initial withdrawal deal in the first place, while also critizing us for leaving the Afgan army in such an unfavorable position. Still, Americans are generally satisified with how the operation played out.

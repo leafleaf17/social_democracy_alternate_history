@@ -19,13 +19,14 @@ Kabul was rapidly surrounded before we could even get our troops out, and we, co
 @fuck_our_lifes
 title: What is the reaction of the American public?
 on-arrival: {!
-Q.republican_radicalization += 7;
+Q.republican_radicalization += 5;
 Q.gop_hawk_vs_dove +=15;
 Q.nat_flat_buff -= 3;
 Q.afgan_failure_massive +=1;
 Q.blue_dog_dissent +=10;
 Q.afgan_failure_massive_poll_rebound = 10;
 Q.new_liberal_dissent +=10;
+Q.moderates_loyalty -=10;
 window.simulate_polling();
 !}
 
