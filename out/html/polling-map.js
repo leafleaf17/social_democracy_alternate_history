@@ -682,7 +682,7 @@ var countyData = null;
     VT:'50',VA:'51',WA:'53',WV:'54',WI:'55',WY:'56'
   };
 
-  function simulateStateCounties(q, polling, stCode, tab) {
+   function simulateStateCounties(q, polling, stCode, tab) {
     var stRes = calcRaceResult(q, polling, stCode, tab);
     if (!stRes || !countyData) return [];
 
@@ -690,9 +690,27 @@ var countyData = null;
     if (!prefix) return [];
 
     var nat = q.nat_support || {};
-    var urbanShift = ((nat.geo && nat.geo.urban) || 0) - ((nat.geo && nat.geo.rural) || 0);
-    var collegeShift = ((nat.edu && nat.edu.college) || 0) - ((nat.edu && nat.edu.noncollege) || 0);
-    var demoTilt = (urbanShift * 0.35) + (collegeShift * 0.30);
+    // Snapshot starting 2020 demographic support once so we measure true *changes* since 2020
+    if (!q.base_nat_support && nat.geo && nat.edu) {
+      q.base_nat_support = {
+        urban: Number(nat.geo.urban) || 65,
+        suburban: Number(nat.geo.suburban) || 50,
+        rural: Number(nat.geo.rural) || 33,
+        college: Number(nat.edu.college) || 58,
+        noncollege: Number(nat.edu.noncollege) || 44
+      };
+    }
+    var base = q.base_nat_support || { urban: 65, suburban: 50, rural: 33, college: 58, noncollege: 44 };
+
+    // Measure net coalition shift since 2020 (+ = more urban/college, - = more rural/WWC)
+    var dUrban   = ((nat.geo && nat.geo.urban) || base.urban) - base.urban;
+    var dSuburb  = ((nat.geo && nat.geo.suburban) || base.suburban) - base.suburban;
+    var dRural   = ((nat.geo && nat.geo.rural) || base.rural) - base.rural;
+    var dCollege = ((nat.edu && nat.edu.college) || base.college) - base.college;
+    var dWWC     = ((nat.edu && nat.edu.noncollege) || base.noncollege) - base.noncollege;
+
+    // Positive tilt favors urban/college counties; negative tilt favors rural/WWC counties
+    var coalitionTilt = ((dUrban - dRural) * 0.75) + ((dCollege - dWWC) * 0.65);
 
     var list = [];
     var weightedSum = 0;
@@ -705,8 +723,12 @@ var countyData = null;
       var baseDem = Number(entry.at(1));
       var weight = Number(entry.at(2)) || 1;
 
-      var urbanFactor = (baseDem - 50) / 25;
-      var rawDem = baseDem + (urbanFactor * demoTilt);
+      // Urban/college counties sit around +0.8 to +1.4; rural/WWC counties sit around -0.8 to -1.5
+      var urbanIndex = Math.max(-1.6, Math.min(1.6, (baseDem - 48) / 22));
+      // Suburban counties (baseDem ~45-55%) also react directly to dSuburb
+      var suburbWeight = Math.max(0, 1 - Math.abs(baseDem - 50) / 15);
+
+      var rawDem = baseDem + (urbanIndex * coalitionTilt) + (suburbWeight * dSuburb * 0.8);
 
       list.push({ fips: fips, name: cName, dem: rawDem, weight: weight });
       weightedSum += rawDem * weight;
@@ -715,6 +737,7 @@ var countyData = null;
 
     if (list.length === 0 || totalWeight === 0) return [];
 
+    // Reconcile weighted county average so it matches your exact live state Dem %
     var currentAvg = weightedSum / totalWeight;
     var adjust = stRes.dem - currentAvg;
 
@@ -726,6 +749,7 @@ var countyData = null;
 
     return list;
   }
+
 
     var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
     if (!drawer) return;
