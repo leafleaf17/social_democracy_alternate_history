@@ -81,6 +81,8 @@ max-cards: 4
 {!</div>!}
 
 {!<h1>Foreign news</h1><div class="news-section">!}
+[? if year == 2021 and month == 2: Border encounters are skyrocketing, primarily driven by a delayed response from hurricanes Eta and Iota that hit Honduras and Guatemala a few months ago. These hurricanes lead to mass displacements and economic destruction across the country, and for hundreds of thousands of people to decide to leave their homes and seek a better life up north. Now, we have a mass accumilation of families, and most heart breakingly, unaccompined children at the border seeking to immigrate to the United States. While some are attempting to cross the border illegally, many are applying for asylum. There is a worry amongst some that the asylum system is becoming a tool to be abused, as there is no offical asylum category for weather events and thus their applications for asylum may just be to get in the country and eventually slip through unnoticed. Experts in the administration are suggesting we should increase aid to Latin American countries to address the root cause of why families flee to the US if we want to mantain a stable southern border.  ?]
+
 {!</div>!}
 
 {!</div>!}

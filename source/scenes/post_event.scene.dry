@@ -168,7 +168,9 @@ if (Q.year <= 2021 && Q.month < 11 && Q.unemployment > 3) {
      Q.unemployment -= 0.2;
     Q.sp500_event_pct = (Q.sp500_event_pct || 0) + 0.5;
 }
-
+if (Q.year <= 2021 ) {
+     Q.border_security -= 4;
+}
 
     // Federal Reserve FOMC Meetings (8 meetings/year: Jan, Mar, May, Jun, Jul, Sep, Nov, Dec)
     
