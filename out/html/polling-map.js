@@ -673,6 +673,60 @@ var countyData = null;
   }
 
   window.openStateCountyView = function(stCode) {
+      var stateFips = {
+    AL:'01',AK:'02',AZ:'04',AR:'05',CA:'06',CO:'08',CT:'09',DE:'10',DC:'11',
+    FL:'12',GA:'13',HI:'15',ID:'16',IL:'17',IN:'18',IA:'19',KS:'20',KY:'21',
+    LA:'22',ME:'23',MD:'24',MA:'25',MI:'26',MN:'27',MS:'28',MO:'29',MT:'30',
+    NE:'31',NV:'32',NH:'33',NJ:'34',NM:'35',NY:'36',NC:'37',ND:'38',OH:'39',
+    OK:'40',OR:'41',PA:'42',RI:'44',SC:'45',SD:'46',TN:'47',TX:'48',UT:'49',
+    VT:'50',VA:'51',WA:'53',WV:'54',WI:'55',WY:'56'
+  };
+
+  function simulateStateCounties(q, polling, stCode, tab) {
+    var stRes = calcRaceResult(q, polling, stCode, tab);
+    if (!stRes || !countyData) return [];
+
+    var prefix = stateFips[stCode];
+    if (!prefix) return [];
+
+    var nat = q.nat_support || {};
+    var urbanShift = ((nat.geo && nat.geo.urban) || 0) - ((nat.geo && nat.geo.rural) || 0);
+    var collegeShift = ((nat.edu && nat.edu.college) || 0) - ((nat.edu && nat.edu.noncollege) || 0);
+    var demoTilt = (urbanShift * 0.35) + (collegeShift * 0.30);
+
+    var list = [];
+    var weightedSum = 0;
+    var totalWeight = 0;
+
+    Object.keys(countyData).forEach(function(fips) {
+      if (fips.slice(0, 2) !== prefix) return;
+      var entry = countyData[fips];
+      var cName = entry.at(0);
+      var baseDem = Number(entry.at(1));
+      var weight = Number(entry.at(2)) || 1;
+
+      var urbanFactor = (baseDem - 50) / 25;
+      var rawDem = baseDem + (urbanFactor * demoTilt);
+
+      list.push({ fips: fips, name: cName, dem: rawDem, weight: weight });
+      weightedSum += rawDem * weight;
+      totalWeight += weight;
+    });
+
+    if (list.length === 0 || totalWeight === 0) return [];
+
+    var currentAvg = weightedSum / totalWeight;
+    var adjust = stRes.dem - currentAvg;
+
+    list.forEach(function(c) {
+      c.dem = +(Math.max(1, Math.min(99, c.dem + adjust))).toFixed(2);
+      c.rep = +(100 - c.dem).toFixed(2);
+      c.margin = +(c.dem - c.rep).toFixed(2);
+    });
+
+    return list;
+  }
+
     var drawer = document.getElementById('polling-map-drawer') || document.querySelector('.polling-map-drawer');
     if (!drawer) return;
     zoomedState = stCode;
