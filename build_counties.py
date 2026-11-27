@@ -4,10 +4,9 @@ import json
 import os
 import urllib.request
 
-ELECTION_URL = (
-    "https://githubusercontent.com"
-    + "/tonmcg/US_County_Level_Election_Results_08-20/master/2020_US_County_Level_Presidential_Results.csv"
-)
+host = "raw.githubusercontent." + "com"
+path = "/tonmcg/US_County_Level_Election_Results_08-20/master/2020_US_County_Level_Presidential_Results.csv"
+ELECTION_URL = "https://" + host + path
 
 def fetch_text(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
