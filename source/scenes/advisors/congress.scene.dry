@@ -1,7 +1,7 @@
-title: Congres
+title: Congress
 is-pinned-card: true
 tags: advisor, centrist
-card-image: img/portraits/congress.jpg
+card-image: img/congress.jpg
 view-if: klobuchar_advisor = 1
 new-page: true
 #face-image: img/portraits/HilferdingRudolf.jpg
