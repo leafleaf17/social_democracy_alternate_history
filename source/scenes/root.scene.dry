@@ -499,7 +499,8 @@ Q.gov_buffs = {
     VA: -3
 };
 Q.senate_buffs = {
-    GA: 3
+    GA: 1.5,
+    WI: -1.5
 };
 window.simulate_polling();
 Q.build_back_better = 0;
