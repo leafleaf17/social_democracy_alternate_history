@@ -663,7 +663,7 @@ return;
 var p1 = countyData
 ? Promise.resolve(countyData)
 : fetch('counties.json').then(function(r) { return r.json(); }).then(function(d) { countyData = d; });
-var svgUrl = 'wikimedia.org' + '/wikipedia/commons/5/5f/Usa_counties_large.svg';
+var svgUrl = 'wikimedia.org' + 'org/wikipedia/commons/5/5f/Usa_counties_large.svg';
 var p2 = countySvgDoc
 ? Promise.resolve(countySvgDoc)
 : fetch(svgUrl)
@@ -725,7 +725,7 @@ var q = getQ();
 var polling = getPolling();
 if (!q || !polling || !countySvgDoc) return;
 var counties = simulateStateCounties(q, polling, stCode, activeTab);
-var ns = 'w3.org' + '/2000/svg';
+var ns = 'http://' + 'www.w3.' + 'org/2000/svg';
 var stSvg = document.createElementNS(ns, 'svg');
 stSvg.style.width = '100%';
 stSvg.style.maxHeight = '62vh';
