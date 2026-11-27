@@ -854,7 +854,7 @@ return h;
 function buildClassicChartNode(data, labels, strokeColor, zeroLine) {
 data = data.slice(-15);
 labels = labels.slice(-15);
-var ns = 'w3.org' + '/2000/svg';
+var ns = 'http://' + 'www.' + 'w3.org/2000/svg';
 var w = 270, h = 115, padL = 38, padR = 12, padT = 10, padB = 26;
 var plotW = w - padL - padR;
 var plotH = h - padT - padB;
