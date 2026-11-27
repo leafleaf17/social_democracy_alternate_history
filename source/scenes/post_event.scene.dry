@@ -303,7 +303,6 @@ if (Q.year <= 2021 ) {
     if (window.simulate_polling) {
     window.simulate_polling();
 }
-}
 if (Q.afgan_failure_massive_poll_rebound > 0 ) {
     Q.afgan_failure_massive_poll_rebound -= 1
     Q.nat_flat_buff += 0.1;
@@ -391,6 +390,8 @@ if (Q.afgan_failure_mod_poll_rebound > 0 ) {
         if (Q.nat_support.geo) mapToSupport('geo_suburban', Q.nat_support.geo, 'suburban');
         if (Q.nat_support.edu) mapToSupport('edu_noncollege', Q.nat_support.edu, 'noncollege');
     }
+}
+
 
 
 Q.has_event = 0;
