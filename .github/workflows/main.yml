@@ -30,6 +30,11 @@ jobs:
         run: npm run dendrynexus make-html -- --pretty
       - name: Copy game.json to output
         run: cp out/game.json out/html/
+      - name: Generate county data
+        run: python3 build_counties.py
+      - name: Package Pages artifact
+        run: tar -cvf artifact.tar -C out/html .
+
       - name: Package Pages artifact
         run: tar -cvf artifact.tar -C out/html .
       - name: Upload artifact
