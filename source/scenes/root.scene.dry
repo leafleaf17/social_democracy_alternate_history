@@ -498,6 +498,9 @@ Q.gov_buffs = {
     NJ: -3,
     VA: -3
 };
+Q.senate_buffs = {
+    GA: 3
+};
 window.simulate_polling();
 Q.build_back_better = 0;
 Q.build_back_better_lite = 0;
