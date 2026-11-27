@@ -689,7 +689,7 @@ var countyData = null;
       if (!q || !polling || !countyData) return;
 
       var counties = simulateStateCounties(q, polling, stCode, activeTab);
-      var ns = 'http://' + 'www.w3.' + 'org/2000/svg';
+      var ns = 'http://' + 'www.' + 'w3.org/2000/svg';
       var stSvg = document.createElementNS(ns, 'svg');
       stSvg.style.width = '100%';
       stSvg.style.maxHeight = '62vh';
